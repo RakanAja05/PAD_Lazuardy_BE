@@ -17,10 +17,10 @@ return new class extends Migration
         Schema::create('tutor_confirms', function (Blueprint $table) use ($statuses) 
         {
             $table->id();
-            $table->foreignId('student_id')->constrained('students');
-            $table->foreignId('tutor_id')->constrained('tutors');
-            $table->string('reason');
-            $table->enum('status', $statuses);
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->foreignId('tutor_id')->constrained('tutors')->onDelete('cascade');
+            $table->string('reason')->nullable();
+            $table->enum('status', $statuses)->nullable();
             $table->timestamps();
         });
     }

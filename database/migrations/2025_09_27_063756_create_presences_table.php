@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('taken_schedule_id')->constrained('taken_schedules');
             $table->foreignId('tutor_id')->constrained('tutors');
             $table->foreignId('student_id')->constrained('students');
-            $table->longText('evaluation');
-            $table->integer('report');
-            $table->string('pbm_image_url');
+            $table->longText('evaluation')->nullable();
+            $table->integer('report')->nullable();
+            $table->string('pbm_image_url')->nullable();
             $table->timestamps();
         });
     }

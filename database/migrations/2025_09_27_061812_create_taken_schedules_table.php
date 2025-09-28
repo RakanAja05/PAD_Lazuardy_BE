@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students');
             $table->foreignId('schedule_tutor_id')->constrained('schedule_tutors');
-            $table->foreignId('subject_id')->constrained('subjects');
-            $table->date('date');
-            $table->enum('status', $statuses);
+            $table->foreignId('subject_id')->constrained('subjects')->nullable();
+            $table->date('date')->nullable();
+            $table->enum('status', $statuses)->nullable();
         });
     }
 

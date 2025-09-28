@@ -17,11 +17,11 @@ return new class extends Migration
             $table->foreignId('tutor_id')->constrained('tutors');
             $table->foreignId('student_id')->constrained('students');
             $table->decimal('rate', 4, 2);
-            $table->enum('quality', $options);
-            $table->enum('delivery', $options);
-            $table->enum('attitude', $options);
-            $table->enum('benefit', $options);
-            $table->string('review');
+            $table->enum('quality', $options)->nullable();
+            $table->enum('delivery', $options)->nullable();
+            $table->enum('attitude', $options)->nullable();
+            $table->enum('benefit', $options)->nullable();
+            $table->string('review')->nullable();
             $table->timestamps();
         });
     }

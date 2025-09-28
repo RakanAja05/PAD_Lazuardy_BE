@@ -16,12 +16,12 @@ return new class extends Migration
         {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('class_id')->constrained('classes');
-            $table->foreignId('major_id')->constrained('majors');
-            $table->foreignId('curriculum_id')->constrained('curriculums');
-            $table->string('school');
-            $table->string('parent');
-            $table->string('parent_telephone_number');
+            $table->foreignId('class_id')->constrained('classes')->nullable();
+            $table->foreignId('major_id')->constrained('majors')->nullable();
+            $table->foreignId('curriculum_id')->constrained('curriculums')->nullable();
+            $table->string('school')->nullable();
+            $table->string('parent')->nullable();
+            $table->string('parent_telephone_number')->nullable();
             $table->timestamps();
         });
     }

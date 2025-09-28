@@ -1,10 +1,11 @@
 <?php
 
-use App\RatingOption;
+use App\Enums\RatingOption;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    dd(array_column(RatingOption::cases(), 'value'));
+    
+    dd(RatingOption::VERY_GOOD->label());
 
     return view('welcome');
 });

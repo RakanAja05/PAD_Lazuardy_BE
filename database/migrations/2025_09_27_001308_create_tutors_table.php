@@ -18,14 +18,14 @@ return new class extends Migration
         Schema::create('tutors', function (Blueprint $table) use ($statuses, $ranks) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('education');
-            $table->integer('salary');
-            $table->integer('price');
-            $table->longText('description');
-            $table->longText('learning_method');
-            $table->json('qualification');
-            $table->enum('status', $statuses);
-            $table->enum('rank', $ranks);
+            $table->string('education')->nullable();
+            $table->integer('salary')->default(0);
+            $table->integer('price')->default(0);
+            $table->longText('description')->nullable();
+            $table->longText('learning_method')->nullable();
+            $table->json('qualification')->nullable();
+            $table->enum('status', $statuses)->nullable();
+            $table->enum('rank', $ranks)->nullable();
             $table->integer('sanction_amount')->default(0);
             $table->timestamps();
         });

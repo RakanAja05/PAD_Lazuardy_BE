@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) use ($payment_methods) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders');
-            $table->integer('total_amount');
-            $table->string('proof_image_url');
-            $table->date('date');
-            $table->enum('payment_method', $payment_methods);
+            $table->integer('total_amount')->nullable();
+            $table->string('proof_image_url')->nullable();
+            $table->date('date')->nullable();
+            $table->enum('payment_method', $payment_methods)->nullable();
             $table->timestamps();
         });
     }

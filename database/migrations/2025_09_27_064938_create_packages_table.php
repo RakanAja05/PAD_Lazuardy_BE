@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('session');
-            $table->integer('price');
-            $table->decimal('discount', 5, 2);
-            $table->longText('description');
-            $table->json('benefit');
-            $table->string('image_url');
-            $table->integer('subject_amount');
+            $table->integer('session')->nullable();
+            $table->integer('price')->nullable();
+            $table->decimal('discount', 5, 2)->nullable();
+            $table->longText('description')->nullable();
+            $table->json('benefit')->nullable();
+            $table->string('image_url')->nullable();
+            $table->integer('subject_amount')->nullable();
             $table->timestamps();
         });
     }
