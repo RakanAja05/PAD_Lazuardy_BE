@@ -21,14 +21,14 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('role', $roles);
-            $table->string('telephone_number', 16)->nullable();
+            $table->string('telephone_number', 15)->nullable();
             $table->string('google_id')->nullable();
             $table->string('facebook_id')->nullable();
             $table->string('profile_photo_url')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('gender', 16)->nullable();
             $table->string('religion', 16)->nullable();
-            $table->string('home_address', 120)->nullable();
+            $table->json('home_address')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->rememberToken();
