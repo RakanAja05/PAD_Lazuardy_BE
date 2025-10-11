@@ -11,7 +11,7 @@ enum Rank: string
     {
         return match($this) 
         {
-        self::AMATEUR => 'mandiri'
+        self::AMATEUR => 'Pemula'
         };
     }
 }

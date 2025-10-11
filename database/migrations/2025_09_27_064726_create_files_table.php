@@ -16,10 +16,10 @@ return new class extends Migration
 
         Schema::create('files', function (Blueprint $table) use ($fileTypes) {
             $table->id();
-            $table->foreignId('tutor_id')->constrained('tutors')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('name');
             $table->enum('type', $fileTypes);
-            $table->string('path_file');
+            $table->string('path_url');
             $table->timestamps();
         });
     }

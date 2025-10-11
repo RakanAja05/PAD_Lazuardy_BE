@@ -1,5 +1,5 @@
 <div>
-    <a href="{{route('login', 'facebook')}}">
+    <a href="{{route('social.login', 'facebook')}}">
         Login dengan facebook
     </a>
 </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Subject extends Model
 {
@@ -19,4 +20,8 @@ class Subject extends Model
         'major_id',
         'curriculum_id',
     ];
+
+    public function tutors(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'tutor_subjects', 'subject_id', 'user_id');
+    }
 }

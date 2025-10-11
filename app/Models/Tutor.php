@@ -18,13 +18,21 @@ class Tutor extends Model
         'salary',
         'price',
         'description',
-        'learning_mehod',
+        'experience',
+        'organization',
+        'learning_method',
         'qualification',
+        'course_location',
         'status',
         'rank',
         'sanction_amount',
     ];
     
+    protected $casts = [
+        'qualification' => 'array',
+        'organization' => 'array',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

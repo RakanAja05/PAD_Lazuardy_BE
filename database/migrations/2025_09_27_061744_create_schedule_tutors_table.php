@@ -16,9 +16,11 @@ return new class extends Migration
 
         Schema::create('schedule_tutors', function (Blueprint $table) use ($days) {
             $table->id();
-            $table->foreignId('tutor_id')->constrained('tutors');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->enum('day', $days);
             $table->time('time');
+
+            $table->unique(['user_id', 'day', 'time']); 
         });
     }
 

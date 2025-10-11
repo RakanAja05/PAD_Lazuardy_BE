@@ -14,7 +14,7 @@ enum Role: string
         {
             self::ADMIN => 'Admin',
             self::TUTOR => 'Mentor',
-            self::STUDENT => 'Murid'
+            self::STUDENT => 'Siswa'
         };
     }
 }

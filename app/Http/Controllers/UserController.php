@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateUserStudentRequest;
-use App\Models\Student;
+use App\Http\Requests\StoreStudentRegisterRequest;
+use App\Http\Requests\StoreTutorRegisterRequest;
 use App\Models\User;
-use Exception;
+use App\Services\ScheduleService;
+use App\Services\TutorService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
@@ -54,45 +56,47 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateStudentRole(UpdateUserStudentRequest $request, User $user)
+    public function updateStudentRole(StoreStudentRegisterRequest $request, User $user, UserService $userService)
     {
+        $user = $request->user();
+
         $validatedData = $request->validated();
+        
+        $userData = collect(Arr::only($validatedData, ['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
+        $addressData = collect(Arr::only($validatedData, ['province', 'regency', 'district', 'subdistrict', 'street']));
+        $studentData = collect(Arr::only($validatedData, ['parent', 'parent_telephone_number', 'class_id']));
 
-        $userData = $request->only('name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude');
-        $addressData = $request->only('province', 'city', 'subdistrict', 'street');
-        $studentData = $request->only('parent', 'parent_telephone_number', );
+        $userService->updateBiodataRegistration($user, $userData, $addressData);
+        $userService->storeStudentRole($user, $studentData);
 
-        DB::beginTransaction();
-        try {
-            $user->update([
-                'name' => $userData['name'],
-                'gender' => $userData['gender'],
-                'date_of_birth' => $userData['date_of_birth'],
-                'telephone_number' => $userData['telephone_number'],
-                'home_address' => $addressData,
-                'profile_photo_url' => $userData['profile_photo_url'],
-                'latitude' => $userData['latitude'],
-                'longitude' => $userData['longitude'],
-            ]);
-
-            Student::updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'parent' => $studentData['parent'],
-                    'parent_telephone_number' => $studentData['parent_telephone_number'],
-                ]
-            );
-
-            DB::commit();
-        } catch(Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        return response()->json([
+            'message' => 'Berhasil'
+        ], 200);;
     }
     
-    public function updateTutorRole(Request $request, string $id)
+    public function updateTutorRole(StoreTutorRegisterRequest $request, User $user, UserService $userService, TutorService $tutorService, ScheduleService $scheduleService)
     {
-        //
+        $user = $request->user();
+
+        $validatedData = $request->validated();
+
+        $userData = collect(Arr::only($validatedData, ['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
+        $addressData = collect(Arr::only($validatedData, ['province', 'regency', 'district', 'subdistrict', 'street']));
+        $tutorData = collect(Arr::only($validatedData, ['experience', 'organization','course_location', 'description', 'qualification', 'learning_method'],));
+        $subjectData = collect(Arr::only($validatedData, ['subject_ids']));
+        $fileData = collect(Arr::only($validatedData, ['cv', 'ktp','ijazah','certificate', 'portofolio']));
+        $scheduleDatas = collect(Arr::only($validatedData, ['schedules']));
+        
+        $userService->updateBiodataRegistration($user, $userData, $addressData);
+        $userService->storeTutorRole($user, $tutorData);
+        $tutorService->storeSubject($user, $subjectData);
+        $tutorService->storeFile($user, $fileData);
+        $scheduleService->storeScheduleTutor($user, $scheduleDatas);
+
+        
+        return response()->json([
+            'message' => 'Berhasil'
+        ], 200);;
     }
 
     /**

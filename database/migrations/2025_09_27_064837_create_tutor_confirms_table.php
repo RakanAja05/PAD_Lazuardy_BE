@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Status;
+use App\Enums\TutorStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $statuses = array_column(Status::cases(), 'value');
+        $statuses = array_column(TutorStatus::cases(), 'value');
         
         Schema::create('tutor_confirms', function (Blueprint $table) use ($statuses) 
         {
