@@ -55,6 +55,22 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @OA\Patch(
+     * path="api/register/student/{user}",
+     * operationId="regStudentRole",
+     * tags={"Users", "Students"},
+     * @OA\Parameter(
+     * name="user",
+     * in="path",
+     * required=true,
+     * description="user adalah ID user yang melakukan registrasi",
+     * @OA\Schema(type="integer"),
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Data berhasil diubah"
+     * )
+     * )
      */
     public function updateStudentRole(StoreStudentRegisterRequest $request, User $user, UserService $userService)
     {
@@ -74,6 +90,25 @@ class UserController extends Controller
         ], 200);;
     }
     
+    /**
+     * Update the specified resource in storage.
+     * @OA\Patch(
+     * path="api/register/tutor/{user}",
+     * operationId="regTutorRole",
+     * tags={"users", "tutors"},
+     * @OA\Parameter(
+     * name="user",
+     * in="path",
+     * required=true,
+     * description="user adalah ID user yang melakukan registrasi",
+     * @OA\Schema(type="integer"),
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Data berhasil diubah"
+     * )
+     * )
+     */
     public function updateTutorRole(StoreTutorRegisterRequest $request, User $user, UserService $userService, TutorService $tutorService, ScheduleService $scheduleService)
     {
         $user = $request->user();
