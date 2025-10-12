@@ -23,7 +23,6 @@ class SocialAuthController extends Controller
     public function handleProviderCallback(string $provider)
     {
         try {
-            dd($provider);
             $socialiteUser = Socialite::driver($provider)->user();
             $providerIdColumn = $provider . '_id';
 
@@ -40,21 +39,23 @@ class SocialAuthController extends Controller
                     $loggedUser = $user;
                 }
             } else {
+                $userEmail = $socialiteUser->getEmail() ?? $socialiteUser->getId().'@'.$provider.'.local';
                 $newUser = User::create([
                     'name' => $socialiteUser->getName(),
-                    'email' => $socialiteUser->getEmail(),
+                    'email' => $userEmail,
                     'role' => 'student',
                     $providerIdColumn => $socialiteUser->getId(),
                     'password' => Hash::make(str()->random(16)), 
                     'email_verified_at' => now(),
                 ]);
-                    $loggedUser = $user;
+                    $loggedUser = $newUser;
             }
             
             Auth::login($loggedUser, true);
-
+            return "berhasil";
         } catch (Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
+            throw $e;
         }
     }
 }
