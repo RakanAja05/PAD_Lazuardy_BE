@@ -37,6 +37,7 @@ class User extends Authenticatable
         'home_address',
         'latitude',
         'longitude',
+        'email_verified_at',
     ];
 
     /**
@@ -84,5 +85,9 @@ class User extends Authenticatable
 
     public function files(): HasMany {
         return $this->hasMany(File::class);
+    }
+
+    public function otps(): HasMany {
+        return $this->hasMany(Otp::class);
     }
 }

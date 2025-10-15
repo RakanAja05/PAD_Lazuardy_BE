@@ -5,7 +5,7 @@ namespace App\Enums;
 enum TutorStatus: string
 {
     case ACTIVE = "active";
-    case PENDING = "pending";
+    case VERIFY = "verify";
     case INACTIVE = "inactive";
     case REJECTED = "rejected";
 
@@ -14,7 +14,7 @@ enum TutorStatus: string
         return match($this) 
         {
             self::ACTIVE => 'Aktif',
-            self::PENDING => 'Menunggu konfirmasi',
+            self::VERIFY => 'Menunggu konfirmasi',
             self::INACTIVE => 'Tidak aktif',
             self::REJECTED => 'Ditolak',
         };

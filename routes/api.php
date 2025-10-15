@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -15,10 +15,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function(){
     Route::patch('/register/student/{user}', [UserController::class, 'updateStudentRole'])->name('register.student');
     Route::patch('/register/tutor/{user}', [UserController::class, 'updateTutorRole'])->name('register.tutor');
+
+    Route::prefix('otp')->group(function () {
+        Route::post('/send', [VerificationController::class, 'sendOtp'])->name('otp.send');
+        Route::patch('/verify', [VerificationController::class, 'verifyOtp'])->name('otp.verify');
+        Route::patch('/resend', [VerificationController::class, 'resendOtp'])->name('otp.resend');
+    });
 }); 
 
-Route::name('social.')->group(function(){
-    Route::get('auth/{provider}', [SocialAuthController::class, 'redirectToProvider'])->name('login');
-    Route::get('auth/{provider}/callback', [SocialAuthController::class, 'handleProviderCallback']);
-});
-
+Route::get('auth/{provider}', [SocialAuthController::class, 'redirectToProvider'])->name('login');
+Route::get('auth/{provider}/callback', [SocialAuthController::class, 'handleProviderCallback']);

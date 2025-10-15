@@ -14,46 +14,6 @@ use Illuminate\Support\Arr;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      * @OA\Patch(
      * path="api/register/student/{user}",
@@ -72,10 +32,10 @@ class UserController extends Controller
      * )
      * )
      */
-    public function updateStudentRole(StoreStudentRegisterRequest $request, User $user, UserService $userService)
+    public function updateStudentRole(StoreStudentRegisterRequest $request, UserService $userService)
     {
         $user = $request->user();
-
+        
         $validatedData = $request->validated();
         
         $userData = collect(Arr::only($validatedData, ['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
@@ -91,11 +51,11 @@ class UserController extends Controller
     }
     
     /**
-     * Update the specified resource in storage.
+     * Update registrasi role tutor
      * @OA\Patch(
      * path="api/register/tutor/{user}",
      * operationId="regTutorRole",
-     * tags={"users", "tutors"},
+     * tags={"Users", "Tutors"},
      * @OA\Parameter(
      * name="user",
      * in="path",
@@ -109,7 +69,7 @@ class UserController extends Controller
      * )
      * )
      */
-    public function updateTutorRole(StoreTutorRegisterRequest $request, User $user, UserService $userService, TutorService $tutorService, ScheduleService $scheduleService)
+    public function updateTutorRole(StoreTutorRegisterRequest $request, UserService $userService, TutorService $tutorService, ScheduleService $scheduleService)
     {
         $user = $request->user();
 
@@ -132,13 +92,5 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Berhasil'
         ], 200);;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

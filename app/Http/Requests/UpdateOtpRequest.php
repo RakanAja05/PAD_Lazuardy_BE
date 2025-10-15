@@ -2,16 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\OtpType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePresenceRequest extends FormRequest
+class UpdateOtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,9 @@ class UpdatePresenceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'identifier_type' => 'required|in:' . implode(',', array_column(OtpType::cases(), 'value')),
+            'verification_type' => 'required|string',
+            'code' => 'required|string',
         ];
     }
 }

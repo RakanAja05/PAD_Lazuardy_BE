@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreScheduleTutorRequest extends FormRequest
+class StoreOtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreScheduleTutorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'identifier_type' => 'required|in:' . implode(',', array_column(\App\Enums\OtpType::cases(), 'value')),
+            'verification_type' => 'required|string',
         ];
     }
 }

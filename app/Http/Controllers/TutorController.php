@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tutor;
-use App\Http\Requests\StoreTutorRequest;
 use App\Http\Requests\UpdateTutorRequest;
+use Illuminate\Http\Request;
 
 class TutorController extends Controller
 {
@@ -19,7 +19,7 @@ class TutorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTutorRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class TutorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTutorRequest $request, Tutor $tutor)
+    public function update(Request $request, Tutor $tutor)
     {
         //
     }

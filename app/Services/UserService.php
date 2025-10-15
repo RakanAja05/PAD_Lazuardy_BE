@@ -71,7 +71,7 @@ class UserService
                     'description' => $tutorData['description'],
                     'qualification' => $tutorData['qualification'],
                     'learning_method' => $tutorData['learning_method'],
-                    'status' => TutorStatus::PENDING->value,
+                    'status' => TutorStatus::VERIFY->value,
                 ],
             );
             DB::commit();
