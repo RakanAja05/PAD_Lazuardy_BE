@@ -14,12 +14,13 @@ return new class extends Migration
     public function up(): void
     {
         $statuses = array_column(TutorStatus::cases(), 'value'); 
+        
         Schema::create('taken_schedules', function (Blueprint $table) use ($statuses) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->foreignId('schedule_tutor_id')->constrained('schedule_tutors');
-            $table->foreignId('subject_id')->constrained('subjects')->nullable();
-            $table->date('date')->nullable();
+            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
+            $table->foreignId('schedule_tutor_id')->constrained('schedule_tutors', 'id');
+            $table->foreignId('subject_id')->constrained('subjects');
+            $table->date('date');
             $table->enum('status', $statuses)->nullable();
         });
     }

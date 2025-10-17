@@ -12,7 +12,7 @@ enum Day: string
     case FRIDAY = 'jumat';
     case SATURDAY = 'sabtu';
 
-    public function label() : string 
+    public function displayName() : string 
     {
         return match($this) 
         {
@@ -24,5 +24,15 @@ enum Day: string
             self::FRIDAY => 'Jumat',
             self::SATURDAY => 'Sabtu'
         };
+    }
+
+    public static function list() : array 
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
+    public static function displayList() : array 
+    {
+        return array_map(fn($case) => $case->displayName(), self::cases());
     }
 }

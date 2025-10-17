@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateOtpRequest;
 use App\Mail\OtpEmail;
 use App\Models\Otp;
 use App\Services\OtpService;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class VerificationController extends Controller

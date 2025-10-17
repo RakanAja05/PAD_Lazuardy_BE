@@ -11,6 +11,9 @@ class Tutor extends Model
     /** @use HasFactory<\Database\Factories\TutorFactory> */
     use HasFactory;
 
+    protected $table = 'tutors';
+    protected $primaryKey = 'user_id';
+
     protected $fillable = 
     [
         'user_id',

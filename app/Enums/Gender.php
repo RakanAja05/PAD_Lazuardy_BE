@@ -7,7 +7,7 @@ enum Gender: string
     case MAN = 'pria';
     case WOMAN = 'wanita';
 
-    public function label() : string 
+    public function displayName() : string 
     {
         return match($this) 
         {
@@ -15,4 +15,16 @@ enum Gender: string
             self::WOMAN => 'Perempuan',
         };
     }
+
+    public static function list() : array 
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
+    public static function displayList() : array 
+    {
+        return array_map(fn($case) => $case->displayName(), self::cases());
+    }
+
+    
 }

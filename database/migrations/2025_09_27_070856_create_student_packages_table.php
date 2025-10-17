@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('student_packages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('package_id')->constrained('packages');
-            $table->foreignId('student_id')->constrained('students');
+            $table->foreignId('student_user_id')->constrained('users', 'id');
             $table->foreignId('subject_id')->constrained('subjects')->nullable();
-            $table->foreignId('tutor_id')->constrained('tutors');
+            $table->foreignId('tutor_user_id')->constrained('users', 'id')->nullable();
             $table->integer('remaining_session')->nullable();
             $table->timestamps();
         });

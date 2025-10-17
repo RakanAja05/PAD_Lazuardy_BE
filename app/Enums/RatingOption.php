@@ -10,7 +10,7 @@ enum RatingOption: string
     case BAD = 'buruk';
     case VERY_BAD = 'sangat buruk';
 
-    public function label() : string 
+    public function displayName() : string 
     {
         return match($this) 
         {
@@ -20,5 +20,15 @@ enum RatingOption: string
             self::BAD => 'Buruk',
             self::VERY_BAD => "Sangat Buruk"
         };
+    }
+
+    public static function list() : array 
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
+    public static function displayList() : array 
+    {
+        return array_map(fn($case) => $case->displayName(), self::cases());
     }
 }

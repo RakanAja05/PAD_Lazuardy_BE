@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('presences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('taken_schedule_id')->constrained('taken_schedules');
-            $table->foreignId('tutor_id')->constrained('tutors');
-            $table->foreignId('student_id')->constrained('students');
+            $table->foreignId('taken_schedule_id')->constrained('taken_schedules', 'id');
+            $table->foreignId('tutor_user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('student_user_id')->constrained('users');
             $table->longText('evaluation')->nullable();
             $table->integer('report')->nullable();
             $table->string('pbm_image_url')->nullable();

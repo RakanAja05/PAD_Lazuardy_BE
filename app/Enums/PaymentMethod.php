@@ -11,16 +11,26 @@ enum PaymentMethod: string
     case BANK_BPD = 'bpd';
     case BANK_QRIS = 'qris';
 
-    public function label() : string 
+    public function displayName() : string 
     {
         return match($this) 
         {
-    self::BANK_MANDIRI => 'mandiri',
-    self::BANK_BNI => 'bni',
-    self::BANK_BRI => 'bri',
-    self::BANK_BPR => 'bpr',
-    self::BANK_BPD => 'bpd',
-    self::BANK_QRIS => 'qris',
+            self::BANK_MANDIRI => 'mandiri',
+            self::BANK_BNI => 'bni',
+            self::BANK_BRI => 'bri',
+            self::BANK_BPR => 'bpr',
+            self::BANK_BPD => 'bpd',
+            self::BANK_QRIS => 'qris',
         };
+    }
+
+    public static function list() : array 
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
+    public static function displayList() : array 
+    {
+        return array_map(fn($case) => $case->displayName(), self::cases());
     }
 }

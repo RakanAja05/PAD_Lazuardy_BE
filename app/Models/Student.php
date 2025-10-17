@@ -15,7 +15,6 @@ class Student extends Model
     [
         'user_id',
         'class_id',
-        'major_id',
         'curriculum_id',
         'school',
         'parent',
@@ -25,5 +24,15 @@ class Student extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(ClassModel::class, 'class_id');
+    }
+
+    public function curriculum(): BelongsTo
+    {
+        return $this->belongsTo(Curriculum::class, 'curriculum_id');
     }
 }

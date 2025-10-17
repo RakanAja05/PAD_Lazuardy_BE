@@ -1,8 +1,9 @@
 <?php
 
-use App\Enums\CourseLocation;
+use App\Enums\CourseMode;
 use App\Enums\Rank;
 use App\Enums\TutorStatus;
+use App\Models\Tutor;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +14,11 @@ return new class extends Migration
     public function up(): void
     {
         // Membuat data enum
-        $statusses = array_column(TutorStatus::cases(), 'value');
-        $ranks = array_column(Rank::cases(), 'value');
-        $courseLocation = array_column(CourseLocation::cases(), 'value');
+        $statusses = TutorStatus::list();
+        $ranks = Rank::list();
+        $courseMode = CourseMode::list();
 
-        Schema::create('tutors', function (Blueprint $table) use ($statusses, $ranks, $courseLocation) {
-            $table->id();
+        Schema::create('tutors', function (Blueprint $table) use ($statusses, $ranks, $courseMode) {
             $table->foreignId('user_id')->constrained('users');
             $table->json('education')->nullable();
             $table->integer('salary')->default(0);
@@ -29,10 +29,12 @@ return new class extends Migration
             $table->longText('experience')->nullable();
             $table->json('organization')->nullable();
             $table->enum('rank', $ranks)->nullable();
-            $table->enum('course_location', $courseLocation)->nullable();
+            $table->enum('course_mode', $courseMode)->nullable();
             $table->integer('sanction_amount')->default(0);
             $table->enum('status', $statusses)->nullable();
             $table->timestamps();
+
+            $table->primary('user_id');
         });
     }
 

@@ -2,21 +2,17 @@
 
 namespace App\Enums;
 
-enum TutorStatus: string
+enum CourseMode: string
 {
-    case ACTIVE = "active";
-    case VERIFY = "verify";
-    case INACTIVE = "inactive";
-    case REJECTED = "rejected";
+    case ONLINE = 'online';
+    case OFFLINE = 'offline';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::ACTIVE => 'Aktif',
-            self::VERIFY => 'Menunggu konfirmasi',
-            self::INACTIVE => 'Tidak aktif',
-            self::REJECTED => 'Ditolak',
+            self::ONLINE => 'Online',
+            self::OFFLINE => 'Offline',
         };
     }
 

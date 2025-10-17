@@ -8,7 +8,7 @@ enum Role: string
     case STUDENT = 'student';
     case TUTOR = 'tutor';
 
-    public function label() : string 
+    public function displayName() : string 
     {
         return match($this) 
         {
@@ -16,5 +16,15 @@ enum Role: string
             self::TUTOR => 'Mentor',
             self::STUDENT => 'Siswa'
         };
+    }
+
+    public static function list() : array 
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
+    public static function displayList() : array 
+    {
+        return array_map(fn($case) => $case->displayName(), self::cases());
     }
 }

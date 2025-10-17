@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('day', $days);
             $table->time('time');
 
-            $table->unique(['user_id', 'day', 'time']); 
+            $table->unique(['user_id', 'day', 'time']);
         });
     }
 

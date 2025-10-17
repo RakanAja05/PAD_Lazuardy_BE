@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStudentRegisterRequest;
 use App\Http\Requests\StoreTutorRegisterRequest;
-use App\Models\User;
 use App\Services\ScheduleService;
 use App\Services\TutorService;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class UserController extends Controller
