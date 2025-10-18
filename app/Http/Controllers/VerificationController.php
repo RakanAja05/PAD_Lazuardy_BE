@@ -64,11 +64,16 @@ class VerificationController extends Controller
     {
         $user = $request->user();
         $request->validated();
-        $identifierType = $request->identifier_type;
-        $identifier = $user->{$identifierType};
-
-        if (!$identifier) {
-            return response()->json(['message' => 'Identifier not found for user.'], 404);
+        if (!$user) {
+            $identifierType = $request->identifier_type;
+            $identifier = $user->{$identifierType};
+            
+            if (!$identifier) {
+                return response()->json(['message' => 'Identifier not found for user.'], 404);
+            }
+        } else {
+            $identifier = $request->identifier;
+            $identifierType = $request->identifier_type;
         }
 
         $otpService = new OtpService();
@@ -132,20 +137,34 @@ class VerificationController extends Controller
      */
     public function verifyOtp(UpdateOtpRequest $request)
     {
-        $user = $request->user();
-        $request->validated();
-        $identifierType = $request->identifier_type;
-        $identifier = $user->{$identifierType};
-
-        $otpService = new OtpService();
-        $result = $otpService->verifyOtp($user, $identifier, $identifierType, $request->verification_type, $request->code);
-
-        if ($result['status'] === 'success') {
-            return response()->json(['message' => 'OTP is valid.'], 200);
-        } else {
-            return response()->json(['message' => $result['message']], $result['code']);
-        }
+        
     }
+
+    // public function verifyOtp(UpdateOtpRequest $request)
+    // {
+    //     $user = $request->user();
+    //     $request->validated();
+    //     if (!$user) {
+    //         $identifierType = $request->identifier_type;
+    //         $identifier = $user->{$identifierType};
+            
+    //         if (!$identifier) {
+    //             return response()->json(['message' => 'Identifier not found for user.'], 404);
+    //         }
+    //     } else {
+    //         $identifier = $request->identifier;
+    //         $identifierType = $request->identifier_type;
+    //     }
+
+    //     $otpService = new OtpService();
+    //     $result = $otpService->verifyOtp($user, $identifier, $identifierType, $request->verification_type, $request->code);
+
+    //     if ($result['status'] === 'success') {
+    //         return response()->json(['message' => 'OTP is valid.'], 200);
+    //     } else {
+    //         return response()->json(['message' => $result['message']], $result['code']);
+    //     }
+    // }
 
     /**
      * Resend OTP
@@ -199,11 +218,14 @@ class VerificationController extends Controller
     {
         $user = $request->user();
         $request->validated();
-        $identifierType = $request->identifier_type;
-        $identifier = $user->{$identifierType};
+        
+        $latest_otp = Otp::latestOtp($user->id);
+        $identifier = $latest_otp->identifier;
+        $identifierType = $latest_otp->identifier_type;
+        $verificationType = $latest_otp->verification_type;
 
         $otp = Otp::byIdentifier($identifier, $identifierType)
-                    ->byVerificationType($request->verification_type)
+                    ->byVerificationType($verificationType)
                     ->valid()
                     ->latest()
                     ->first();

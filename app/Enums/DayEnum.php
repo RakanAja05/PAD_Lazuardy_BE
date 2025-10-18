@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Day: string
+enum DayEnum: string
 {
     case SUNDAY = 'minggu';
     case MONDAY = 'senin';

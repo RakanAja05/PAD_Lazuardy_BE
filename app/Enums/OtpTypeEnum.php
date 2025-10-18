@@ -2,17 +2,15 @@
 
 namespace App\Enums;
 
-enum Gender: string
+enum OtpTypeEnum:string
 {
-    case MAN = 'pria';
-    case WOMAN = 'wanita';
+    case EMAIL = 'email';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::MAN => 'Laki-laki',
-            self::WOMAN => 'Perempuan',
+            self::EMAIL => 'Email',
         };
     }
 
@@ -25,6 +23,4 @@ enum Gender: string
     {
         return array_map(fn($case) => $case->displayName(), self::cases());
     }
-
-    
 }

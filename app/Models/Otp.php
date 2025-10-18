@@ -34,6 +34,11 @@ class Otp extends Model
         $this->save();
     }
 
+    public function latestOtp($user_id)
+    {
+        return $this->where('user_id', $user_id)->latest()->first();
+    }
+
     public function scopeValid($query)
     {
         return $query->where('attempts', '<', 5)->where('expired_at', '>', now())->where('is_used', false);

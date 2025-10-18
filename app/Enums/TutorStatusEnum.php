@@ -2,16 +2,21 @@
 
 namespace App\Enums;
 
-enum Rank: string
+enum TutorStatusEnum: string
 {
-    case AMATEUR = "pemula";
+    case ACTIVE = "active";
+    case VERIFY = "verify";
+    case INACTIVE = "inactive";
+    case REJECTED = "rejected";
 
-    
     public function displayName() : string 
     {
         return match($this) 
         {
-        self::AMATEUR => 'Pemula'
+            self::ACTIVE => 'Aktif',
+            self::VERIFY => 'Menunggu konfirmasi',
+            self::INACTIVE => 'Tidak aktif',
+            self::REJECTED => 'Ditolak',
         };
     }
 

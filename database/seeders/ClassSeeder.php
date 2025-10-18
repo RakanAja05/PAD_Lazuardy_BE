@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\ClassStudent;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ClassModel;
 use Illuminate\Database\Seeder;
 
-class ClassStudentSeeder extends Seeder
+class ClassSeeder extends Seeder
 {
     public function run(): void
     {
@@ -16,6 +15,6 @@ class ClassStudentSeeder extends Seeder
             $classes[] = ['name' => 'kelas ' . $i];
         }
 
-        ClassStudent::insert($classes);
+        ClassModel::insert($classes);
     }
 }

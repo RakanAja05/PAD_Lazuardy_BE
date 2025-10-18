@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TutorConfirm;
 use App\Http\Requests\StoreTutorConfirmRequest;
 use App\Http\Requests\UpdateTutorConfirmRequest;
+use Illuminate\Http\Request;
 
 class TutorConfirmController extends Controller
 {
@@ -19,7 +20,7 @@ class TutorConfirmController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTutorConfirmRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class TutorConfirmController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTutorConfirmRequest $request, TutorConfirm $tutorConfirm)
+    public function update(Request $request, TutorConfirm $tutorConfirm)
     {
         //
     }

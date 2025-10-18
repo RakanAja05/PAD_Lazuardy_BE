@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Day;
+use App\Enums\DayEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $days = array_column(Day::cases(), 'value');
+        $days = DayEnum::list();
 
         Schema::create('schedule_tutors', function (Blueprint $table) use ($days) {
             $table->id();

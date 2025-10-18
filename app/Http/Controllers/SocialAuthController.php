@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Auth; 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Enum;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller

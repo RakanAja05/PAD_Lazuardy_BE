@@ -2,13 +2,11 @@
 
 namespace App\Services;
 
-use App\Enums\FileType;
-use App\Models\File;
+use App\Enums\FileType; 
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class TutorService
 {
@@ -35,8 +33,6 @@ class TutorService
 
     public function storeFile(User $user, Collection $fileData): bool
     {
-        // Rule
-        // ['key' => ['name'=>'sswsw', 'path_url'=>'sswsw'], 'key' => ['name'=>'sswsw', 'path_url'=>'sswsw']]
         $userId = $user->id;
 
         $fileTypes = [

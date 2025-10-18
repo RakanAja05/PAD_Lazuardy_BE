@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\RatingOption;
+use App\Enums\RatingOptionEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         // Membuat enum
-        $options = array_column(RatingOption::cases(), 'value');
+        $options = RatingOptionEnum::list();
 
         Schema::create('reviews', function (Blueprint $table) use ($options) {
             $table->id();

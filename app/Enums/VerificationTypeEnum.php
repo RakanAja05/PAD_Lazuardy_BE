@@ -2,21 +2,19 @@
 
 namespace App\Enums;
 
-enum TutorStatus: string
+enum VerificationTypeEnum: string
 {
-    case ACTIVE = "active";
-    case VERIFY = "verify";
-    case INACTIVE = "inactive";
-    case REJECTED = "rejected";
+    case REGISTRATION = 'registrasi';
+    case RESET_PASSWORD = 'reset_password';
+    case FORGET_PASSWORD = 'lupa_password';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::ACTIVE => 'Aktif',
-            self::VERIFY => 'Menunggu konfirmasi',
-            self::INACTIVE => 'Tidak aktif',
-            self::REJECTED => 'Ditolak',
+            self::REGISTRATION => 'Registrasi',
+            self::RESET_PASSWORD => 'Reset password',
+            self::FORGET_PASSWORD => 'Lupa password',
         };
     }
 

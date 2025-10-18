@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassStudent;
-use App\Http\Requests\StoreClassStudentRequest;
-use App\Http\Requests\UpdateClassStudentRequest;
+use App\Models\ClassModel;
+use Illuminate\Http\Request;
 
-class ClassStudentController extends Controller
+class ClassController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +18,7 @@ class ClassStudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreClassStudentRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -27,7 +26,7 @@ class ClassStudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ClassStudent $classStudent)
+    public function show(Request $class)
     {
         //
     }
@@ -35,7 +34,7 @@ class ClassStudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateClassStudentRequest $request, ClassStudent $classStudent)
+    public function update(Request $request, ClassModel $classModel)
     {
         //
     }
@@ -43,7 +42,7 @@ class ClassStudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ClassStudent $classStudent)
+    public function destroy(ClassModel $classModel)
     {
         //
     }

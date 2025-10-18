@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum PaymentMethod: string
+enum PaymentMethodEnum: string
 {
     case BANK_MANDIRI = 'mandiri';
     case BANK_BNI = 'bni';

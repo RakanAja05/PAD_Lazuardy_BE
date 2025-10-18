@@ -2,11 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\CourseLocation;
+use App\Enums\CourseMode;
 use App\Enums\Gender;
-use App\Enums\Role;
-use App\Enums\TutorStatus;
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -97,7 +94,7 @@ class StoreTutorRegisterRequest extends FormRequest
                 'array',
             ],
 
-            'course_location' => ['string', new Enum(CourseLocation::class)],
+            'course_mode' => ['string', new Enum(CourseMode::class)],
 
             'description' => [
                 'nullable',

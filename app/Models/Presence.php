@@ -18,4 +18,5 @@ class Presence extends Model
         'report',
         'pbm_image_url',
     ];
+
 }

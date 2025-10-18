@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Presence;
 use App\Http\Requests\StorePresenceRequest;
 use App\Http\Requests\UpdatePresenceRequest;
+use Illuminate\Http\Request;
 
 class PresenceController extends Controller
 {
@@ -19,7 +20,7 @@ class PresenceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePresenceRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class PresenceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePresenceRequest $request, Presence $presence)
+    public function update(Request $request, Presence $presence)
     {
         //
     }

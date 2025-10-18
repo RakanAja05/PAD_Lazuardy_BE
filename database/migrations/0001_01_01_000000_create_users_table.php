@@ -1,8 +1,11 @@
 <?php
 
 use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Enums\Religion;
+use App\Enums\ReligionEnum;
 use App\Enums\Role;
+use App\Enums\RoleEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +16,9 @@ return new class extends Migration
     public function up(): void
     {
         // membuat data enum
-        $roles = Role::list();
-        $genders = Gender::list();
-        $religions = Religion::list();
+        $roles = RoleEnum::list();
+        $genders = GenderEnum::list();
+        $religions = ReligionEnum::list();
 
         Schema::create('users', function (Blueprint $table) use ($roles, $genders, $religions) {
             $table->id();

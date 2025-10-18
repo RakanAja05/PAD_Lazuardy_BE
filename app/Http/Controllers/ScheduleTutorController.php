@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ScheduleTutor;
-use App\Http\Requests\StoreScheduleTutorRequest;
-use App\Http\Requests\UpdateScheduleTutorRequest;
+use Illuminate\Http\Request;
 
 class ScheduleTutorController extends Controller
 {
@@ -19,7 +18,7 @@ class ScheduleTutorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreScheduleTutorRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +34,7 @@ class ScheduleTutorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateScheduleTutorRequest $request, ScheduleTutor $scheduleTutor)
+    public function update(Request $request, ScheduleTutor $scheduleTutor)
     {
         //
     }

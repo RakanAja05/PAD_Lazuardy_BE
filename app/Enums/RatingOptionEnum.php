@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum RatingOption: string
+enum RatingOptionEnum: string
 {
     case VERY_GOOD = 'sangat baik';
     case GOOD = 'baik';

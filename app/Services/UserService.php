@@ -9,7 +9,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -67,13 +66,14 @@ class UserService
                 [
                     'experience' => $tutorData['experience'],
                     'organization' => $tutorData['organization'],
-                    'course_location' => $tutorData['course_location'],
+                    'course_mode' => $tutorData['course_mode'],
                     'description' => $tutorData['description'],
                     'qualification' => $tutorData['qualification'],
                     'learning_method' => $tutorData['learning_method'],
                     'status' => TutorStatus::VERIFY->value,
                 ],
             );
+
             DB::commit();
             return $tutor;
         } catch(Exception $e) {

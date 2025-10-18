@@ -2,19 +2,23 @@
 
 namespace App\Enums;
 
-enum Role: string
+enum FileTypeEnum: string
 {
-    case ADMIN = 'admin';
-    case STUDENT = 'student';
-    case TUTOR = 'tutor';
+    case IJAZAH = 'ijazah';
+    case KTP = 'ktp';
+    case CV = 'cv';
+    case PORTOFOLIO = 'portofolio';
+    case CERTIFICATE = 'sertifikat';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::ADMIN => 'Admin',
-            self::TUTOR => 'Mentor',
-            self::STUDENT => 'Siswa'
+            self::IJAZAH => 'Ijazah',
+            self::KTP => 'KTP',
+            self::CV => 'CV',
+            self::PORTOFOLIO => 'Portofolio',
+            self::CERTIFICATE => 'Sertifikat',
         };
     }
 

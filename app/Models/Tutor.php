@@ -25,7 +25,7 @@ class Tutor extends Model
         'organization',
         'learning_method',
         'qualification',
-        'course_location',
+        'course_mode',
         'status',
         'rank',
         'sanction_amount',

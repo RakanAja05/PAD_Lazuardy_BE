@@ -2,19 +2,19 @@
 
 namespace App\Enums;
 
-enum VerificationType: string
+enum RoleEnum: string
 {
-    case REGISTRATION = 'registrasi';
-    case RESET_PASSWORD = 'reset_password';
-    case FORGET_PASSWORD = 'lupa_password';
+    case ADMIN = 'admin';
+    case STUDENT = 'student';
+    case TUTOR = 'tutor';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::REGISTRATION => 'Registrasi',
-            self::RESET_PASSWORD => 'Reset password',
-            self::FORGET_PASSWORD => 'Lupa password',
+            self::ADMIN => 'Admin',
+            self::TUTOR => 'Mentor',
+            self::STUDENT => 'Siswa'
         };
     }
 

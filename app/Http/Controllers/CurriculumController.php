@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curriculum;
-use App\Http\Requests\StoreCurriculumRequest;
-use App\Http\Requests\UpdateCurriculumRequest;
+use Illuminate\Http\Request;
 
 class CurriculumController extends Controller
 {
@@ -19,7 +18,7 @@ class CurriculumController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCurriculumRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,15 +34,15 @@ class CurriculumController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCurriculumRequest $request, Curriculum $curriculum)
+    public function update(Request $request, Curriculum $curriculum)
     {
-        //
+        
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Curriculum $curriculum)
+    public function destroy(Request $curriculum)
     {
         //
     }

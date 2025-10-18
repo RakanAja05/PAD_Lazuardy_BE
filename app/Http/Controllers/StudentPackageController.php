@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\StudentPackage;
 use App\Http\Requests\StoreStudentPackageRequest;
 use App\Http\Requests\UpdateStudentPackageRequest;
+use Illuminate\Http\Request;
 
 class StudentPackageController extends Controller
 {
@@ -19,7 +20,7 @@ class StudentPackageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStudentPackageRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class StudentPackageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStudentPackageRequest $request, StudentPackage $studentPackage)
+    public function update(Request $request, StudentPackage $studentPackage)
     {
         //
     }

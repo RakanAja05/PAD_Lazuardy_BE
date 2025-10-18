@@ -2,6 +2,7 @@
 
 use App\Enums\Status;
 use App\Enums\TutorStatus;
+use App\Enums\TutorStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $statuses = TutorStatus::list();
+        $statuses = TutorStatusEnum::list();
         
         Schema::create('tutor_confirms', function (Blueprint $table) use ($statuses) 
         {

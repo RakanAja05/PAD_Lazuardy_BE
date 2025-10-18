@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Religion: string
+enum ReligionEnum: string
 {
     case ISLAM = 'islam';
     case KRISTEN = 'kristen';

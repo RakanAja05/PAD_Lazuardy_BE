@@ -2,23 +2,17 @@
 
 namespace App\Enums;
 
-enum FileType: string
+enum CourseModeEnum: string
 {
-    case IJAZAH = 'ijazah';
-    case KTP = 'ktp';
-    case CV = 'cv';
-    case PORTOFOLIO = 'portofolio';
-    case CERTIFICATE = 'sertifikat';
+    case ONLINE = 'online';
+    case OFFLINE = 'offline';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::IJAZAH => 'Ijazah',
-            self::KTP => 'KTP',
-            self::CV => 'CV',
-            self::PORTOFOLIO => 'Portofolio',
-            self::CERTIFICATE => 'Sertifikat',
+            self::ONLINE => 'Online',
+            self::OFFLINE => 'Offline',
         };
     }
 

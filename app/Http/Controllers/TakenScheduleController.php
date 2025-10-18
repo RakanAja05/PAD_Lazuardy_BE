@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TakenSchedule;
 use App\Http\Requests\StoreTakenScheduleRequest;
 use App\Http\Requests\UpdateTakenScheduleRequest;
+use Illuminate\Http\Request;
 
 class TakenScheduleController extends Controller
 {
@@ -19,7 +20,7 @@ class TakenScheduleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTakenScheduleRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class TakenScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTakenScheduleRequest $request, TakenSchedule $takenSchedule)
+    public function update(Request $request, TakenSchedule $takenSchedule)
     {
         //
     }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\OtpType;
+use App\Enums\OtpTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOtpRequest extends FormRequest
@@ -23,7 +23,8 @@ class UpdateOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'identifier_type' => 'required|in:' . implode(',', array_column(OtpType::cases(), 'value')),
+            'identifier' => 'nullable|string',
+            'identifier_type' => 'required|in:' . implode(',', OtpTypeEnum::list()),
             'verification_type' => 'required|string',
             'code' => 'required|string',
         ];

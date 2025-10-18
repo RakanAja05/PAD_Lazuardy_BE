@@ -2,17 +2,16 @@
 
 namespace App\Enums;
 
-enum CourseMode: string
+enum BadgeEnum: string
 {
-    case ONLINE = 'online';
-    case OFFLINE = 'offline';
+    case AMATEUR = "pemula";
 
+    
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::ONLINE => 'Online',
-            self::OFFLINE => 'Offline',
+        self::AMATEUR => 'Pemula'
         };
     }
 
