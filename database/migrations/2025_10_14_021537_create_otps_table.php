@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('identifier')->index(); 
             $table->enum('identifier_type', $otpTypes);
-            $table->string('code', 60); 
+            $table->string('code'); 
             $table->enum('verification_type', $verificationTypes); 
             $table->integer('attempts')->default(0);
             $table->boolean('is_used')->default(false);

@@ -81,9 +81,9 @@ class VerificationController extends Controller
         $otp = $result['otp'];
         $otpCode = $result['otpCode'];
 
-        Mail::to($user->email)->send(new OtpEmail($otpCode));
+        // Mail::to($user->email)->send(new OtpEmail($otpCode));
 
-        return response()->json(['message' => 'OTP sent successfully.'], 200);
+        return response()->json(['message' => 'OTP sent successfully.', "code" => $otpCode], 200);
     }
 
     /**
@@ -137,7 +137,8 @@ class VerificationController extends Controller
      */
     public function verifyOtp(UpdateOtpRequest $request)
     {
-        
+        $user = $request->user();
+        $request->validated();
     }
 
     // public function verifyOtp(UpdateOtpRequest $request)

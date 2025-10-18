@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\FileType; 
+use App\Enums\FileTypeEnum;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Collection;
@@ -36,11 +36,11 @@ class TutorService
         $userId = $user->id;
 
         $fileTypes = [
-            'cv' => FileType::CV->value,
-            'ktp' => FileType::KTP->value,
-            'ijazah' => FileType::IJAZAH->value,
-            'certificate' => FileType::CERTIFICATE->value,
-            'portofolio' => FileType::PORTOFOLIO->value,
+            'cv' => FileTypeEnum::CV->value,
+            'ktp' => FileTypeEnum::KTP->value,
+            'ijazah' => FileTypeEnum::IJAZAH->value,
+            'certificate' => FileTypeEnum::CERTIFICATE->value,
+            'portofolio' => FileTypeEnum::PORTOFOLIO->value,
         ];
 
         DB::beginTransaction();

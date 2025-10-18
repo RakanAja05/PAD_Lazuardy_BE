@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Curriculum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CurriculumFactory extends Factory
 {
+    protected $model = Curriculum::class;
     /**
      * Define the model's default state.
      *
@@ -16,8 +18,9 @@ class CurriculumFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->sentence(2);
         return [
-            //
+            'name' => $name,
         ];
     }
 }

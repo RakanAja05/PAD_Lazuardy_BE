@@ -9,7 +9,7 @@ use App\Services\TutorService;
 use App\Services\UserService;
 use Illuminate\Support\Arr;
 
-class UserController extends Controller
+class   UserController extends Controller
 {
     /**
      * Update the specified resource in storage.
@@ -54,7 +54,7 @@ class UserController extends Controller
         
         $userData = collect(Arr::only($validatedData, ['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
         $addressData = collect(Arr::only($validatedData, ['province', 'regency', 'district', 'subdistrict', 'street']));
-        $studentData = collect(Arr::only($validatedData, ['parent', 'parent_telephone_number', 'class_id']));
+        $studentData = collect(Arr::only($validatedData, ['parent', 'parent_telephone_number', 'class_id', 'curriculum_id']));
 
         $userService->updateBiodataRegistration($user, $userData, $addressData);
         $userService->storeStudentRole($user, $studentData);

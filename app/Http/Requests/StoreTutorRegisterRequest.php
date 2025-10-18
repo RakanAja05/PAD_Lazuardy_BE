@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Enums\CourseMode;
+use App\Enums\CourseModeEnum;
 use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -14,18 +16,7 @@ class StoreTutorRegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        
-        // $userToUpdate = $this->route('user'); 
-
-        // if (!$userToUpdate instanceof User) {
-        //     return false;
-        // }
-
-        // $isOwner = $this->user()->id === $userToUpdate->id;
-        // $isTutor = $this->user()->role === Role::TUTOR->value; 
-
-        // return $isOwner && $isTutor;
-        return true;
+        return $this->user() !== null;
     }
 
     /**
@@ -38,7 +29,7 @@ class StoreTutorRegisterRequest extends FormRequest
         return [
             // Update User
             'name' => ['required', 'string', 'min:2', 'max:255'],
-            'gender' => ['required', new Enum(Gender::class)],
+            'gender' => ['required', new Enum(GenderEnum::class)],
 
             'date_of_birth' => [
                 'required', 
@@ -94,7 +85,7 @@ class StoreTutorRegisterRequest extends FormRequest
                 'array',
             ],
 
-            'course_mode' => ['string', new Enum(CourseMode::class)],
+            'course_mode' => ['string', new Enum(CourseModeEnum::class)],
 
             'description' => [
                 'nullable',

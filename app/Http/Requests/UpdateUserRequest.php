@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
@@ -34,7 +35,7 @@ class UpdateUserRequest extends FormRequest
         return [
             
             'name' => ['required', 'string', 'min:2', 'max:255'],
-            'gender' => ['required', new Enum(Gender::class)],
+            'gender' => ['required', new Enum(GenderEnum::class)],
 
             'date_of_birth' => [
                 'required', 

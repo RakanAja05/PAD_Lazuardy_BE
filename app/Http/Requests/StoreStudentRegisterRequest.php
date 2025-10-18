@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Enums\Role;
+use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
@@ -12,16 +14,8 @@ class StoreStudentRegisterRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $userToUpdate = $this->route('user'); 
-
-        if (!$userToUpdate instanceof User) {
-            return false;
-        }
-
-        $isOwner = $this->user()->id === $userToUpdate->id;
-        $isStudent = $this->user()->role === Role::STUDENT->value; 
-
-        return $isOwner && $isStudent;
+        // Since the route no longer includes {user}, authorize only checks authentication.
+        return $this->user() !== null;
     }
 
     public function rules(): array
@@ -30,7 +24,7 @@ class StoreStudentRegisterRequest extends FormRequest
         [
             // tabel user
             'name' => ['required', 'string', 'min:2', 'max:255'],
-            'gender' => ['required', new Enum(Gender::class)],
+            'gender' => ['required', new Enum(GenderEnum::class)],
 
             'date_of_birth' => [
                 'required', 
@@ -77,6 +71,12 @@ class StoreStudentRegisterRequest extends FormRequest
                 'nullable', 
                 'integer', 
                 'exists:classes,id'
+            ],
+
+            'curriculum_id' => [
+                'nullable',
+                'integer',
+                'exists:curriculums,id'
             ],
 
             'school' => ['nullable', 'string', 'min:2', 'max:100'],

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\TutorStatus;
+use App\Enums\TutorStatusEnum;
 use App\Models\Student;
 use App\Models\Tutor;
 use App\Models\User;
@@ -47,6 +47,7 @@ class UserService
                     'parent' => $studentData['parent'],
                     'parent_telephone_number' => $studentData['parent_telephone_number'],
                     'class_id' => $studentData['class_id'],
+                    'curriculum_id' => $studentData['curriculum_id'],
                 ]
             );
             DB::commit();
@@ -70,7 +71,7 @@ class UserService
                     'description' => $tutorData['description'],
                     'qualification' => $tutorData['qualification'],
                     'learning_method' => $tutorData['learning_method'],
-                    'status' => TutorStatus::VERIFY->value,
+                    'status' => TutorStatusEnum::VERIFY->value,
                 ],
             );
 

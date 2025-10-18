@@ -10,11 +10,14 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'initiateRegister'])->name('register.initiate');
+Route::patch('/register/verify', [AuthController::class, 'verifyEmail'])->name('register.verify-email');
+Route::post('/register/otp/send', [VerificationController::class, 'sendOtp'])->name('register.otp.send');
+
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::patch('/register/student/{user}', [UserController::class, 'updateStudentRole'])->name('register.student');
-    Route::patch('/register/tutor/{user}', [UserController::class, 'updateTutorRole'])->name('register.tutor');
+    Route::patch('/register/student', [UserController::class, 'updateStudentRole'])->name('register.student');
+    Route::patch('/register/tutor', [UserController::class, 'updateTutorRole'])->name('register.tutor');
 
     Route::prefix('otp')->group(function () {
         Route::post('/send', [VerificationController::class, 'sendOtp'])->name('otp.send');
