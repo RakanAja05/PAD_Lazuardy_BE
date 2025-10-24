@@ -1,9 +1,19 @@
 <?php
 
-use App\Http\Controllers\ClassStudentController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\GoogleController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// === REGISTER & LOGIN BIASA ===
+Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/login', [LoginController::class, 'login']);
+
+// === LOGIN GOOGLE UNTUK MOBILE ===
+Route::post('/auth/google/mobile', [GoogleController::class, 'mobileLogin']);
+
+// === PROTECTED ROUTES (wajib login) ===
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout']);
+    Route::get('/me', [LoginController::class, 'me']);
+});

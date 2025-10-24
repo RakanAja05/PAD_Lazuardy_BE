@@ -1,11 +1,11 @@
 <?php
 
-use App\Enums\RatingOption;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleController;
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 Route::get('/', function () {
-    
-    dd(RatingOption::VERY_GOOD->label());
-
     return view('welcome');
 });
