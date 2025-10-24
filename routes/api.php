@@ -42,5 +42,5 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::patch('/register/tutor', [UserController::class, 'updateTutorRole'])->name('register.tutor');
 }); 
 
-Route::get('auth/{provider}', [SocialAuthController::class, 'redirectToProvider'])->name('login');
-Route::get('auth/{provider}/callback', [SocialAuthController::class, 'handleProviderCallback']);
+// Route::get('auth/{provider}', [SocialAuthController::class, 'redirectToProvider'])->name('login');
+// Route::get('auth/{provider}/callback', [SocialAuthController::class, 'handleProviderCallback']);

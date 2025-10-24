@@ -12,10 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-<<<<<<< HEAD
-=======
     /** @use HasFactory<\Database\Factories\UserFactory> */
->>>>>>> registration
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -26,10 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-<<<<<<< HEAD
-=======
         'email_verified_at',
->>>>>>> registration
         'password',
         'role',
         'telephone_number',
@@ -63,13 +57,9 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-<<<<<<< HEAD
-            'password'          => 'hashed',
-            'date_of_birth'     => 'date',
-=======
             'password' => 'hashed',
             'home_address' => 'array',
->>>>>>> registration
+            'date_of_birth' => 'date'
         ];
     }
 
