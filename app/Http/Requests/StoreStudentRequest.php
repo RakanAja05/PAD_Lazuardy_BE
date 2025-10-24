@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreStudentRequest extends FormRequest
@@ -11,7 +12,16 @@ class StoreStudentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $userToUpdate = $this->route('user'); 
+
+        if (!$userToUpdate instanceof User) {
+            return false;
+        }
+
+        $isOwner = $this->user()->id === $userToUpdate->id;
+        $isStudent = $this->user()->role === 'student'; 
+
+        return $isOwner && $isStudent;
     }
 
     /**
@@ -21,8 +31,33 @@ class StoreStudentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        return [            
+            'class_id' => [
+                'nullable', 
+                'integer', 
+                'exists:classes,id'
+            ],
+            
+            'major_id' => [
+                'nullable', 
+                'integer', 
+                'exists:majors,id'
+            ],
+            'curriculum_id' => [
+                'nullable', 
+                'integer', 
+                'exists:curriculums,id'
+            ],
+
+            'school' => ['nullable', 'string', 'min:2', 'max:100'],
+            'parent' => ['nullable', 'string', 'min:2', 'max:255'],
+
+            'parent_telephone_number' => [
+                'nullable', 
+                'string', 
+                'max:15',
+                // 'regex:/^(\+62|0)\d{9,15}$/',
+            ],
         ];
     }
 }

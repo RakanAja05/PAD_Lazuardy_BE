@@ -3,12 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+<<<<<<< HEAD
+=======
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+>>>>>>> registration
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -19,6 +26,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+<<<<<<< HEAD
+=======
+        'email_verified_at',
+>>>>>>> registration
         'password',
         'role',
         'telephone_number',
@@ -52,8 +63,41 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+<<<<<<< HEAD
             'password'          => 'hashed',
             'date_of_birth'     => 'date',
+=======
+            'password' => 'hashed',
+            'home_address' => 'array',
+>>>>>>> registration
         ];
+    }
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function tutor(): HasOne
+    {
+        return $this->hasOne(Tutor::class);
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(ScheduleTutor::class);
+    }
+
+    public function subjects(): BelongsToMany {
+        return $this->belongsToMany(Subject::class, 'tutor_subjects', 'user_id', 'subject_id');
+    }
+
+    public function files(): HasMany {
+        return $this->hasMany(File::class);
+    }
+
+    public function scopeGetUserByEmail($query, $email)
+    {
+        return $query->where('email', $email)->first();
     }
 }

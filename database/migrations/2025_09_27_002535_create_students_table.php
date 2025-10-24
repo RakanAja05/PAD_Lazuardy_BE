@@ -14,15 +14,15 @@ return new class extends Migration
 
         Schema::create('students', function (Blueprint $table) 
         {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('class_id')->constrained('classes')->nullable();
-            $table->foreignId('major_id')->constrained('majors')->nullable();
-            $table->foreignId('curriculum_id')->constrained('curriculums')->nullable();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('class_id')->constrained('classes');
+            $table->foreignId('curriculum_id')->constrained('curriculums');
             $table->string('school')->nullable();
             $table->string('parent')->nullable();
-            $table->string('parent_telephone_number')->nullable();
+            $table->string('parent_telephone_number', 15)->nullable();
             $table->timestamps();
+            
+            $table->primary('user_id');
         });
     }
 

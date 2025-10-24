@@ -13,10 +13,25 @@ class TakenSchedule extends Model
 
     protected $fillable = 
     [
-        'student_id',
+        'user_id',
         'schedule_tutor_id',
         'subject_id',
         'date',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scheduleTutor()
+    {
+        return $this->belongsTo(ScheduleTutor::class);
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
 }
