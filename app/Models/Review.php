@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\RatingOption;
+use App\Enums\RatingOptionEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,21 +38,21 @@ class Review extends Model
 
     public function getQualityLabelAttribute()
     {
-        return $this->quality ? RatingOption::from($this->quality)->label() : null;
+        return $this->quality ? RatingOptionEnum::from($this->quality)->displayName() : null;
     }
 
     public function getDeliveryLabelAttribute()
     {
-        return $this->delivery ? RatingOption::from($this->delivery)->label() : null;
+        return $this->delivery ? RatingOptionEnum::from($this->delivery)->displayName() : null;
     }
 
     public function getAttitudeLabelAttribute()
     {
-        return $this->attitude ? RatingOption::from($this->attitude)->label() : null;
+        return $this->attitude ? RatingOptionEnum::from($this->attitude)->displayName() : null;
     }
 
     public function getBenefitLabelAttribute()
     {
-        return $this->benefit ? RatingOption::from($this->benefit)->label() : null;
+        return $this->benefit ? RatingOptionEnum::from($this->benefit)->displayName() : null;
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\VerificationTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
-class GetOtpRequest extends FormRequest
+class VerifyOtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +24,8 @@ class GetOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "temp_token" => ["required", "string"],
-            "otp_code" => ["required", "string"],
+            'temp_token' => 'required|string',
+            'otp_code' => 'required|string',
         ];
     }
 }

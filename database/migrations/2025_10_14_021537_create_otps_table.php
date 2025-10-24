@@ -18,7 +18,6 @@ return new class extends Migration
 
         Schema::create('otps', function (Blueprint $table) use ($verificationTypes, $otpTypes) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('identifier')->index(); 
             $table->enum('identifier_type', $otpTypes);
             $table->string('code'); 

@@ -15,25 +15,508 @@
         }
     ],
     "paths": {
+        "api/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User menginput data email dan password untuk registrasi",
+                "description": "Endpoint untuk memulai proses registrasi user baru dengan mengirimkan email dan password. Sistem akan mengirimkan OTP ke email yang didaftarkan untuk verifikasi.",
+                "operationId": "initiateRegister",
+                "requestBody": {
+                    "description": "Data registrasi user",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "string12345"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "string12345"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registrasi berhasil, OTP telah dikirim ke email",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "temp_token": {
+                                            "type": "string",
+                                            "example": "temporary_token_string"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "user@gmail.com"
+                                        },
+                                        "otp": {
+                                            "type": "string",
+                                            "example": "1234"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email has already been taken."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/register/verify": {
+            "patch": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Verifikasi email menggunakan OTP saat registrasi",
+                "description": "Endpoint untuk memverifikasi email user baru dengan menggunakan OTP yang telah dikirimkan ke email tersebut selama proses registrasi.",
+                "operationId": "verifyEmail",
+                "requestBody": {
+                    "description": "Data verifikasi email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "temp_token",
+                                    "otp_code"
+                                ],
+                                "properties": {
+                                    "temp_token": {
+                                        "type": "string",
+                                        "example": "temporary_token_string"
+                                    },
+                                    "otp_code": {
+                                        "type": "string",
+                                        "example": "1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email berhasil diverifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Registrasi berhasil. Email terverifikasi."
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "auth_token_string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid OTP or temp token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid OTP or temporary token."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/register/resend-otp": {
+            "patch": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Kirim ulang OTP untuk verifikasi email saat registrasi",
+                "description": "Endpoint untuk mengirim ulang OTP ke email user baru selama proses registrasi jika OTP sebelumnya tidak diterima atau hilang.",
+                "operationId": "resendOtp",
+                "requestBody": {
+                    "description": "Data untuk mengirim ulang OTP",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "temp_token"
+                                ],
+                                "properties": {
+                                    "temp_token": {
+                                        "type": "string",
+                                        "example": "temporary_token_string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP berhasil dikirim ulang ke email",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP berhasil terkirim kembali."
+                                        },
+                                        "otp_code": {
+                                            "type": "string",
+                                            "example": "1234"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid temp token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid temporary token."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/forgot-password/verify": {
+            "patch": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Verifikasi OTP untuk lupa password",
+                "description": "Endpoint untuk memverifikasi OTP yang dikirimkan ke email user saat proses lupa password.",
+                "operationId": "verifyForgotPassword",
+                "requestBody": {
+                    "description": "Data verifikasi OTP lupa password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "temp_token",
+                                    "otp_code"
+                                ],
+                                "properties": {
+                                    "temp_token": {
+                                        "type": "string",
+                                        "example": "temporary_token_string"
+                                    },
+                                    "otp_code": {
+                                        "type": "string",
+                                        "example": "1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP berhasil diverifikasi untuk reset password",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP verified successfully."
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "reset_token_string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid OTP or temp token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid OTP or temporary token."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/reset-password": {
+            "patch": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Reset password user",
+                "description": "Endpoint untuk mereset password user setelah OTP lupa password berhasil diverifikasi.",
+                "operationId": "resetPassword",
+                "requestBody": {
+                    "description": "Data reset password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "example": "reset_token_string"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password berhasil direset",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password berhasil direset."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid token or input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid reset token."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "api/register/student/{user}": {
             "patch": {
                 "tags": [
-                    "Users",
-                    "Students"
+                    "students",
+                    "Users"
                 ],
-                "summary": "Update the specified resource in storage.",
+                "summary": "Biodata saat registrasi student",
+                "description": "Endpoint untuk mengisi biodata saat registrasi student",
                 "operationId": "regStudentRole",
-                "parameters": [
-                    {
-                        "name": "user",
-                        "in": "path",
-                        "description": "user adalah ID user yang melakukan registrasi",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "gender",
+                                    "date_of_birth",
+                                    "telephone_number",
+                                    "province",
+                                    "regency",
+                                    "district",
+                                    "subdistrict",
+                                    "street",
+                                    "parent",
+                                    "parent_telephone_number",
+                                    "class_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nama lengkap student",
+                                        "type": "string",
+                                        "example": "Jane Doe"
+                                    },
+                                    "gender": {
+                                        "description": "Jenis kelamin student",
+                                        "type": "string",
+                                        "example": "wanita"
+                                    },
+                                    "date_of_birth": {
+                                        "description": "Tanggal lahir student",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2005-05-15"
+                                    },
+                                    "telephone_number": {
+                                        "description": "Nomor telepon student",
+                                        "type": "string",
+                                        "example": "089876543210"
+                                    },
+                                    "province": {
+                                        "description": "Provinsi tempat tinggal student",
+                                        "type": "string",
+                                        "example": "Jawa Barat"
+                                    },
+                                    "regency": {
+                                        "description": "Kota/Kabupaten tempat tinggal student",
+                                        "type": "string",
+                                        "example": "Bandung"
+                                    },
+                                    "district": {
+                                        "description": "Kecamatan tempat tinggal student",
+                                        "type": "string",
+                                        "example": "Coblong"
+                                    },
+                                    "subdistrict": {
+                                        "description": "Kelurahan tempat tinggal student",
+                                        "type": "string",
+                                        "example": "Dago"
+                                    },
+                                    "street": {
+                                        "description": "Alamat lengkap student",
+                                        "type": "string",
+                                        "example": "Jl. Dago No. 456"
+                                    },
+                                    "profile_photo_url": {
+                                        "description": "URL foto profil student",
+                                        "type": "string",
+                                        "example": "http://example.com/photo.jpg"
+                                    },
+                                    "latitude": {
+                                        "description": "Latitude lokasi student",
+                                        "type": "string",
+                                        "example": "-6.90389"
+                                    },
+                                    "longitude": {
+                                        "description": "Longitude lokasi student",
+                                        "type": "string",
+                                        "example": "107.61861"
+                                    },
+                                    "parent": {
+                                        "description": "Nama orang tua/wali student",
+                                        "type": "string",
+                                        "example": "Mr. Doe"
+                                    },
+                                    "parent_telephone_number": {
+                                        "description": "Nomor telepon orang tua/wali student",
+                                        "type": "string",
+                                        "example": "081234567899"
+                                    },
+                                    "class_id": {
+                                        "description": "ID kelas student",
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Data berhasil diubah"
@@ -44,362 +527,178 @@
         "api/register/tutor/{user}": {
             "patch": {
                 "tags": [
-                    "Users",
-                    "Tutors"
+                    "tutors",
+                    "Users"
                 ],
-                "summary": "Update registrasi role tutor",
+                "summary": "Biodata saat registrasi tutor",
+                "description": "Endpoint untuk mengisi biodata saat registrasi tutor",
                 "operationId": "regTutorRole",
-                "parameters": [
-                    {
-                        "name": "user",
-                        "in": "path",
-                        "description": "user adalah ID user yang melakukan registrasi",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "gender",
+                                    "date_of_birth",
+                                    "telephone_number",
+                                    "province",
+                                    "regency",
+                                    "district",
+                                    "subdistrict",
+                                    "street",
+                                    "experience",
+                                    "organization",
+                                    "course_location",
+                                    "description",
+                                    "qualification",
+                                    "learning_method",
+                                    "subject_ids",
+                                    "schedules"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nama lengkap tutor",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "gender": {
+                                        "description": "Jenis kelamin tutor",
+                                        "type": "string",
+                                        "example": "pria"
+                                    },
+                                    "date_of_birth": {
+                                        "description": "Tanggal lahir tutor",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "telephone_number": {
+                                        "description": "Nomor telepon tutor",
+                                        "type": "string",
+                                        "example": "081234567890"
+                                    },
+                                    "province": {
+                                        "description": "Provinsi tempat tinggal tutor",
+                                        "type": "string",
+                                        "example": "Jawa Barat"
+                                    },
+                                    "regency": {
+                                        "description": "Kota/Kabupaten tempat tinggal tutor",
+                                        "type": "string",
+                                        "example": "Bandung"
+                                    },
+                                    "district": {
+                                        "description": "Kecamatan tempat tinggal tutor",
+                                        "type": "string",
+                                        "example": "Coblong"
+                                    },
+                                    "subdistrict": {
+                                        "description": "Kelurahan tempat tinggal tutor",
+                                        "type": "string",
+                                        "example": "Dago"
+                                    },
+                                    "street": {
+                                        "description": "Alamat lengkap tutor",
+                                        "type": "string",
+                                        "example": "Jl. Dago No. 123"
+                                    },
+                                    "profile_photo_url": {
+                                        "description": "URL foto profil tutor",
+                                        "type": "string",
+                                        "example": "http://example.com/photo.jpg"
+                                    },
+                                    "latitude": {
+                                        "description": "Latitude lokasi tutor",
+                                        "type": "string",
+                                        "example": "-6.90389"
+                                    },
+                                    "longitude": {
+                                        "description": "Longitude lokasi tutor",
+                                        "type": "string",
+                                        "example": "107.61861"
+                                    },
+                                    "experience": {
+                                        "description": "Pengalaman mengajar tutor",
+                                        "type": "string",
+                                        "example": "3 tahun mengajar matematika"
+                                    },
+                                    "organization": {
+                                        "description": "Organisasi tempat tutor mengajar",
+                                        "type": "string",
+                                        "example": "Bimbel XYZ"
+                                    },
+                                    "course_location": {
+                                        "description": "Lokasi kursus tutor",
+                                        "type": "string",
+                                        "example": "Rumah tutor"
+                                    },
+                                    "description": {
+                                        "description": "Deskripsi tentang tutor",
+                                        "type": "string",
+                                        "example": "Saya seorang tutor yang berpengalaman..."
+                                    },
+                                    "qualification": {
+                                        "description": "Kualifikasi akademik tutor",
+                                        "type": "string",
+                                        "example": "S1 Pendidikan Matematika"
+                                    },
+                                    "learning_method": {
+                                        "description": "Metode pembelajaran tutor",
+                                        "type": "string",
+                                        "example": "Online dan Offline"
+                                    },
+                                    "subject_ids": {
+                                        "description": "Daftar ID mata pelajaran yang diajarkan tutor",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "schedules": {
+                                        "description": "Jadwal ketersediaan tutor",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "day": {
+                                                    "description": "Hari tersedia",
+                                                    "type": "string",
+                                                    "example": "Monday"
+                                                },
+                                                "time": {
+                                                    "description": "Waktu tersedia",
+                                                    "type": "string",
+                                                    "example": "18:00-20:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "day": "Monday",
+                                                "time": "18:00-20:00"
+                                            },
+                                            {
+                                                "day": "Wednesday",
+                                                "time": "18:00-20:00"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Data berhasil diubah"
-                    }
-                }
-            }
-        },
-        "/api/otp/send": {
-            "post": {
-                "tags": [
-                    "OTP"
-                ],
-                "summary": "Mengirim OTP ke user",
-                "description": "Mengirim OTP ke user via email atau telephone_number",
-                "operationId": "sendOtp",
-                "requestBody": {
-                    "description": "Pass user credentials",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "identifier",
-                                    "identifier_type",
-                                    "verification_type"
-                                ],
-                                "properties": {
-                                    "identifier": {
-                                        "description": "Email atau nomor telepon user.",
-                                        "type": "string",
-                                        "example": "user@example.com"
-                                    },
-                                    "identifier_type": {
-                                        "description": "Tipe identifier: email atau telephone_number.",
-                                        "type": "string",
-                                        "example": "email"
-                                    },
-                                    "verification_type": {
-                                        "description": "Tipe verifikasi: registration, password_reset, dll.",
-                                        "type": "string",
-                                        "example": "registration"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "OTP berhasil terkirim."
-                                        },
-                                        "otp_code": {
-                                            "description": "Kode OTP yang dibuat (Hanya untuk testing/debug).",
-                                            "type": "string",
-                                            "example": "ABC123"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Invalid request data."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Email atau nomor hp tidak ditemukan."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden / Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/otp/verify": {
-            "patch": {
-                "tags": [
-                    "OTP"
-                ],
-                "summary": "Verifikasi OTP",
-                "description": "Verifikasi OTP yang dikirim ke user via email atau telephone_number.",
-                "operationId": "verifyOtp",
-                "requestBody": {
-                    "description": "Data yang diperlukan untuk verifikasi OTP",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "identifier",
-                                    "identifier_type",
-                                    "verification_type",
-                                    "code"
-                                ],
-                                "properties": {
-                                    "identifier": {
-                                        "description": "Email atau nomor telepon user.",
-                                        "type": "string",
-                                        "example": "user@example.com"
-                                    },
-                                    "identifier_type": {
-                                        "description": "Tipe identifier: email atau telephone_number.",
-                                        "type": "string",
-                                        "example": "email"
-                                    },
-                                    "verification_type": {
-                                        "description": "Tipe verifikasi: registration, password_reset, dll.",
-                                        "type": "string",
-                                        "example": "registration"
-                                    },
-                                    "code": {
-                                        "description": "Kode OTP yang diterima user.",
-                                        "type": "string",
-                                        "example": "123456"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "OTP is valid."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request / Invalid Code",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Invalid OTP code."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found / Expired OTP",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "No valid OTP found or OTP has expired."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden / Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/otp/resend": {
-            "post": {
-                "tags": [
-                    "OTP"
-                ],
-                "summary": "resend OTP",
-                "description": "Resend OTP yang dikirim ke user via email atau telephone_number.",
-                "operationId": "resendOtp",
-                "requestBody": {
-                    "description": "Data yang diperlukan untuk mengirim ulang OTP",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "identifier_type",
-                                    "verification_type"
-                                ],
-                                "properties": {
-                                    "identifier_type": {
-                                        "description": "Tipe identifier: email atau telephone_number.",
-                                        "type": "string",
-                                        "example": "email"
-                                    },
-                                    "verification_type": {
-                                        "description": "Tipe verifikasi: registration, password_reset, dll.",
-                                        "type": "string",
-                                        "example": "registration"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "OTP berhasil terkirim."
-                                        },
-                                        "otp_code": {
-                                            "description": "Kode OTP yang dibuat (Hanya untuk testing/debug).",
-                                            "type": "string",
-                                            "example": "ABC123"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Invalid request data."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "No valid OTP found to resend."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden / Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -407,20 +706,20 @@
     },
     "tags": [
         {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "students",
+            "description": "students"
+        },
+        {
             "name": "Users",
             "description": "Users"
         },
         {
-            "name": "Students",
-            "description": "Students"
-        },
-        {
-            "name": "Tutors",
-            "description": "Tutors"
-        },
-        {
-            "name": "OTP",
-            "description": "OTP"
+            "name": "tutors",
+            "description": "tutors"
         }
     ]
 }

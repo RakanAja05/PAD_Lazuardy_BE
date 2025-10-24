@@ -23,10 +23,7 @@ class UpdateOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'identifier' => 'nullable|string',
-            'identifier_type' => 'required|in:' . implode(',', OtpTypeEnum::list()),
-            'verification_type' => 'required|string',
-            'code' => 'required|string',
+            "temp_token" => ["required", "string"],
         ];
     }
 }

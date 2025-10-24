@@ -4,17 +4,17 @@ namespace App\Enums;
 
 enum VerificationTypeEnum: string
 {
-    case REGISTRATION = 'registrasi';
-    case RESET_PASSWORD = 'reset_password';
-    case FORGET_PASSWORD = 'lupa_password';
+    case REGISTER = 'register';
+    case UPDATE_PASSWORD = 'update_password';
+    case FORGOT_PASSWORD = 'forgot_password';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::REGISTRATION => 'Registrasi',
-            self::RESET_PASSWORD => 'Reset password',
-            self::FORGET_PASSWORD => 'Lupa password',
+            self::REGISTER => 'Registrasi',
+            self::UPDATE_PASSWORD => 'Ubah kata sandi',
+            self::FORGOT_PASSWORD => 'Lupa kata sandi',
         };
     }
 

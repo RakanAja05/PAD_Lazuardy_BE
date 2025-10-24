@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\OtpTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOtpRequest extends FormRequest
+class UpdateAuthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +22,8 @@ class StoreOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "temp_token" => ["required", "string"],
-            "otp_code" => ["required", "string"],
+            'token' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 }

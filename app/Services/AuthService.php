@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\OtpTypeEnum;
 use App\Enums\VerificationTypeEnum;
+use App\Models\Otp;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Cache;
@@ -13,6 +14,31 @@ use Illuminate\Support\Str;
 
 class AuthService
 {
+    public function registerUser(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'role' => $data['role'],
+                'email_verified_at' => now(),
+            ]);
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        
+        return [
+            'user' => $user,
+            'token' => $token
+        ];
+    }
+
     public function initiateRegister(array $data)
     {
         $data['password'] = Hash::make($data['password']);
@@ -38,11 +64,11 @@ class AuthService
         $otpService = new OtpService;
         DB::beginTransaction();
         try {
-            $otpService->verifyOtp(
+            $otpService->checkOtp(
                 $otpCode, 
                 $cache_data['email'], 
-                OtpTypeEnum::EMAIL, 
-                VerificationTypeEnum::REGISTRATION
+                OtpTypeEnum::EMAIL->value, 
+                VerificationTypeEnum::REGISTER->value
             );
             $resultUser = $this->registerUser($cache_data);
             DB::commit();
@@ -56,28 +82,23 @@ class AuthService
         }
     }
 
-    public function registerUser(array $data)
+    public function resendOtpRegister(string $temp_token)
     {
-        DB::beginTransaction();
-        try {
-            $user = User::create([
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'role' => $data['role'],
-                'email_verified_at' => now(),
-            ]);
+        $cache_key = 'registration:pending:' . $temp_token;
+        $cache_data = Cache::get($cache_key);
 
-            $token = $user->createToken('auth_token')->plainTextToken;
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
+        if(!$cache_data)
+        {
+            throw new Exception("Sesi registrasi tidak ditemukan atau sudah kadaluarsa");
         }
 
-        
-        return [
-            'user' => $user,
-            'token' => $token
-        ];
+        $otpService = new OtpService;
+        $result = $otpService->resendOtp(
+            $cache_data['email'], 
+            OtpTypeEnum::EMAIL->value, 
+            VerificationTypeEnum::REGISTER->value
+        );
+
+        return $result;
     }
 }

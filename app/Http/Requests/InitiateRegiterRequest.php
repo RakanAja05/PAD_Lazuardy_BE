@@ -7,7 +7,7 @@ use App\Enums\RoleEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class StoreUserRequest extends FormRequest
+class InitiateRegiterRequest extends FormRequest
 {
     public function authorize(): bool
     {

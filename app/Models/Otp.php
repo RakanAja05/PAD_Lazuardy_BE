@@ -13,11 +13,6 @@ class Otp extends Model
         'expired_at' => 'datetime',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function isExpired()
     {
         return $this->expired_at->isPast();
@@ -34,11 +29,6 @@ class Otp extends Model
         $this->save();
     }
 
-    public function latestOtp($user_id)
-    {
-        return $this->where('user_id', $user_id)->latest()->first();
-    }
-
     public function scopeValid($query)
     {
         return $query->where('attempts', '<', 5)->where('expired_at', '>', now())->where('is_used', false);
@@ -53,6 +43,4 @@ class Otp extends Model
     {
         return $query->where('verification_type', $verificationType);
     }
-
-    
 }

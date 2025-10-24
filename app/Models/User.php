@@ -86,7 +86,8 @@ class User extends Authenticatable
         return $this->hasMany(File::class);
     }
 
-    public function otps(): HasMany {
-        return $this->hasMany(Otp::class);
+    public function scopeGetUserByEmail($query, $email)
+    {
+        return $query->where('email', $email)->first();
     }
 }
