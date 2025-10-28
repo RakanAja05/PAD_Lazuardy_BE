@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\RoleEnum;
 use App\Enums\TutorStatusEnum;
 use App\Models\Student;
 use App\Models\Tutor;
@@ -12,13 +13,48 @@ use Illuminate\Support\Facades\DB;
 
 class UserService
 {
+    public function convertAddressToJson($data)
+    {
+        return json_encode(
+            [
+            "province" => $data["province"],
+            "regency" => $data["regency"],
+            "district" => $data["district"],
+            "subdistrict" => $data["subdistrict"],
+            "street" => $data["street"],
+            ]
+        );
+    }
+
+    public function showUserProfile(User $query)
+    {
+        $address = $query->home_address;
+        $data = [
+            'name' => $query->name,
+            'email' => $query->email,
+            'telephone_number' => $query->telephone_number,
+            'profile_photo_url' => $query->profile_photo_url,
+            'gender' => $query->gender,
+            'date_of_birth' => $query->date_of_birth,
+            'religion' => $query->religion,
+
+            'province' => $address['province']?? null,
+            'city' => $address['regency']?? null,
+            'district' => $address['district']?? null,
+            'subdistrict' => $address['subdistrict']?? null,
+            'street' => $address['street']?? null,
+        ];
+
+        return $data;
+    }
+
     public function updateBiodataRegistration(User $user, Collection $userData, Collection $addressData){
         DB::beginTransaction();
         try 
         {
             $updated = $user->update([
                 'name' => $userData['name'],
-                'role' => 'student',
+                'role' => RoleEnum::STUDENT->value,
                 'gender' => $userData['gender'],
                 'date_of_birth' => $userData['date_of_birth'],
                 'telephone_number' => $userData['telephone_number'],

@@ -11,6 +11,8 @@ class Student extends Model
     /** @use HasFactory<\Database\Factories\StudentFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'user_id';
+
     protected $fillable = 
     [
         'user_id',

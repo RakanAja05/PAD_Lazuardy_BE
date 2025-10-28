@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTutorRegisterRequest;
 use App\Services\ScheduleService;
 use App\Services\TutorService;
 use App\Services\UserService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class   UserController extends Controller
@@ -81,7 +82,7 @@ class   UserController extends Controller
      * @OA\Property(property="date_of_birth", type="string", format="date", example="1990-01-01", description="Tanggal lahir tutor"),
      * @OA\Property(property="telephone_number", type="string", example="081234567890", description="Nomor telepon tutor"),
      * @OA\Property(property="province", type="string", example="Jawa Barat", description="Provinsi tempat tinggal tutor"),
-     * @OA\Property(property="regency", type="string", example="Bandung", description="Kota/Kabupaten tempat tinggal tutor"),
+     * @OA\Property(property="city", type="string", example="Bandung", description="Kota/Kabupaten tempat tinggal tutor"),
      * @OA\Property(property="district", type="string", example="Coblong", description="Kecamatan tempat tinggal tutor"),
      * @OA\Property(property="subdistrict", type="string", example="Dago", description="Kelurahan tempat tinggal tutor"),
      * @OA\Property(property="street", type="string", example="Jl. Dago No. 123", description="Alamat lengkap tutor"),
@@ -115,7 +116,7 @@ class   UserController extends Controller
         $validatedData = $request->validated();
 
         $userData = collect(Arr::only($validatedData, ['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
-        $addressData = collect(Arr::only($validatedData, ['province', 'regency', 'district', 'subdistrict', 'street']));
+        $addressData = collect(Arr::only($validatedData, ['province', 'city', 'district', 'subdistrict', 'street']));
         $tutorData = collect(Arr::only($validatedData, ['experience', 'organization','course_mode', 'description', 'qualification', 'learning_method'],));
         $subjectData = collect(Arr::only($validatedData, ['subject_ids']));
         $fileData = collect(Arr::only($validatedData, ['cv', 'ktp','ijazah','certificate', 'portofolio']));
@@ -130,6 +131,6 @@ class   UserController extends Controller
         
         return response()->json([
             'message' => 'Berhasil'
-        ], 200);;
+        ], 200);
     }
 }

@@ -57,7 +57,7 @@ class StoreTutorRegisterRequest extends FormRequest
             ],
             
             'province' => ['required', 'string', 'min:2', 'max:255'],
-            'regency' => ['required', 'string', 'min:2', 'max:255'],
+            'city' => ['required', 'string', 'min:2', 'max:255'],
             'district' => ['required', 'string', 'min:2', 'max:255'],
             'subdistrict' => ['required', 'string', 'min:2', 'max:255'],
             'street' => ['required', 'string', 'min:2', 'max:255'],

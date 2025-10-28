@@ -10,7 +10,7 @@
         "darkaonline/l5-swagger": "^9.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.2",
-        "laravel/socialite": "*",
+        "laravel/socialite": "^5.23",
         "laravel/tinker": "^2.10.1"
     },
     "require-dev": {
@@ -73,6 +73,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

@@ -75,4 +75,10 @@ class TutorService
             throw $e;
         }
     }
+
+
+    public function showtutorProfile()
+    {
+        
+    }
 }
