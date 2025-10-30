@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\FileTypeEnum;
+use App\Models\Tutor;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Collection;
@@ -10,75 +11,62 @@ use Illuminate\Support\Facades\DB;
 
 class TutorService
 {
-    public function storeSubject(User $user, Collection $subjectData)
-    {
-        // $subjectData = $subjectData['subject_ids'];
-        DB::beginTransaction();
-        try {
-            
-            $subjectIds = $subjectData->get('subject_ids');
-
-            $syncResult = $user->subjects()->sync($subjectIds);
-            
-            DB::commit();
-            
-            return $syncResult;
-        } catch(Exception $e){
-            
-            DB::rollBack();
-            
-            throw $e;
-        }
-    }
-
-    public function storeFile(User $user, Collection $fileData): bool
+    public function storeTutorFile(User $user, Collection $fileset)
     {
         $userId = $user->id;
 
-        $fileTypes = [
-            'cv' => FileTypeEnum::CV->value,
-            'ktp' => FileTypeEnum::KTP->value,
-            'ijazah' => FileTypeEnum::IJAZAH->value,
-            'certificate' => FileTypeEnum::CERTIFICATE->value,
-            'portofolio' => FileTypeEnum::PORTOFOLIO->value,
+        $types = [
+            FileTypeEnum::CV->value,
+            FileTypeEnum::CERTIFICATE->value,
+            FileTypeEnum::IJAZAH->value,
+            FileTypeEnum::KTP->value,
+            FileTypeEnum::PORTOFOLIO->value,
         ];
 
-        DB::beginTransaction();
-        try {
-            foreach($fileTypes as $key => $fileTypeValue)
+        $temp_arr = [];
+        foreach($types as $type)
+        {
+            $files = $fileset->get($type, null);
+            if(!$files) continue;
+
+            foreach($files as $file)
             {
-                $files = $fileData->get($key);
-                if (is_array($files))
-                {
-                    $temp_arr = [];
-                    foreach($files as $file)
-                    {
-                        if (isset($file['name']) && isset($file['path_url']))
-                        {
-                            array_push(
-                                $temp_arr,
-                                [
-                                    'name' => $file['name'],
-                                    'path_url' => $file['path_url'],
-                                    'type' => $fileTypeValue,
-                                ]
-                            );
-                        }
-                    }
-                    $user->files()->createMany($temp_arr);
-                }
+                array_push($temp_arr, [
+                    'name' => $file['name'],
+                    'path_url' => $file['path_url'],
+                    'type' => $type
+                ]);
             }
-            DB::commit();
-            return true;
-        } catch(Exception $e){
-            DB::rollBack();
-            throw $e;
         }
+        return $user->files()->createMany($temp_arr);
     }
 
 
-    public function showtutorProfile()
+    public function storeScheduleTutor(User $user, Collection $schedules)
     {
-        
+        return $user->schedules()->upsert($schedules["schedules"],['user_id', 'day', 'time']);
+    }
+
+
+    public function showtutorProfile(User $user, Tutor $tutor)
+    {
+        $data = [
+            'education' => $tutor->education,
+            'salary' => $tutor->salary,
+            'price' => $tutor->price,
+            'description' => $tutor->description,
+            'qualification' => $tutor->qualification,
+            'experience' => $tutor->experience,
+            'organization' => $tutor->organization,
+            'learning_method' => $tutor->learning_method,
+            'course_mode' => $tutor->course_mode->displayName(),
+            'status' => $tutor->status->displayName(),
+            'rank' => $tutor->rank->displayName(),
+            'sanction_amount' => $tutor->sanction_amount,
+            
+            'schedules' => $user->schedules
+        ];
+
+        return $data;
     }
 }

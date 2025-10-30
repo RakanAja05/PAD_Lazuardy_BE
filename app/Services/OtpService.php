@@ -81,12 +81,12 @@ class OtpService
         
         $createData = Otp::create($data);
 
-        // switch($identifierType)
-        // {
-        //     case OtpTypeEnum::EMAIL->value:
-        //         Mail::to($identifier)->send(new OtpEmail($code));
-        //         break;
-        // }
+        switch($identifierType)
+        {
+            case OtpTypeEnum::EMAIL->value:
+                Mail::to($identifier)->send(new OtpEmail($code));
+                break;
+        }
 
         return [
             "otp" => $createData,

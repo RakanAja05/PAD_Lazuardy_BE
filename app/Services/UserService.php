@@ -13,17 +13,16 @@ use Illuminate\Support\Facades\DB;
 
 class UserService
 {
-    public function convertAddressToJson($data)
+    public function convertAddress($data)
     {
-        return json_encode(
+        return 
             [
             "province" => $data["province"],
             "regency" => $data["regency"],
             "district" => $data["district"],
             "subdistrict" => $data["subdistrict"],
             "street" => $data["street"],
-            ]
-        );
+            ];
     }
 
     public function showUserProfile(User $query)
@@ -48,50 +47,18 @@ class UserService
         return $data;
     }
 
-    public function updateBiodataRegistration(User $user, Collection $userData, Collection $addressData){
-        DB::beginTransaction();
-        try 
-        {
-            $updated = $user->update([
-                'name' => $userData['name'],
+    public function updateBiodataRegistration(User $query, $data){
+        return $query->update([
+                'name' => $data['name'],
                 'role' => RoleEnum::STUDENT->value,
-                'gender' => $userData['gender'],
-                'date_of_birth' => $userData['date_of_birth'],
-                'telephone_number' => $userData['telephone_number'],
-                'home_address' => $addressData,
-                'profile_photo_url' => $userData['profile_photo_url'],
-                'latitude' => $userData['latitude'],
-                'longitude' => $userData['longitude'],
+                'gender' => $data['gender'],
+                'date_of_birth' => $data['date_of_birth'],
+                'telephone_number' => $data['telephone_number'],
+                'home_address' => $data['home_address'],
+                'profile_photo_url' => $data['profile_photo_url'],
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
             ]);
-            DB::commit();
-            return $updated;
-        } 
-        catch (Exception $e) 
-        {
-            DB::rollBack();
-            throw $e;
-        }
-    }
-
-    public function storeStudentRole(User $user, Collection $studentData)
-    {
-        DB::beginTransaction();
-        try {
-            $student = Student::updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'parent' => $studentData['parent'],
-                    'parent_telephone_number' => $studentData['parent_telephone_number'],
-                    'class_id' => $studentData['class_id'],
-                    'curriculum_id' => $studentData['curriculum_id'],
-                ]
-            );
-            DB::commit();
-            return $student;
-        } catch(Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
     }
 
     public function storeTutorRole(User $user, Collection $tutorData) {

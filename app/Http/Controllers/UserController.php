@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Http\Requests\StoreStudentRegisterRequest;
 use App\Http\Requests\StoreTutorRegisterRequest;
-use App\Services\ScheduleService;
+use App\Models\Student;
+use App\Models\Tutor;
 use App\Services\TutorService;
 use App\Services\UserService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class   UserController extends Controller
 {
@@ -47,22 +49,42 @@ class   UserController extends Controller
      * )
      * )
      */
-    public function updateStudentRole(StoreStudentRegisterRequest $request, UserService $userService)
+    public function updateStudentRole(StoreStudentRegisterRequest $request)
     {
-        $user = $request->user();
-        
-        $validatedData = $request->validated();
-        
-        $userData = collect(Arr::only($validatedData, ['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
-        $addressData = collect(Arr::only($validatedData, ['province', 'regency', 'district', 'subdistrict', 'street']));
-        $studentData = collect(Arr::only($validatedData, ['parent', 'parent_telephone_number', 'class_id', 'curriculum_id']));
+        $request->validated();
 
-        $userService->updateBiodataRegistration($user, $userData, $addressData);
-        $userService->storeStudentRole($user, $studentData);
+        $user = $request->user()->load(['student']);
+        $student = $user->student;
 
-        return response()->json([
-            'message' => 'Berhasil'
-        ], 200);;
+        $userService = new UserService;
+
+        $address = ["home_address" => $userService->convertAddress($request->only(['province', 'regency', 'district', 'subdistrict', 'street']))];
+        $userData = array_merge($address, $request->only(['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
+        $userData["role"] = RoleEnum::STUDENT->value;
+
+        DB::beginTransaction();
+        try 
+        {
+            $user->update($userData);
+            Student::updateOrCreate(
+                ['user_id' => $user->id],
+                $request->only(['parent', 'parent_telephone_number', 'class_id', 'curriculum_id']),
+            );
+
+            DB::commit();
+            return response()->json([
+                "status" => "success",
+                "message" => "Biodata berhasil ditambahkan",
+            ], 200);
+        } catch (Exception $e)
+        {
+            DB::rollBack();
+            return response()->json([
+                "status" => "error",
+                "message" => "Gagal menambahkan biodata: " . $e->getMessage(),
+                "error_code" => $e->getCode(),
+            ], 500);
+        }
     }
     
     /**
@@ -109,28 +131,54 @@ class   UserController extends Controller
      * )
      * )
     */
-    public function updateTutorRole(StoreTutorRegisterRequest $request, UserService $userService, TutorService $tutorService, ScheduleService $scheduleService)
+    public function updateTutorRole(StoreTutorRegisterRequest $request)
     {
-        $user = $request->user();
+        $request->validated();
 
-        $validatedData = $request->validated();
+        $user = $request->user()->load(['tutor']);
+        $tutor = $user->tutor;
 
-        $userData = collect(Arr::only($validatedData, ['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
-        $addressData = collect(Arr::only($validatedData, ['province', 'city', 'district', 'subdistrict', 'street']));
-        $tutorData = collect(Arr::only($validatedData, ['experience', 'organization','course_mode', 'description', 'qualification', 'learning_method'],));
-        $subjectData = collect(Arr::only($validatedData, ['subject_ids']));
-        $fileData = collect(Arr::only($validatedData, ['cv', 'ktp','ijazah','certificate', 'portofolio']));
-        $scheduleDatas = collect(Arr::only($validatedData, ['schedules']));
-        
-        $userService->updateBiodataRegistration($user, $userData, $addressData);
-        $userService->storeTutorRole($user, $tutorData);
-        $tutorService->storeSubject($user, $subjectData);
-        $tutorService->storeFile($user, $fileData);
-        $scheduleService->storeScheduleTutor($user, $scheduleDatas);
+        $userService = new UserService;
+        $tutorService = new TutorService;
 
-        
-        return response()->json([
-            'message' => 'Berhasil'
-        ], 200);
+        // filter data user
+        $address = ['home_address' => $userService->convertAddress($request->only(['province', 'regency', 'district', 'subdistrict', 'street']))];
+        $userData = array_merge($address, $request->only(['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
+        $userData['role'] = RoleEnum::TUTOR->value;
+
+        // Filter file
+        $files = collect($request->only(['cv', 'ktp','ijazah','certificate', 'portofolio']));
+
+        DB::beginTransaction();
+        try 
+        {
+            $user->update($userData);
+            Tutor::updateOrCreate(
+                ["user_id" => $user->id],
+                $request->only(['experience', 'organization','course_mode', 'description', 'qualification', 'learning_method'])
+            );
+            
+            // Many to many antara user dan subject
+            $user->subjects()->sync($request['subject_ids']);
+
+            $tutorService->storeTutorFile($user, $files);
+            $tutorService->storeScheduleTutor($user, collect($request->only(['schedules'])));
+
+            DB::commit();
+            return response()->json([
+                "status" => "success",
+                "message" => "Data tutor berhasil ditambahkan"
+            ], 200);
+        } 
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'data tutor gagal ditambahkan',
+                'error_message' => $e->getMessage(),
+                'error_code' => $e->getCode()
+            ], 500);
+        }
     }
 }

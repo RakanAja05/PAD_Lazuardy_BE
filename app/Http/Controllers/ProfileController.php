@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateStudentProfileRequest;
+use App\Http\Requests\UpdateTutorProfileRequest;
+use App\Models\Tutor;
 use App\Services\StudentService;
 use App\Services\TutorService;
 use App\Services\UserService;
@@ -22,9 +24,24 @@ class ProfileController extends Controller
 
         $userData = $userService->showUserProfile($user);
         $studentData = $studentService->showStudentProfile($student);
-        $message = ['message' => 'success'];
+        $message = ['status' => 'success'];
         
         $data = array_merge($userData, $studentData, $message);
+
+        return response()->json($data, 200);
+    }
+
+    public function showTutorProfile(Request $request)
+    {
+        $user = $request->user()->load(['tutor']);
+        $tutor = $user->tutor;
+
+        $userService = new UserService;
+
+        $userData = $userService->showUserProfile($user);
+        $message = ['message' => 'success'];
+        
+        $data = array_merge($userData, $message);
 
         return response()->json($data, 200);
     }
@@ -38,7 +55,7 @@ class ProfileController extends Controller
 
         $userService = new UserService;
 
-        $address = $userService->convertAddressToJson($request);
+        $address = $userService->convertAddress($request);
         $userData = $request->only(['name', 'telephone_number', 'profile_photo_url', 'gender', 'date_of_birth', 'religion']);
         $userData['home_address'] = $address;
         
@@ -63,6 +80,36 @@ class ProfileController extends Controller
                 // 'error_detail' => $e->getMessage(), //hanya untuk debugging
                 'error_code' => $e->getCode(),
             ], 500); 
+        }
+    }
+    
+    public function updateTutorProfile(UpdateTutorProfileRequest $request)
+    {
+        $request->validated();
+
+        $user = $request->user()->load(['tutor']);
+        $tutor = $user->tutor;
+
+        $userService = new UserService;
+        $address = $userService->convertAddress($request);
+        $userData = $request->only(['name', 'telephone_number', 'profile_photo_url', 'gender', 'date_of_birth', 'religion']);
+        $userData['home_address'] = $address;
+
+        try{
+
+            $user->update($userData);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile berhasil di update',
+            ], 200);
+        } catch(Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal mengupdate profile' . $e->getMessage(),
+                'error_code' => $e->getCode()
+            ], 500);
         }
     }
 }

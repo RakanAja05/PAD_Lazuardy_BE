@@ -39,7 +39,7 @@ class AuthService
         ];
     }
 
-    public function initiateRegister(array $data)
+    public function registerToCache(array $data)
     {
         $data['password'] = Hash::make($data['password']);
         $temp_token = Str::random(15);

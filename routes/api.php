@@ -20,18 +20,27 @@ Route::middleware('guest')->group(function () {
 
 // === LOGIN GOOGLE UNTUK MOBILE ===
 // Route::post('/auth/google/mobile', [GoogleController::class, 'mobileLogin']);
-Route::post('/auth/google/mobile', [SocialAuthController::class, 'mobileLogin']);
+Route::post('/auth/{provider}/mobile', [SocialAuthController::class, 'mobileLogin']);
 
 // === Route Wajib Login ===
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-    Route::patch('/register/tutor', [UserController::class, 'updateTutorRole'])->name('register.tutor');
     
-    Route::patch('/register/student', [UserController::class, 'updateStudentRole'])->name('register.student');
-    Route::get('/student/profile', [ProfileController::class, 'showStudentProfile']);
-    Route::get('/student/profile/edit', [ProfileController::class, 'showStudentProfile']);
-    Route::patch('/student/profile', [ProfileController::class, 'updateStudentProfile']);
+    Route::middleware('role:tutor')->group(function () {
+        Route::patch('/register/tutor', [UserController::class, 'updateTutorRole'])->name('register.tutor');
+        Route::get('/tutor/profile', [ProfileController::class, 'showTutorProfile']);
+        Route::get('/tutor/profile/edit', [ProfileController::class, 'showTutorProfile']);
+        Route::patch('/tutor/profile', [ProfileController::class, 'updateTutorProfile']);
+    });
+
+    Route::middleware('role:student')->group(function (){
+        Route::patch('/register/student', [UserController::class, 'updateStudentRole'])->name('register.student');
+        Route::get('/student/profile', [ProfileController::class, 'showStudentProfile']);
+        Route::get('/student/profile/edit', [ProfileController::class, 'showStudentProfile']);
+        Route::patch('/student/profile', [ProfileController::class, 'updateStudentProfile']);
+    });
+    
 });
 
 

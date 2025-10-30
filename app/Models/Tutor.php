@@ -40,4 +40,6 @@ class Tutor extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    
 }

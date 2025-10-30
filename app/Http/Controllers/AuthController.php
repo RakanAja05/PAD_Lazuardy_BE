@@ -72,8 +72,8 @@ class AuthController extends Controller
 
         DB::beginTransaction();
         try{
-            $regInit = $authService->initiateRegister($validatedData);
-            $otp = $otpService->createOtp($regInit['email'], OtpTypeEnum::EMAIL, VerificationTypeEnum::REGISTER);
+            $regInit = $authService->registerToCache($validatedData);
+            $otp = $otpService->createOtp($request['email'], OtpTypeEnum::EMAIL->value, VerificationTypeEnum::REGISTER->value);
             DB::commit();
         } catch (Exception $e){
             DB::rollBack();
