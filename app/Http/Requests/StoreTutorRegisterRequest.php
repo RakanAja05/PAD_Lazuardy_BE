@@ -62,17 +62,17 @@ class StoreTutorRegisterRequest extends FormRequest
             'subdistrict' => ['required', 'string', 'min:2', 'max:255'],
             'street' => ['required', 'string', 'min:2', 'max:255'],
             
-            'latitude' => [
-                'nullable', 
-                'numeric', 
-                'between:-90,90', 
-            ],
+            // 'latitude' => [
+            //     'nullable', 
+            //     'numeric', 
+            //     'between:-90,90', 
+            // ],
 
-            'longitude' => [
-                'nullable', 
-                'numeric', 
-                'between:-180,180', 
-            ],
+            // 'longitude' => [
+            //     'nullable', 
+            //     'numeric', 
+            //     'between:-180,180', 
+            // ],
 
             // Create Tutor
             'experience' => [

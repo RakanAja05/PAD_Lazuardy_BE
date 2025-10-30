@@ -1,2 +1,5 @@
 Instalasi yang dilakukan
 1. Swagger
+
+2. Opencage API
+composer require geocoder-php/open-cage-provider php-http/guzzle7-adapter

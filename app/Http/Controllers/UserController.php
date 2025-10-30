@@ -7,6 +7,7 @@ use App\Http\Requests\StoreStudentRegisterRequest;
 use App\Http\Requests\StoreTutorRegisterRequest;
 use App\Models\Student;
 use App\Models\Tutor;
+use App\Services\OpenCageService;
 use App\Services\TutorService;
 use App\Services\UserService;
 use Exception;
@@ -57,10 +58,15 @@ class   UserController extends Controller
         $student = $user->student;
 
         $userService = new UserService;
+        $openCageService = new OpenCageService;
 
-        $address = ["home_address" => $userService->convertAddress($request->only(['province', 'regency', 'district', 'subdistrict', 'street']))];
-        $userData = array_merge($address, $request->only(['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
-        $userData["role"] = RoleEnum::STUDENT->value;
+        $userData = $request->only(['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']);
+        $address = ["home_address" => $userService->convertAddressToArray($request->only(['province', 'regency', 'district', 'subdistrict', 'street']))];
+        $string_address = $userService->convertAddressToString($address['home_address']);
+        $coordinate = $openCageService->fordwardGeocode($string_address['fullAddress'], $string_address["simplifiedAddress"]);
+
+        $userData = array_merge($address, $userData, $coordinate);
+
 
         DB::beginTransaction();
         try 
@@ -139,12 +145,14 @@ class   UserController extends Controller
         $tutor = $user->tutor;
 
         $userService = new UserService;
+        $openCageService = new OpenCageService;
         $tutorService = new TutorService;
 
         // filter data user
-        $address = ['home_address' => $userService->convertAddress($request->only(['province', 'regency', 'district', 'subdistrict', 'street']))];
-        $userData = array_merge($address, $request->only(['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']));
-        $userData['role'] = RoleEnum::TUTOR->value;
+        $address = ['home_address' => $userService->convertAddressToArray($request->only(['province', 'regency', 'district', 'subdistrict', 'street']))];
+        $string_address = $userService->convertAddressToString($address['home_address']);
+        $coordinate = $openCageService->fordwardGeocode($string_address['fullAddress'], $string_address["simplifiedAddress"]);
+        $userData = array_merge($address, $coordinate, $request->only(['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url'],));
 
         // Filter file
         $files = collect($request->only(['cv', 'ktp','ijazah','certificate', 'portofolio']));

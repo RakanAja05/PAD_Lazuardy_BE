@@ -52,19 +52,19 @@ class StoreStudentRegisterRequest extends FormRequest
             'subdistrict' => ['required', 'string', 'min:2', 'max:255'],
             'street' => ['required', 'string', 'min:2', 'max:255'],
             
-            'latitude' => [
-                'required', 
-                'numeric', 
-                'between:-90,90', 
-                // 'regex:/^-?\d{1,2}\.\d{8}$/',
-            ],
+            // 'latitude' => [
+            //     'required', 
+            //     'numeric', 
+            //     'between:-90,90', 
+            //     // 'regex:/^-?\d{1,2}\.\d{8}$/',
+            // ],
 
-            'longitude' => [
-                'required', 
-                'numeric', 
-                'between:-180,180', 
-                // 'regex:/^-?\d{1,3}\.\d{8}$/', 
-            ],
+            // 'longitude' => [
+            //     'required', 
+            //     'numeric', 
+            //     'between:-180,180', 
+            //     // 'regex:/^-?\d{1,3}\.\d{8}$/', 
+            // ],
 
             // Tabel Student
             'class_id' => [

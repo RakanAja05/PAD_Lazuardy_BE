@@ -4,16 +4,16 @@ namespace App\Services;
 
 use App\Enums\RoleEnum;
 use App\Enums\TutorStatusEnum;
-use App\Models\Student;
 use App\Models\Tutor;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
-    public function convertAddress($data)
+    public function convertAddressToArray($data)
     {
         return 
             [
@@ -23,6 +23,14 @@ class UserService
             "subdistrict" => $data["subdistrict"],
             "street" => $data["street"],
             ];
+    }
+
+    public function convertAddressToString($data)
+    {
+        return [
+            "fullAddress" => "{$data['street']}, {$data['subdistrict']}, {$data['district']}, {$data['regency']}, {$data['province']}, Indonesia",
+            "simplifiedAddress" => "{$data['subdistrict']}, {$data['district']}, {$data['regency']}, {$data['province']}, Indonesia",
+        ];
     }
 
     public function showUserProfile(User $query)
@@ -45,20 +53,6 @@ class UserService
         ];
 
         return $data;
-    }
-
-    public function updateBiodataRegistration(User $query, $data){
-        return $query->update([
-                'name' => $data['name'],
-                'role' => RoleEnum::STUDENT->value,
-                'gender' => $data['gender'],
-                'date_of_birth' => $data['date_of_birth'],
-                'telephone_number' => $data['telephone_number'],
-                'home_address' => $data['home_address'],
-                'profile_photo_url' => $data['profile_photo_url'],
-                'latitude' => $data['latitude'],
-                'longitude' => $data['longitude'],
-            ]);
     }
 
     public function storeTutorRole(User $user, Collection $tutorData) {
