@@ -28,14 +28,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     
     Route::middleware('role:tutor')->group(function () {
-        Route::patch('/register/tutor', [UserController::class, 'updateTutorRole'])->name('register.tutor');
+        Route::patch('/register/tutor', [UserController::class, 'updateTutorRegister'])->name('register.tutor');
         Route::get('/tutor/profile', [ProfileController::class, 'showTutorProfile']);
         Route::get('/tutor/profile/edit', [ProfileController::class, 'showTutorProfile']);
         Route::patch('/tutor/profile', [ProfileController::class, 'updateTutorProfile']);
     });
 
     Route::middleware('role:student')->group(function (){
-        Route::patch('/register/student', [UserController::class, 'updateStudentRole'])->name('register.student');
+        Route::patch('/register/student', [UserController::class, 'updateStudentRegister'])->name('register.student');
         Route::get('/student/profile', [ProfileController::class, 'showStudentProfile']);
         Route::get('/student/profile/edit', [ProfileController::class, 'showStudentProfile']);
         Route::patch('/student/profile', [ProfileController::class, 'updateStudentProfile']);

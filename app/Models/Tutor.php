@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\BadgeEnum;
+use App\Enums\CourseModeEnum;
+use App\Enums\TutorStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,6 +37,9 @@ class Tutor extends Model
     protected $casts = [
         'qualification' => 'array',
         'organization' => 'array',
+        'badge' => BadgeEnum::class,
+        'course_mode' => CourseModeEnum::class,
+        'status' => TutorStatusEnum::class,
     ];
 
     public function user(): BelongsTo

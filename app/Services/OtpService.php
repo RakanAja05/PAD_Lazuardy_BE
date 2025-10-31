@@ -84,7 +84,7 @@ class OtpService
         switch($identifierType)
         {
             case OtpTypeEnum::EMAIL->value:
-                Mail::to($identifier)->send(new OtpEmail($code));
+                Mail::to($identifier)->queue(new OtpEmail($code));
                 break;
         }
 

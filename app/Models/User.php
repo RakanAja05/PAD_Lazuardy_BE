@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ReligionEnum;
+use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -59,7 +61,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'home_address' => 'array',
-            'date_of_birth' => 'date'
+            'date_of_birth' => 'date',
+            'role' => RoleEnum::class,
+            'religion' => ReligionEnum::class,
         ];
     }
 

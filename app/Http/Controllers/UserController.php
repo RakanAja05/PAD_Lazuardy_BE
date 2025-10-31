@@ -10,7 +10,9 @@ use App\Models\Tutor;
 use App\Services\OpenCageService;
 use App\Services\TutorService;
 use App\Services\UserService;
+use Doctrine\Common\Annotations\Annotation\Enum;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class   UserController extends Controller
@@ -50,7 +52,7 @@ class   UserController extends Controller
      * )
      * )
      */
-    public function updateStudentRole(StoreStudentRegisterRequest $request)
+    public function updateStudentRegister(StoreStudentRegisterRequest $request)
     {
         $request->validated();
 
@@ -137,7 +139,7 @@ class   UserController extends Controller
      * )
      * )
     */
-    public function updateTutorRole(StoreTutorRegisterRequest $request)
+    public function updateTutorRegister(StoreTutorRegisterRequest $request)
     {
         $request->validated();
 
@@ -186,6 +188,41 @@ class   UserController extends Controller
                 'message' => 'data tutor gagal ditambahkan',
                 'error_message' => $e->getMessage(),
                 'error_code' => $e->getCode()
+            ], 500);
+        }
+    }
+
+    public function viewRole()
+    {
+        return response()->json([
+            "status" => "success",
+            "Message" => "role berhasil dikirimkan",
+            'role' => RoleEnum::displayList(),
+        ], 200);
+    }
+
+    public function updateRole(Request $request)
+    {
+        $request->validate([
+            'role' => [
+                'required',
+                'enum:' . RoleEnum::class,
+            ],
+        ]);
+
+        $user = $request->user();
+
+        try{
+            $user->update(['role' => $request['role']]);
+
+            return response()->json([
+                'status' => 'succeess',
+                'message' => 'Role berhasil diupdate'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Role gagal diupdate'
             ], 500);
         }
     }

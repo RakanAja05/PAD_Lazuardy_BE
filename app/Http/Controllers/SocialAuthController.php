@@ -6,8 +6,6 @@ use App\Enums\RoleEnum;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Str;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -46,7 +44,6 @@ class SocialAuthController extends Controller
                 $newUser = User::create([
                     'name' => $socialiteUser->getName(),
                     'email' => $userEmail,
-                    'role' => RoleEnum::STUDENT->value,
                     $providerIdColumn => $socialiteUser->getId(),
                     'password' => Hash::make(Str::random(16)),
                     'email_verified_at' => now()
@@ -57,12 +54,12 @@ class SocialAuthController extends Controller
 
             $token = $loggedUser->createToken('auth_token')->plainTextToken;
 
-            $frontend = config('app.frontend_url') ?? env('FRONTEND_URL');
-            if ($frontend && ! request()->wantsJson()) {
-                // Redirect ke frontend; frontend bertanggung jawab menyimpan token
-                $redirectUrl = rtrim($frontend, '/') . '/auth/callback?token=' . urlencode($token);
-                return redirect()->away($redirectUrl);
-            }
+            // $frontend = config('app.frontend_url') ?? env('FRONTEND_URL');
+            // if ($frontend && ! request()->wantsJson()) {
+            //     // Redirect ke frontend; frontend bertanggung jawab menyimpan token
+            //     $redirectUrl = rtrim($frontend, '/') . '/auth/callback?token=' . urlencode($token);
+            //     return redirect()->away($redirectUrl);
+            // }
 
             return response()->json([
                 'user' => $loggedUser,
