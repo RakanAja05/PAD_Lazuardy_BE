@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\RoleEnum;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class CheckRoleMiddleware
 
         $role = $user->role;
 
-        if(!$role) return response()->json([
+        if($role === RoleEnum::DEFAULT ) return response()->json([
             'status' => 'error',
             'code' => 'ROLE_MISSING',
             'message' => 'Forbidden. Akses ditolak pengguna belum memilih role',
