@@ -49,10 +49,23 @@ class SocialAuthController extends Controller
             }
             
             Auth::login($loggedUser, true);
-            return "berhasil";
+            
+            // Generate Sanctum token untuk API
+            $token = $loggedUser->createToken('auth_token')->plainTextToken;
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Login berhasil',
+                'token' => $token,
+                'user' => $loggedUser,
+                'email_verified' => true, // Email sudah terverifikasi otomatis via social auth
+                'needs_registration' => empty($loggedUser->gender) || empty($loggedUser->date_of_birth)
+            ]);
         } catch (Exception $e) {
-            // dd($e->getMessage());
-            throw $e;
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Login gagal: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

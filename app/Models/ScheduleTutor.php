@@ -22,4 +22,9 @@ class ScheduleTutor extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function takenSchedules()
+    {
+        return $this->hasMany(TakenSchedule::class, 'schedule_tutor_id');
+    }
 }

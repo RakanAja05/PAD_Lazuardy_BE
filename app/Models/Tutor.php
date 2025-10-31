@@ -13,6 +13,7 @@ class Tutor extends Model
 
     protected $table = 'tutors';
     protected $primaryKey = 'user_id';
+    public $incrementing = false;
 
     protected $fillable = 
     [
@@ -27,13 +28,14 @@ class Tutor extends Model
         'qualification',
         'course_mode',
         'status',
-        'rank',
+        'badge',
         'sanction_amount',
     ];
     
     protected $casts = [
         'qualification' => 'array',
         'organization' => 'array',
+        'education' => 'array',
     ];
 
     public function user(): BelongsTo

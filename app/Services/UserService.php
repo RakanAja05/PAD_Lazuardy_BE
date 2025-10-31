@@ -23,7 +23,7 @@ class UserService
                 'date_of_birth' => $userData['date_of_birth'],
                 'telephone_number' => $userData['telephone_number'],
                 'home_address' => $addressData,
-                'profile_photo_url' => $userData['profile_photo_url'],
+                'profile_photo_url' => $userData['profile_photo_url'] ?? null,
                 'latitude' => $userData['latitude'],
                 'longitude' => $userData['longitude'],
             ]);

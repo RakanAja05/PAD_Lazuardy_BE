@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ScheduleStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,11 @@ class TakenSchedule extends Model
         'subject_id',
         'date',
         'status',
+    ];
+
+    protected $casts = [
+        'status' => ScheduleStatusEnum::class,
+        'date' => 'date',
     ];
 
     public function user()
