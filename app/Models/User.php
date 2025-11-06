@@ -82,14 +82,25 @@ class User extends Authenticatable
         return $this->hasMany(ScheduleTutor::class);
     }
 
+    
     public function subjects(): BelongsToMany {
         return $this->belongsToMany(Subject::class, 'tutor_subjects', 'user_id', 'subject_id');
     }
-
+    
     public function files(): HasMany {
         return $this->hasMany(File::class);
     }
 
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+    
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+    
     public function scopeGetUserByEmail($query, $email)
     {
         return $query->where('email', $email)->first();

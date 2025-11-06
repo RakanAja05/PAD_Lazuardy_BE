@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,10 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        $orderStatus = OrderStatusEnum::list();
+
+        Schema::create('orders', function (Blueprint $table) use ($orderStatus) {
             $table->id();
-            $table->foreignId('package_id')->constrained('packages');
+            $table->foreignId('package_id')->constrained('packages', 'id');
             $table->foreignId('user_id')->constrained('users', 'id');
+            $table->integer('total_amount');
+            $table->enum('status', $orderStatus);
             $table->timestamps();
         });
     }

@@ -28,7 +28,7 @@ class CheckRoleMiddleware
 
         $role = $user->role;
 
-        if($role === RoleEnum::DEFAULT ) return response()->json([
+        if($role === RoleEnum::DEFAULT || $role === null) return response()->json([
             'status' => 'error',
             'code' => 'ROLE_MISSING',
             'message' => 'Forbidden. Akses ditolak pengguna belum memilih role',

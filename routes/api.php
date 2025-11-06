@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
@@ -39,6 +40,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/student/profile', [ProfileController::class, 'showStudentProfile']);
         Route::get('/student/profile/edit', [ProfileController::class, 'showStudentProfile']);
         Route::patch('/student/profile', [ProfileController::class, 'updateStudentProfile']);
+        Route::get('/package/order', [PaymentController::class, 'showPaymentPackage']);
+        Route::post('/package/order', [PaymentController::class, 'storeOrderPackage']);
+        Route::post('/package/payment', [PaymentController::class, 'uploadPaymentFile']);
+        Route::get('/payment/history', [PaymentController::class, 'showHistory']);
+        Route::get('/payment/history/detail', [PaymentController::class, 'showDetail']);
     });
     
 });

@@ -37,6 +37,7 @@ class Tutor extends Model
     protected $casts = [
         'qualification' => 'array',
         'organization' => 'array',
+        'education' => 'array',
         'badge' => BadgeEnum::class,
         'course_mode' => CourseModeEnum::class,
         'status' => TutorStatusEnum::class,
