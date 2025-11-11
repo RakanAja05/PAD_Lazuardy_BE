@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Log;
 
 class UserService
 {
+    public function storeUserProfile(array $data)
+    {
+
+    }
+    
     public function convertAddressToArray($data)
     {
         return 

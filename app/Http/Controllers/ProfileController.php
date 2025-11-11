@@ -7,14 +7,13 @@ use App\Http\Requests\UpdateTutorProfileRequest;
 use App\Models\Tutor;
 use App\Services\OpenCageService;
 use App\Services\StudentService;
-use App\Services\TutorService;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
-{
+{ 
     public function showStudentProfile(Request $request)
     {
         $user = $request->user()->load(['student.class']);
@@ -27,7 +26,7 @@ class ProfileController extends Controller
         $studentData = $studentService->showStudentProfile($student);
         $message = ['status' => 'success'];
         
-        $data = array_merge($userData, $studentData, $message);
+        $data = array_merge($message, $userData, $studentData);
 
         return response()->json($data, 200);
     }
@@ -98,31 +97,48 @@ class ProfileController extends Controller
 
         $user = $request->user()->load(['tutor']);
         $tutor = $user->tutor;
+        $userData = $request->only([
+            'name', 
+            'gender', 
+            'date_of_birth', 
+            'religion',
+            'telephone_number',
+            'latitude',
+            'longitude',
+        ]);
+        
+        $rawAddress = $request->only([
+            'province',
+            'regency',
+            'district',
+            'subdistrict',
+            'street',
+        ]);
+        
+        $tutorData = $request->only([
+            'bank',
+            'rekening',
+        ]);
 
         $userService = new UserService;
-        $openCageService = new OpenCageService;
-
-        $address = $userService->convertAddressToArray($request);
-        $string_address = $userService->convertAddressToString($address);
-        $geocode = $openCageService->fordwardGeocode($string_address['fullAddress'], $string_address["simplifiedAddress"]);
-        $coordinate['latitude'] = $geocode['latitude'];
-        $coordinate['longitude'] = $geocode['longitude'];
-        $userData = $request->only(['name', 'telephone_number', 'profile_photo_url', 'gender', 'date_of_birth', 'religion']);
-        $userData['home_address'] = $address;
-        $data = array_merge($userData, $coordinate);
-
+        $address = $userService->convertAddressToArray($rawAddress);
+        $userData = array_merge($userData, $address);
+        
+        DB::beginTransaction();
         try{
-
-            $user->update($data);
+            $user->update($userData);
+            $tutor->update($tutorData);
+            
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Profile berhasil di update',
-                "alamat" => $userService->convertAddressToString($address),
-                'tes' => $geocode
             ], 200);
         } catch(Exception $e) {
-
+            
+            DB::rollBack();
+            
             return response()->json([
                 'status' => 'error',
                 'message' => 'Gagal mengupdate profile' . $e->getMessage(),

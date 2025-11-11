@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Enums\OtpTypeEnum;
 use App\Enums\VerificationTypeEnum;
-use App\Models\Otp;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Cache;
@@ -16,32 +15,25 @@ class AuthService
 {
     public function registerUser(array $data)
     {
+        $data['email_verified_at'] = now();
         DB::beginTransaction();
         try {
-            $user = User::create([
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'role' => $data['role'],
-                'email_verified_at' => now(),
-            ]);
-
+            $user = User::create($data);
             $token = $user->createToken('auth_token')->plainTextToken;
+
             DB::commit();
+            return [
+                'user' => $user,
+                'token' => $token
+            ];
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
         }
-
-        
-        return [
-            'user' => $user,
-            'token' => $token
-        ];
     }
 
-    public function registerToCache(array $data)
+    public function storeToCache(array $data)
     {
-        $data['password'] = Hash::make($data['password']);
         $temp_token = Str::random(15);
         Cache::put('registration:pending:' . $temp_token, $data, 1800);
         

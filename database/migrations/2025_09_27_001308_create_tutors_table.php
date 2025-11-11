@@ -31,6 +31,8 @@ return new class extends Migration
             $table->json('qualification')->nullable();
             $table->longText('experience')->nullable();
             $table->json('organization')->nullable();
+            $table->string('bank')->nullable();
+            $table->string('rekening')->nullable();
             $table->enum('badge', $badges)->nullable();
             $table->enum('course_mode', $courseMode)->nullable();
             $table->integer('sanction_amount')->default(0);

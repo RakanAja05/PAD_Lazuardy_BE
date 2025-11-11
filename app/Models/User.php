@@ -64,6 +64,7 @@ class User extends Authenticatable
             'date_of_birth' => 'date',
             'role' => RoleEnum::class,
             'religion' => ReligionEnum::class,
+            'rekening' => 'string'
         ];
     }
 

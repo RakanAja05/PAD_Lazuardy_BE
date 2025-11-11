@@ -64,9 +64,8 @@ class   UserController extends Controller
         $userData = $request->only(['name', 'gender', 'date_of_birth', 'telephone_number', 'profile_photo_url', 'latitude', 'longitude']);
         $address = ["home_address" => $userService->convertAddressToArray($request->only(['province', 'regency', 'district', 'subdistrict', 'street']))];
         $string_address = $userService->convertAddressToString($address['home_address']);
-        $coordinate = $openCageService->fordwardGeocode($string_address['fullAddress'], $string_address["simplifiedAddress"]);
 
-        $userData = array_merge($address, $userData, $coordinate);
+        $userData = array_merge($address, $userData);
 
 
         DB::beginTransaction();

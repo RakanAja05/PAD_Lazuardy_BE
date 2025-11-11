@@ -2,19 +2,15 @@
 
 namespace App\Enums;
 
-enum VerificationTypeEnum: string
+enum OtpIdentifierEnum: string
 {
-    case REGISTER = 'register';
-    case UPDATE_PASSWORD = 'update_password';
-    case FORGOT_PASSWORD = 'forgot_password';
-
+    case EMAIL = 'email';
+    
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::REGISTER => 'Registrasi',
-            self::UPDATE_PASSWORD => 'Ubah kata sandi',
-            self::FORGOT_PASSWORD => 'Lupa kata sandi',
+            self::EMAIL => 'Email',
         };
     }
 

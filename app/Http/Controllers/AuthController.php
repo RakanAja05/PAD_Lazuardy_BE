@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\OtpTypeEnum;
+use App\Enums\RoleEnum;
 use App\Enums\VerificationTypeEnum;
 use App\Http\Requests\StoreOtpRequest;
 use App\Http\Requests\InitiateRegiterRequest;
@@ -17,7 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str; 
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -63,16 +65,26 @@ class AuthController extends Controller
      * )
      * )
      */
-    public function initiateRegister(InitiateRegiterRequest $request)
+    public function initiateRegister(Request $request)
     {
-        $validatedData = $request->validated();
+        // validasi
+        $data = $request->validated([
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => ['required', new Enum(RoleEnum::class)]
+        ]);
 
+        // panggil service
         $authService = new AuthService;
         $otpService = new OtpService;
 
+        // hash password
+        $data['password'] = Hash::make($data['password']);
+
         DB::beginTransaction();
         try{
-            $regInit = $authService->registerToCache($validatedData);
+            // masukin data email ke cache untuk 
+            $regInit = $authService->storeToCache($data);
             $otp = $otpService->createOtp($request['email'], OtpTypeEnum::EMAIL->value, VerificationTypeEnum::REGISTER->value);
             DB::commit();
         } catch (Exception $e){
@@ -121,6 +133,16 @@ class AuthController extends Controller
      * )
      * )
      */
+
+    public function verifyEmail(Request $request)
+    {
+        $request->validate([
+            "temp_token" => ["required", "string"],
+            "otp_code" => ["required", "string"],
+        ]);
+
+        
+    }
     public function verifyEmail(StoreOtpRequest $request)
     {
         $validatedData = $request->validated();
@@ -136,6 +158,8 @@ class AuthController extends Controller
             "token" => $user['token']
         ], 200);
     }
+
+
 
     /**
      * Resend OTP for email verification during registration

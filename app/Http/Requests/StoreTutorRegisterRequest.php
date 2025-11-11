@@ -27,7 +27,9 @@ class StoreTutorRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Update User
+            // tabel user
+            'email' => ['required','string','email','max:255','unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'gender' => ['required', new Enum(GenderEnum::class)],
 
@@ -45,12 +47,12 @@ class StoreTutorRegisterRequest extends FormRequest
             ],
             
             'profile_photo_url' => [
-                'nullable',
+                'required',
                 'url',
             ],
 
             'religion' => [
-                'nullable',
+                'required',
                 'string',
                 'min:2',
                 'max:30'
@@ -62,44 +64,53 @@ class StoreTutorRegisterRequest extends FormRequest
             'subdistrict' => ['required', 'string', 'min:2', 'max:255'],
             'street' => ['required', 'string', 'min:2', 'max:255'],
             
-            // 'latitude' => [
-            //     'nullable', 
-            //     'numeric', 
-            //     'between:-90,90', 
-            // ],
+            'latitude' => [
+                'required', 
+                'numeric', 
+                'between:-90,90', 
+            ],
 
-            // 'longitude' => [
-            //     'nullable', 
-            //     'numeric', 
-            //     'between:-180,180', 
-            // ],
+            'longitude' => [
+                'required', 
+                'numeric', 
+                'between:-180,180', 
+            ],
 
             // Create Tutor
             'experience' => [
-                'nullable',
+                'required',
                 'string',
             ],
 
             'organization' => [
-                'nullable',
+                'required',
                 'array',
             ],
 
             'course_mode' => ['string', new Enum(CourseModeEnum::class)],
 
             'description' => [
-                'nullable',
+                'required',
                 'string',
             ],
             
             'qualification' => [
-                'nullable',
+                'required',
                 'array',
             ],
 
             'learning_method' => [
-                'nullable',
+                'required',
                 'string',
+            ],
+
+            'bank' => [
+                'required',
+                'string'
+            ],
+            'rekening' => [
+                'required',
+                'string'
             ],
 
             // Tutor-subject

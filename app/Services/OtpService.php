@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Enums\OtpIdentifierEnum;
 use App\Enums\OtpTypeEnum;
 use App\Enums\VerificationTypeEnum;
+use App\Jobs\SendOtpMailJob;
 use App\Mail\OtpEmail;
 use App\Models\Otp;
 use Exception;
@@ -33,11 +35,11 @@ class OtpService
      */
     public function storeOtpToCache($verificationType, $data)
     {
-        $temp_token = Str::random(15);
-        Cache::put('otp:' . $verificationType . ':' . $temp_token, $data, 1800);
+        $token = Str::random(15);
+        Cache::put('otp:' . $verificationType . ':' . $token, $data, 1800);
         
         return [
-            'temp_token' => $temp_token,
+            'token' => $token,
         ];
     }
 
@@ -50,9 +52,9 @@ class OtpService
         {
             switch($verificationType)
             {
-                case VerificationTypeEnum::REGISTER->value:
+                case OtpTypeEnum::REGISTER->value:
                     throw new Exception("Sesi registrasi tidak ditemukan atau sudah kadaluarsa");
-                case VerificationTypeEnum::FORGOT_PASSWORD->value:
+                case OtpTypeEnum::FORGOT_PASSWORD->value:
                     throw new Exception("Sesi lupa password tidak ditemukan atau sudah kadaluarsa");
                 default:
                     throw new Exception("Sesi OTP tidak ditemukan atau sudah kadaluarsa");
@@ -83,14 +85,14 @@ class OtpService
 
         switch($identifierType)
         {
-            case OtpTypeEnum::EMAIL->value:
-                Mail::to($identifier)->queue(new OtpEmail($code));
+            case OtpIdentifierEnum::EMAIL->value:
+                dispatch(new SendOtpMailJob($identifier, $code));
                 break;
         }
 
         return [
             "otp" => $createData,
-            "otpCode" => $code
+            "code" => $code
         ];
     }
 
@@ -174,14 +176,14 @@ class OtpService
 
             switch($identifierType)
             {
-                case OtpTypeEnum::EMAIL->value:
-                    Mail::to($identifier)->send(new OtpEmail($code));
+                case OtpIdentifierEnum::EMAIL->value:
+                    dispatch(new SendOtpMailJob($identifier, $code));
                     break;
             }
 
             return [
                 "status" => "success OTP berhasil terkirim", 
-                "otpCode" => $code, 
+                "otp_code" => $code, 
                 "code" => 200
             ];
 

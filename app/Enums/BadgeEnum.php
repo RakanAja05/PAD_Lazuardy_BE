@@ -4,14 +4,18 @@ namespace App\Enums;
 
 enum BadgeEnum: string
 {
-    case AMATEUR = "pemula";
+    case BRONZE = "bronze";
+    case SILVER = "silver";
+    case GOLD = "gold";
 
     
     public function displayName() : string 
     {
         return match($this) 
         {
-        self::AMATEUR => 'Pemula'
+            self::BRONZE => 'Perunggu',
+            self::SILVER => 'Perak',
+            self::GOLD => 'Emas',
         };
     }
 

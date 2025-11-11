@@ -17,10 +17,11 @@ class Payment extends Model
     protected $fillable = 
     [
         'order_id',
-        'total_amount',
+        'amount',
         'proof_image_url',
         'date',
         'payment_method',
+        'status',
     ];
 
     protected function casts(): array

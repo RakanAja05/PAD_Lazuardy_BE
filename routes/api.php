@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/student/profile', [ProfileController::class, 'updateStudentProfile']);
         Route::get('/package/order', [PaymentController::class, 'showPaymentPackage']);
         Route::post('/package/order', [PaymentController::class, 'storeOrderPackage']);
-        Route::post('/package/payment', [PaymentController::class, 'uploadPaymentFile']);
+        Route::post('/package/payment', [PaymentController::class, 'uploadPaymentFile'])->name('payment.upload');
         Route::get('/payment/history', [PaymentController::class, 'showHistory']);
         Route::get('/payment/history/detail', [PaymentController::class, 'showDetail']);
     });

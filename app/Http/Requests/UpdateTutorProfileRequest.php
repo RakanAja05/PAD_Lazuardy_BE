@@ -28,8 +28,6 @@ class UpdateTutorProfileRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:2', 'max:255'],
-            'telephone_number' => ['required','string','max:15'],
-            'profile_photo_url' => ['required', 'string'],
             'gender' => ['required', new Enum(GenderEnum::class)],
             'date_of_birth' => [
                 'required', 
@@ -38,12 +36,16 @@ class UpdateTutorProfileRequest extends FormRequest
                 'before_or_equal:today'
             ],
             'religion' => ['required', new Enum(ReligionEnum::class)],
+            'telephone_number' => ['required','string','max:15'],
             
             'province' => ['required', 'string', 'min:2', 'max:255'],
             'regency' => ['required', 'string', 'min:2', 'max:255'],
             'district' => ['required', 'string', 'min:2', 'max:255'],
             'subdistrict' => ['required', 'string', 'min:2', 'max:255'],
             'street' => ['required', 'string', 'min:2', 'max:255'],
+
+            'bank' => ['nullable', 'string'],
+            'rekening' => ['nullable', 'string'],
         ];
     }
 }

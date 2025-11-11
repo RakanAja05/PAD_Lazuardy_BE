@@ -2,19 +2,19 @@
 
 namespace App\Enums;
 
-enum OtpTypeEnum:string
+enum SubjectApplicationEnum: string
 {
-    case REGISTER = 'register';
-    case UPDATE_PASSWORD = 'update_password';
-    case FORGOT_PASSWORD = 'forgot_password';
+    case VERIFY = 'verify';
+    case ACCEPTED = 'accepted';
+    case REJECTED = 'rejected';
 
     public function displayName() : string 
     {
         return match($this) 
         {
-            self::REGISTER => 'Registrasi',
-            self::UPDATE_PASSWORD => 'Ubah password',
-            self::FORGOT_PASSWORD => 'Lupa password',
+            self::VERIFY => 'Menunggu konfirmasi',
+            self::ACCEPTED => 'Diterima',
+            self::REJECTED => 'Ditolak',
         };
     }
 

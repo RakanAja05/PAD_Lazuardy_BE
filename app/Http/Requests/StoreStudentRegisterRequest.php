@@ -2,11 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Gender;
 use App\Enums\GenderEnum;
-use App\Enums\Role;
-use App\Enums\RoleEnum;
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -23,6 +19,8 @@ class StoreStudentRegisterRequest extends FormRequest
         return 
         [
             // tabel user
+            'email' => ['required','string','email','max:255','unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'gender' => ['required', new Enum(GenderEnum::class)],
 
@@ -37,13 +35,11 @@ class StoreStudentRegisterRequest extends FormRequest
                 'required', 
                 'string', 
                 'max:15',
-                // 'regex:/^(\+62|0)\d{9,15}$/',
             ],
             
             'profile_photo_url' => [
                 'nullable',
                 'url',
-                // 'regex:/^(http(s)?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-.\/?%&=]*)?\.(jpg|jpeg|png|gif|webp)$/i',
             ],
             
             'province' => ['required', 'string', 'min:2', 'max:255'],
@@ -52,19 +48,17 @@ class StoreStudentRegisterRequest extends FormRequest
             'subdistrict' => ['required', 'string', 'min:2', 'max:255'],
             'street' => ['required', 'string', 'min:2', 'max:255'],
             
-            // 'latitude' => [
-            //     'required', 
-            //     'numeric', 
-            //     'between:-90,90', 
-            //     // 'regex:/^-?\d{1,2}\.\d{8}$/',
-            // ],
+            'latitude' => [
+                'required', 
+                'numeric', 
+                'between:-90,90', 
+            ],
 
-            // 'longitude' => [
-            //     'required', 
-            //     'numeric', 
-            //     'between:-180,180', 
-            //     // 'regex:/^-?\d{1,3}\.\d{8}$/', 
-            // ],
+            'longitude' => [
+                'required', 
+                'numeric', 
+                'between:-180,180', 
+            ],
 
             // Tabel Student
             'class_id' => [
@@ -86,7 +80,6 @@ class StoreStudentRegisterRequest extends FormRequest
                 'nullable', 
                 'string', 
                 'max:15',
-                // 'regex:/^(\+62|0)\d{9,15}$/',
             ],
         ];
     }
