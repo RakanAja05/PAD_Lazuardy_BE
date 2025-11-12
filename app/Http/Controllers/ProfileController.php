@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DayEnum;
 use App\Http\Requests\UpdateStudentProfileRequest;
+use App\Http\Requests\UpdateTutorLessonMethodRequest;
 use App\Http\Requests\UpdateTutorProfileRequest;
 use App\Models\Tutor;
 use App\Services\OpenCageService;
 use App\Services\StudentService;
+use App\Services\TutorService;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Enum;
 
 class ProfileController extends Controller
 { 
@@ -143,6 +147,62 @@ class ProfileController extends Controller
                 'status' => 'error',
                 'message' => 'Gagal mengupdate profile' . $e->getMessage(),
                 'error_code' => $e->getCode()
+            ], 500);
+        }
+    }
+
+    // Formulir profile tutor yang bagian pilih jadwal
+    public function showTutorLessonMethod(Request $request) {
+        $user = $request->user()->load(['tutor', 'schedules']);
+        $tutor = $user->tutor;
+
+        $data = [
+            'course_mode' => $tutor->course_mode,
+            'description' => $tutor->description,
+            'qualification' => $tutor->qualification,
+            'learning_method' => $tutor->learning_method,
+            'schedules' =>  $user->schedules,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    // Formulir profile tutor yang bagian pilih jadwal
+    public function updateTutorLessonMethod(UpdateTutorLessonMethodRequest $request)
+    {
+        $user = $request->user()->load(['tutor', 'schedules']);
+        $tutor = $user->tutor;
+        $schedules = $user->schedules();
+
+        $tutorData = $request->only([
+            'course_mode',
+            'description',
+            'qualification',
+            'learning_method',
+        ]);
+
+        $schedulesData = $request->input('schedules');
+
+        DB::beginTransaction();
+        try{
+            $tutor->update($tutorData);
+            $user->schedules()->delete();
+
+            $schedulesToCreate = collect($schedulesData)->map(function ($schedule) use ($user) {
+                return array_merge($schedule, ['user_id' => $user->id]);
+            })->toArray();
+
+            $user->schedules()->insert($schedulesToCreate);
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile dan jadwal tutor berhasil diperbarui.'
+            ], 200);
+        } catch(Exception $e){
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Profile dan jadwal tutor gagal diperbarui: ' . $e->getMessage(),
             ], 500);
         }
     }

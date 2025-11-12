@@ -44,11 +44,11 @@ class TutorService
 
     public function storeScheduleTutor(User $user, Collection $schedules)
     {
-        return $user->schedules()->upsert($schedules["schedules"],['user_id', 'day', 'time']);
+        return $user->schedules()->upsert($schedules->get("schedules"),['user_id', 'day', 'time']);
     }
 
 
-    public function showtutorProfile(User $user, Tutor $tutor)
+    public function showTutorProfile(User $user, Tutor $tutor)
     {
         $data = [
             'education' => $tutor->education,
