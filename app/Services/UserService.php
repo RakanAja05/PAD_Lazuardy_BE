@@ -49,6 +49,8 @@ class UserService
             'gender' => $query->gender,
             'date_of_birth' => $query->date_of_birth,
             'religion' => $query->religion,
+            'latitude' => $query->latitude,
+            'longitude' => $query->longitude,
 
             'province' => $address['province']?? null,
             'city' => $address['regency']?? null,
@@ -61,7 +63,6 @@ class UserService
     }
 
     public function storeTutorRole(User $user, Collection $tutorData) {
-        // Log::info($tutorData['experience']);
         DB::beginTransaction();
         try {
             $tutor = Tutor::updateOrCreate(

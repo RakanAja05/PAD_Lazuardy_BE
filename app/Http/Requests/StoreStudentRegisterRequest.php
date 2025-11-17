@@ -11,7 +11,7 @@ class StoreStudentRegisterRequest extends FormRequest
     public function authorize(): bool
     {
         // Since the route no longer includes {user}, authorize only checks authentication.
-        return $this->user() !== null;
+        return $this->user() === null;
     }
 
     public function rules(): array
@@ -20,7 +20,7 @@ class StoreStudentRegisterRequest extends FormRequest
         [
             // tabel user
             'email' => ['required','string','email','max:255','unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'gender' => ['required', new Enum(GenderEnum::class)],
 

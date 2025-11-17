@@ -182,18 +182,20 @@ class OtpService
             }
 
             return [
-                "status" => "success OTP berhasil terkirim", 
+                "status" => "success", 
+                'message' => 'OTP berhasil terkirim',
                 "otp_code" => $code, 
                 "code" => 200
             ];
-
+            
         } catch (Exception $e) {
-
+            
             DB::rollBack();
             
             return [
                 'status' => 'error',
                 'message' => 'Failed to resend OTP: ' . $e->getMessage(),
+                "otp_code" => null, 
                 'code' => 500
             ];
         }

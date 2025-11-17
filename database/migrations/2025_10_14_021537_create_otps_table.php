@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OtpIdentifierEnum;
 use App\Enums\OtpTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,12 +14,12 @@ return new class extends Migration
     public function up(): void
     {
         $verificationTypes = OtpTypeEnum::list();
-        $otpTypes = OtpTypeEnum::list();
+        $identifierType = OtpIdentifierEnum::list();
 
-        Schema::create('otps', function (Blueprint $table) use ($verificationTypes, $otpTypes) {
+        Schema::create('otps', function (Blueprint $table) use ($verificationTypes, $identifierType) {
             $table->id();
             $table->string('identifier')->index(); 
-            $table->enum('identifier_type', $otpTypes);
+            $table->enum('identifier_type', $identifierType);
             $table->string('code'); 
             $table->enum('verification_type', $verificationTypes); 
             $table->integer('attempts')->default(0);

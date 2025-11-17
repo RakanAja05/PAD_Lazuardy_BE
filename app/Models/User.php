@@ -83,6 +83,10 @@ class User extends Authenticatable
         return $this->hasMany(ScheduleTutor::class);
     }
 
+    public function takenSchedules(): HasMany
+    {
+        return $this->hasMany(TakenSchedule::class);
+    }
     
     public function subjects(): BelongsToMany {
         return $this->belongsToMany(Subject::class, 'tutor_subjects', 'user_id', 'subject_id');

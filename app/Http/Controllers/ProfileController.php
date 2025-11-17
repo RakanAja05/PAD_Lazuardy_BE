@@ -6,15 +6,11 @@ use App\Enums\DayEnum;
 use App\Http\Requests\UpdateStudentProfileRequest;
 use App\Http\Requests\UpdateTutorLessonMethodRequest;
 use App\Http\Requests\UpdateTutorProfileRequest;
-use App\Models\Tutor;
-use App\Services\OpenCageService;
 use App\Services\StudentService;
-use App\Services\TutorService;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules\Enum;
 
 class ProfileController extends Controller
 { 
@@ -58,28 +54,20 @@ class ProfileController extends Controller
         $student = $user->student;
 
         $userService = new UserService;
-        $openCageService = new OpenCageService;
 
         $address = $userService->convertAddressToArray($request);
-        $string_address = $userService->convertAddressToString($address);
-        $geocode = $openCageService->fordwardGeocode($string_address['fullAddress'], $string_address["simplifiedAddress"]);
-        $coordinate['latitude'] = $geocode['latitude'];
-        $coordinate['longitude'] = $geocode['longitude'];
-        $userData = $request->only(['name', 'telephone_number', 'profile_photo_url', 'gender', 'date_of_birth', 'religion']);
+        $userData = $request->only(['name', 'telephone_number', 'profile_photo_url', 'gender', 'date_of_birth', 'religion', 'latitude', 'longitude']);
         $userData['home_address'] = $address;
-        $data = array_merge($userData, $coordinate);
         
         DB::beginTransaction();
         try 
         {
-            $user->update($data);
+            $user->update($userData);
             $student->update($request->only(['school', 'class_id', 'curriculum_id', 'parent', 'parent_telephone_number']));
             DB::commit();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Profile berhasil di update',
-                "alamat" => $userService->convertAddressToString($address),
-                'tes' => $geocode
             ],200);
         } 
         catch(Exception $e) 
@@ -89,7 +77,6 @@ class ProfileController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Gagal mengupdate profil: ' . $e->getMessage(),
-                // 'error_detail' => $e->getMessage(), //hanya untuk debugging
                 'error_code' => $e->getCode(),
             ], 500); 
         }

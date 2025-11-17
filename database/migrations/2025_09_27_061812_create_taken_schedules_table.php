@@ -18,7 +18,7 @@ return new class extends Migration
         
         Schema::create('taken_schedules', function (Blueprint $table) use ($statuses) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete(); // user siswa
             $table->foreignId('schedule_tutor_id')->constrained('schedule_tutors', 'id');
             $table->foreignId('subject_id')->constrained('subjects');
             $table->date('date');
