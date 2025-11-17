@@ -17,6 +17,11 @@ class DatabaseSeeder extends Seeder
             ClassSeeder::class,
             CurriculumSeeder::class,
             SubjectSeeder::class,
+            TutorSeeder::class,         // Buat tutors + attach subjects
+            StudentSeeder::class,        // Buat students (untuk reviewer)
+            ReviewSeeder::class,         // Buat reviews untuk tutors (PENTING untuk scoring!)
+            PackageSeeder::class,
+            StudentPackageSeeder::class,
         ]);
     }
 }

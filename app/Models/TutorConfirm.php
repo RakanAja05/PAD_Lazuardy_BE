@@ -12,8 +12,8 @@ class TutorConfirm extends Model
 
     protected $fillable = 
     [
-        'student_id',
-        'tutor_id',
+        'student_user_id',
+        'tutor_user_id',
         'reason',
         'status',
     ];

@@ -20,7 +20,7 @@ class AuthService
         try {
             $user = User::create([
                 'email' => $data['email'],
-                'password' => Hash::make($data['password']),
+                'password' => $data['password'], // Password sudah di-hash di initiateRegister, jangan hash lagi!
                 'role' => $data['role'],
                 'email_verified_at' => now(),
             ]);
