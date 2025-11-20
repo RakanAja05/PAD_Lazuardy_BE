@@ -6,6 +6,7 @@ use App\Enums\CourseMode;
 use App\Enums\CourseModeEnum;
 use App\Enums\Gender;
 use App\Enums\GenderEnum;
+use App\Enums\ReligionEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -32,6 +33,7 @@ class StoreTutorRegisterRequest extends FormRequest
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'gender' => ['required', new Enum(GenderEnum::class)],
+            'religion' => ['nullable', new Enum(ReligionEnum::class)],
 
             'date_of_birth' => [
                 'required', 
@@ -46,9 +48,10 @@ class StoreTutorRegisterRequest extends FormRequest
                 'max:15',
             ],
             
-            'profile_photo_url' => [
-                'required',
-                'url',
+            'profile_photo' => [
+                'nullable',
+                'file',
+                'mimes:png,jpg, pdf, svg, webp',
             ],
 
             'religion' => [
@@ -76,34 +79,6 @@ class StoreTutorRegisterRequest extends FormRequest
                 'between:-180,180', 
             ],
 
-            // Create Tutor
-            'experience' => [
-                'required',
-                'string',
-            ],
-
-            'organization' => [
-                'required',
-                'array',
-            ],
-
-            'course_mode' => ['string', new Enum(CourseModeEnum::class)],
-
-            'description' => [
-                'required',
-                'string',
-            ],
-            
-            'qualification' => [
-                'required',
-                'array',
-            ],
-
-            'learning_method' => [
-                'required',
-                'string',
-            ],
-
             'bank' => [
                 'required',
                 'string'
@@ -112,42 +87,6 @@ class StoreTutorRegisterRequest extends FormRequest
                 'required',
                 'string'
             ],
-
-            // Tutor-subject
-            'subject_ids' => [
-                'required',
-                'array',
-            ],
-
-            'subject_ids.*' => [
-                'exists:subjects,id'
-            ],
-
-            // files
-            'cv' => ['nullable', 'array'],
-            'cv.*.name' => ['required', 'string', 'max:255'],
-            'cv.*.path_url' => ['required', 'string', 'url'],
-            
-            'ktp' => ['nullable', 'array'],
-            'ktp.*.name' => ['required', 'string', 'max:255'],
-            'ktp.*.path_url' => ['required', 'string', 'url'],
-            
-            'ijazah' => ['nullable', 'array'],
-            'ijazah.*.name' => ['required', 'string', 'max:255'],
-            'ijazah.*.path_url' => ['required', 'string', 'url'],
-            
-            'certificate' => ['nullable', 'array'],
-            'certificate.*.name' => ['required', 'string', 'max:255'],
-            'certificate.*.path_url' => ['required', 'string', 'url'],
-            
-            'portofolio' => ['nullable', 'array'],
-            'portofolio.*.name' => ['required', 'string', 'max:255'],
-            'portofolio.*.path_url' => ['required', 'string', 'url'],
-
-            // Schedule
-            'schedules' => ['nullable', 'array'],
-            'schedules.*.day' => ['required', 'string'],
-            'schedules.*.time' => ['required', 'date_format:H:i'],
         ];
     }
 }

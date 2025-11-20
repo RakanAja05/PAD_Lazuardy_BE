@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\GenderEnum;
+use App\Enums\ReligionEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -37,9 +38,10 @@ class StoreStudentRegisterRequest extends FormRequest
                 'max:15',
             ],
             
-            'profile_photo_url' => [
+            'profile_photo' => [
                 'nullable',
-                'url',
+                'file',
+                'mimes:png,jpg, pdf, svg, webp',
             ],
             
             'province' => ['required', 'string', 'min:2', 'max:255'],
@@ -47,6 +49,7 @@ class StoreStudentRegisterRequest extends FormRequest
             'district' => ['required', 'string', 'min:2', 'max:255'],
             'subdistrict' => ['required', 'string', 'min:2', 'max:255'],
             'street' => ['required', 'string', 'min:2', 'max:255'],
+            'religion' => ['nullable', new Enum(ReligionEnum::class)],
             
             'latitude' => [
                 'required', 

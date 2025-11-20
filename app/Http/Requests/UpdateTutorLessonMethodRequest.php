@@ -14,7 +14,7 @@ class UpdateTutorLessonMethodRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user() && $this->user()->role === RoleEnum::TUTOR->value;
+        return true;
     }
 
     /**
@@ -27,7 +27,8 @@ class UpdateTutorLessonMethodRequest extends FormRequest
         return [
             'course_mode' => ['required', 'string', 'max:50'],
             'description' => ['required', 'string', 'max:1000'],
-            'qualification' => ['required', 'string', 'max:500'],
+            'qualification' => ['required', 'array', 'max:500'],
+            'qualification.*' => ['required', 'string'],
             'learning_method' => ['required', 'string', 'max:50'],
 
             'schedules' => ['required', 'array', 'min:0'],

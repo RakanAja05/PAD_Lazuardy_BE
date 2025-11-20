@@ -144,9 +144,17 @@ class AuthController extends Controller
         $userData = $request->only(
             'email', 'password','name', 
             'gender', 'date_of_birth',
-            'telephone_number', 'profile_photo_url', 
+            'telephone_number', 'religion',
             'latitude', 'longitude',
         );
+
+        if ($request->hasFile('profile_photo')){
+            $file = $request->file('profile_photo');
+            $path = $file->store('uploads', 'public');
+
+            $userData['profile_photo_url'] = $path;
+        }
+
         $userData['password'] = Hash::make($userData['password']);
         $userData['role'] = RoleEnum::STUDENT;
         $userData['home_address'] = $userService->convertAddressToArray(
@@ -195,9 +203,17 @@ class AuthController extends Controller
         $userData = $request->only(
             'email', 'password','name', 
             'gender', 'date_of_birth',
-            'telephone_number', 'profile_photo_url', 
+            'telephone_number', 'religion',
             'latitude', 'longitude',
         );
+
+        if ($request->hasFile('profile_photo')){
+            $file = $request->file('profile_photo');
+            $path = $file->store('uploads', 'public');
+
+            $userData['profile_photo_url'] = $path;
+        }
+
         $userData['password'] = Hash::make($userData['password']);
         $userData['role'] = RoleEnum::TUTOR;
         $userData['home_address'] = $userService->convertAddressToArray(
@@ -212,6 +228,7 @@ class AuthController extends Controller
         try 
         {
             $userResult = $authService->registerUser($userData);
+            $tutorData['user_id'] = $userResult["user"]->id;
             Tutor::create($tutorData);
             
             DB::commit();

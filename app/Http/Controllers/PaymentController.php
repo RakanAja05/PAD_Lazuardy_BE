@@ -80,7 +80,7 @@ class PaymentController extends Controller
     public function uploadPaymentFile(Request $request)
     {
         $request->validate([
-            'file_upload' => ['required', 'file', 'mimes:png,jpg, pdf, svg, webp, '],
+            'file_upload' => ['required', 'file', 'mimes:png,jpg, pdf, svg, webp'],
             'order_id' => ['required', 'exists:orders,id'],
         ]);
 
@@ -113,7 +113,7 @@ class PaymentController extends Controller
         return response()->json([
             'status' => "failed",
             "message" => 'Tidak ditemukan file yang diunggah',
-        ], 200);
+        ], 400);
     }
 
     public function showHistory(Request $request)

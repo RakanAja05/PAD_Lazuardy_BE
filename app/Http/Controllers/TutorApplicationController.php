@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class TutorApplicationController extends Controller
 {
 
-    public function showTutorApply()
+    public function index()
     {
         $classes = ClassModel::all(['id', 'name']);
         $subjects = Subject::all('id', 'name');
@@ -26,7 +26,7 @@ class TutorApplicationController extends Controller
         ], 200);
     }
 
-    public function storeTutorApplication(StoreTutorApplicationRequest $request)
+    public function store(StoreTutorApplicationRequest $request)
     {
         $request->validated();
         $user = $request->user()->load(['tutor']);

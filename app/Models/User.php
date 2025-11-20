@@ -105,6 +105,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function studentPackageTutors(): HasMany
+    {
+        return $this->hasMany(StudentPackage::class, 'tutor_user_id');
+    }
+
+    public function studentPackageStudents(): HasMany
+    {
+        return $this->hasMany(StudentPackage::class, 'student_user_id');
+    }
+
+    public function reviewStudents():HasMany
+    {
+        return $this->hasMany(Review::class, 'from_user_id');
+    }
+
+    public function reviewTutors():HasMany
+    {
+        return $this->hasMany(Review::class, 'to_user_id');
+    }
     
     public function scopeGetUserByEmail($query, $email)
     {

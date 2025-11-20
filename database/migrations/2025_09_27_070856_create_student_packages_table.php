@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('package_id')->constrained('packages');
             $table->foreignId('student_user_id')->constrained('users', 'id');
-            $table->foreignId('subject_id')->constrained('subjects')->nullable();
             $table->foreignId('tutor_user_id')->constrained('users', 'id')->nullable();
+            $table->foreignId('subject_id')->constrained('subjects')->nullable();
             $table->integer('remaining_session')->nullable();
             $table->timestamps();
         });

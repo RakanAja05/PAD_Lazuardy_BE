@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum TutorStatusEnum: string
 {
-    case ACTIVE = "active";
     case VERIFY = "verify";
+    case ACTIVE = "active";
     case INACTIVE = "inactive";
     case REJECTED = "rejected";
 
