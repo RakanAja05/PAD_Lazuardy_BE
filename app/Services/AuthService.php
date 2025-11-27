@@ -2,13 +2,12 @@
 
 namespace App\Services;
 
+use App\Enums\OtpIdentifierEnum;
 use App\Enums\OtpTypeEnum;
-use App\Enums\VerificationTypeEnum;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str; 
 
 class AuthService
@@ -59,8 +58,8 @@ class AuthService
             $otpService->checkOtp(
                 $otpCode, 
                 $cache_data['email'], 
-                OtpTypeEnum::EMAIL->value, 
-                VerificationTypeEnum::REGISTER->value
+                OtpIdentifierEnum::EMAIL->value, 
+                OtpTypeEnum::REGISTER->value
             );
             $resultUser = $this->registerUser($cache_data);
             DB::commit();
@@ -87,8 +86,8 @@ class AuthService
         $otpService = new OtpService;
         $result = $otpService->resendOtp(
             $cache_data['email'], 
-            OtpTypeEnum::EMAIL->value, 
-            VerificationTypeEnum::REGISTER->value
+            OtpIdentifierEnum::EMAIL->value, 
+            OtpTypeEnum::REGISTER->value
         );
 
         return $result;

@@ -8,6 +8,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\TutorApplicationController;
 use App\Models\Review;
 
@@ -74,6 +75,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/student/review/{tutor_id}', [ReviewController::class, 'show']);
         Route::post('/student/review', [ReviewController::class, 'storeOrUpdate']);
         Route::patch('/student/review', [ReviewController::class, 'storeOrUpdate']);
+    });
+
+    Route::middleware('role:admin')->group(function(){
+        Route::get('/admin/student', [StudentManagementController::class, 'index']);
+        Route::get('/admin/student/{id}', [StudentManagementController::class, 'show']);
+        Route::patch('/admin/student/{id}/accept', [StudentManagementController::class, 'accept']);
+        Route::patch('/admin/student/{id}/reject', [StudentManagementController::class, 'reject']);
     });
     
 });
