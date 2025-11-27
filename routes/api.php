@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportAndAnalyticController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin/student/{id}', [StudentManagementController::class, 'show']);
         Route::patch('/admin/student/{id}/accept', [StudentManagementController::class, 'accept']);
         Route::patch('/admin/student/{id}/reject', [StudentManagementController::class, 'reject']);
+        
+        Route::get('/admin/analytic', [ReportAndAnalyticController::class, 'index']);
     });
     
 });

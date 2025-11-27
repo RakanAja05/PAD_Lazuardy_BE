@@ -12,31 +12,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Enum;
-use PhpParser\Node\Stmt\Catch_;
 use Throwable;
 
 class PaymentController extends Controller
 {
-    public function showPaymentPackage(Request $request)
+    public function showPaymentPackage(Package $package)
     {
-        $request->validate([
-            'package_id' => ['required', 'integer', 'exists:packages,id'],
-        ]);
-
-        $package = Package::findOrFail($request->package_id);
-
-        $data = [
-            'name' => $package->name,
-            'session' => $package->session,
-            'price' => $package->price,
-            'discount' => $package->discount,
-            'description' => $package->description,
-            'benefit' => $package->benefit,
-            'image_url' => $package->image_url,
-            'subject_amount' => $package->subject_amount,
-        ];
-
-        return response()->json($data, 200);
+        return response()->json($package, 200);
     }
 
     public function storeOrderPackage(Request $request)
