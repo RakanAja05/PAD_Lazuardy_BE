@@ -25,6 +25,7 @@ class TakenSchedule extends Model
     {
         return [
             'status' => TakenScheduleStatusEnum::class,
+            'date' => 'date',
         ];
     }
 

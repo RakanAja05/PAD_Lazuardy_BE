@@ -8,6 +8,7 @@ use App\Enums\TutorStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tutor extends Model
 {
@@ -16,6 +17,7 @@ class Tutor extends Model
 
     protected $table = 'tutors';
     protected $primaryKey = 'user_id';
+    public $incrementing = false;
 
     protected $fillable = 
     [
@@ -30,7 +32,7 @@ class Tutor extends Model
         'qualification',
         'course_mode',
         'status',
-        'rank',
+        'badge',
         'sanction_amount',
     ];
     
@@ -48,5 +50,8 @@ class Tutor extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+    public function subjects(): BelongsToMany
+    {
+        return $this->belongsToMany(Subject::class, 'tutor_subjects', 'user_id', 'subject_id');
+    }
 }

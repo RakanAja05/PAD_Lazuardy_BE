@@ -37,4 +37,14 @@ class Student extends Model
     {
         return $this->belongsTo(Curriculum::class, 'curriculum_id');
     }
+
+    public function studentPackages()
+    {
+        return $this->hasMany(StudentPackage::class, 'student_user_id', 'user_id');
+    }
+
+    public function takenSchedules()
+    {
+        return $this->hasMany(TakenSchedule::class, 'user_id', 'user_id');
+    }
 }

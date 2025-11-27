@@ -6,7 +6,6 @@ enum TutorStatusEnum: string
 {
     case VERIFY = "verify";
     case ACTIVE = "active";
-    case INACTIVE = "inactive";
     case REJECTED = "rejected";
 
     public function displayName() : string 
@@ -15,8 +14,7 @@ enum TutorStatusEnum: string
         {
             self::ACTIVE => 'Aktif',
             self::VERIFY => 'Menunggu konfirmasi',
-            self::INACTIVE => 'Tidak aktif',
-            self::REJECTED => 'Ditolak',
+            self::REJECTED => 'Ditolak', 
         };
     }
 

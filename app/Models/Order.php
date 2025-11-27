@@ -19,6 +19,7 @@ class Order extends Model
         'user_id',
         'total_amount',
         'package_id',
+        'status',
     ];
 
     protected function casts(): array
