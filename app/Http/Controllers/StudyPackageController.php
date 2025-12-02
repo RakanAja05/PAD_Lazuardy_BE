@@ -10,6 +10,31 @@ class StudyPackageController extends Controller
 {
     /**
      * Menampilkan daftar paket yang dibeli student (summary)
+     * 
+     * @OA\Get(
+     *     path="/api/my-packages",
+     *     tags={"Study Packages"},
+     *     summary="Get student's purchased packages",
+     *     description="Menampilkan daftar paket belajar yang sudah dibeli student dengan progress dan sesi tersisa.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="package_id", type="integer"),
+     *                     @OA\Property(property="package_name", type="string"),
+     *                     @OA\Property(property="total_session", type="integer"),
+     *                     @OA\Property(property="total_remaining_session", type="integer"),
+     *                     @OA\Property(property="overall_progress_percentage", type="number")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=403, description="Only student can access")
+     * )
      */
     public function packages(Request $request)
     {

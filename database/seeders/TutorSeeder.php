@@ -419,6 +419,79 @@ class TutorSeeder extends Seeder
             ],
         ];
 
+        // Tambah tutor yang belum terverifikasi (status = VERIFY) untuk testing proses verifikasi oleh admin
+        $tutors[] = [
+            'name' => 'Pending Tutor One',
+            'email' => 'pending.tutor1@example.com',
+            'telephone_number' => '081234569901',
+            'gender' => GenderEnum::MAN->value,
+            'religion' => ReligionEnum::ISLAM->value,
+            'date_of_birth' => '1995-01-01',
+            'profile_photo_url' => 'https://ui-avatars.com/api/?name=Pending+Tutor+One&background=64748B&color=fff',
+            'latitude' => -7.2800,
+            'longitude' => 112.7600,
+            'home_address' => [
+                'street' => 'Jl. Pending No.1',
+                'subdistrict' => 'Pending',
+                'district' => 'Pending',
+                'regency' => 'Surabaya',
+                'province' => 'Jawa Timur',
+            ],
+            'tutor' => [
+                'education' => [
+                    ['degree' => 'S1', 'major' => 'Matematika', 'university' => 'Universitas Negeri', 'year' => '2017']
+                ],
+                'price' => 80000,
+                'description' => 'Tutor baru menunggu verifikasi oleh admin.',
+                'learning_method' => 'Pendekatan dasar dan latihan intensif.',
+                'qualification' => [
+                    'Lulusan S1 Matematika'
+                ],
+                'experience' => '1 tahun mengajar les privat',
+                'organization' => [],
+                'badge' => BadgeEnum::BRONZE->value,
+                'course_mode' => CourseModeEnum::ONLINE->value,
+                'status' => TutorStatusEnum::VERIFY->value,
+                'subjects' => [1],
+            ],
+        ];
+
+        $tutors[] = [
+            'name' => 'Pending Tutor Two',
+            'email' => 'pending.tutor2@example.com',
+            'telephone_number' => '081234569902',
+            'gender' => GenderEnum::WOMAN->value,
+            'religion' => ReligionEnum::KRISTEN->value,
+            'date_of_birth' => '1993-02-02',
+            'profile_photo_url' => 'https://ui-avatars.com/api/?name=Pending+Tutor+Two&background=F59E0B&color=fff',
+            'latitude' => -7.2850,
+            'longitude' => 112.7550,
+            'home_address' => [
+                'street' => 'Jl. Pending No.2',
+                'subdistrict' => 'Pending',
+                'district' => 'Pending',
+                'regency' => 'Surabaya',
+                'province' => 'Jawa Timur',
+            ],
+            'tutor' => [
+                'education' => [
+                    ['degree' => 'S1', 'major' => 'Bahasa Inggris', 'university' => 'Universitas Negeri', 'year' => '2016']
+                ],
+                'price' => 90000,
+                'description' => 'Menunggu verifikasi dokumen oleh admin.',
+                'learning_method' => 'Praktik percakapan dan evaluasi berkala.',
+                'qualification' => [
+                    'Sertifikat Pengajaran Bahasa Inggris'
+                ],
+                'experience' => '2 tahun mengajar private',
+                'organization' => [],
+                'badge' => BadgeEnum::BRONZE->value,
+                'course_mode' => CourseModeEnum::OFFLINE->value,
+                'status' => TutorStatusEnum::VERIFY->value,
+                'subjects' => [4],
+            ],
+        ];
+
         foreach ($tutors as $tutorData) {
             $tutorInfo = $tutorData['tutor'];
             $subjectIds = $tutorInfo['subjects'] ?? [];

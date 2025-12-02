@@ -14,6 +14,26 @@ use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 { 
+    /**
+     * @OA\Get(
+     *     path="/api/student/profile",
+     *     tags={"Profile"},
+     *     summary="Get student profile",
+     *     description="Menampilkan data lengkap profile student termasuk user data dan student-specific data.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="school", type="string"),
+     *             @OA\Property(property="class", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function showStudentProfile(Request $request)
     {
         $user = $request->user()->load(['student.class']);

@@ -13,6 +13,28 @@ class TutorDashboardController extends Controller
 {
     /**
      * Get dashboard data untuk tutor
+     * 
+     * @OA\Get(
+     *     path="/api/dashboard/tutor",
+     *     tags={"Dashboard"},
+     *     summary="Get tutor dashboard data",
+     *     description="Menampilkan data lengkap dashboard tutor: profile, students, jadwal, earnings, dan statistik.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="profile", type="object"),
+     *             @OA\Property(property="subjects", type="array", @OA\Items(type="object")),
+     *             @OA\Property(property="students", type="array", @OA\Items(type="object")),
+     *             @OA\Property(property="earnings", type="object"),
+     *             @OA\Property(property="statistics", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=403, description="User bukan tutor")
+     * )
      */
     public function index(Request $request)
     {

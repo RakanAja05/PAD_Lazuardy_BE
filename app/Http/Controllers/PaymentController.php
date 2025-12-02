@@ -17,6 +17,35 @@ use Throwable;
 
 class PaymentController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/package/order",
+     *     tags={"Payment & Orders"},
+     *     summary="Get payment package info",
+     *     description="Menampilkan informasi detail paket belajar untuk persiapan order.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="package_id",
+     *         in="query",
+     *         required=true,
+     *         description="ID paket yang akan dibeli",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="Paket Bronze"),
+     *             @OA\Property(property="session", type="integer", example=8),
+     *             @OA\Property(property="price", type="integer", example=1000000),
+     *             @OA\Property(property="discount", type="integer", example=100000),
+     *             @OA\Property(property="description", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Package not found"),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
+     */
     public function showPaymentPackage(Request $request)
     {
         $request->validate([
@@ -39,6 +68,34 @@ class PaymentController extends Controller
         return response()->json($data, 200);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/package/order",
+     *     tags={"Payment & Orders"},
+     *     summary="Create order for study package",
+     *     description="Membuat order baru untuk paket belajar. Status order = pending, payment status = pending.",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"package_id", "total_amount", "payment_method"},
+     *             @OA\Property(property="package_id", type="integer", example=1),
+     *             @OA\Property(property="total_amount", type="integer", example=900000, description="Total setelah diskon"),
+     *             @OA\Property(property="payment_method", type="string", enum={"transfer", "e-wallet", "cash"}, example="transfer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Order created",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Berhasil membuat order")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Failed to create order")
+     * )
+     */
     public function storeOrderPackage(Request $request)
     {
         $request->validate([
@@ -77,6 +134,36 @@ class PaymentController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/package/payment",
+     *     tags={"Payment & Orders"},
+     *     summary="Upload payment proof",
+     *     description="Upload bukti pembayaran (transfer). File akan disimpan dan status payment berubah menjadi 'pending verification'.",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"order_id", "payment_file"},
+     *                 @OA\Property(property="order_id", type="integer", example=1),
+     *                 @OA\Property(property="payment_file", type="string", format="binary", description="File bukti transfer (jpg, png, pdf)")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Payment proof uploaded",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Bukti pembayaran berhasil diupload")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=500, description="Failed to upload")
+     * )
+     */
     public function uploadPaymentFile(Request $request)
     {
         $request->validate([

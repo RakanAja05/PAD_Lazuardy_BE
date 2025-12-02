@@ -12,6 +12,36 @@ class StudentDashboardController extends Controller
 {
     /**
      * Get dashboard data untuk student
+     * 
+     * @OA\Get(
+     *     path="/api/dashboard/student",
+     *     tags={"Dashboard"},
+     *     summary="Get student dashboard data",
+     *     description="Menampilkan data lengkap dashboard student: profile, paket belajar, jadwal, dan statistik.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="profile", type="object",
+     *                 @OA\Property(property="user_id", type="integer"),
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="email", type="string"),
+     *                 @OA\Property(property="class", type="string", example="kelas 10"),
+     *                 @OA\Property(property="school", type="string")
+     *             ),
+     *             @OA\Property(property="packages", type="array", @OA\Items(type="object")),
+     *             @OA\Property(property="package_stats", type="object",
+     *                 @OA\Property(property="total_packages", type="integer"),
+     *                 @OA\Property(property="total_remaining_sessions", type="integer")
+     *             ),
+     *             @OA\Property(property="schedules", type="array", @OA\Items(type="object")),
+     *             @OA\Property(property="schedule_stats", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=403, description="User bukan student")
+     * )
      */
     public function index(Request $request)
     {
@@ -163,6 +193,39 @@ class StudentDashboardController extends Controller
     /**
      * Get recommended tutors dengan pagination (5 tutor per page)
      * Untuk kotak "Tutor Rekomendasi" di dashboard
+     * 
+     * @OA\Get(
+     *     path="/api/dashboard/student/recommended-tutors",
+     *     tags={"Dashboard"},
+     *     summary="Get recommended tutors for student",
+     *     description="Menampilkan daftar tutor rekomendasi berdasarkan kedekatan lokasi (5 tutors per page).",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="user_id", type="integer"),
+     *                     @OA\Property(property="name", type="string"),
+     *                     @OA\Property(property="profile_photo_url", type="string"),
+     *                     @OA\Property(property="education", type="array", @OA\Items(type="object")),
+     *                     @OA\Property(property="subjects", type="array", @OA\Items(type="object"))
+     *                 )
+     *             ),
+     *             @OA\Property(property="pagination", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=403, description="User bukan student")
+     * )
      */
     public function getRecommendedTutors(Request $request)
     {

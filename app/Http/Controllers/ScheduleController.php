@@ -8,6 +8,35 @@ class ScheduleController extends Controller
 {
     /**
      * Display a listing of the student schedule resource.
+     * 
+     * @OA\Get(
+     *     path="/api/student/schedule",
+     *     tags={"Schedule"},
+     *     summary="Get student schedule",
+     *     description="Menampilkan jadwal belajar student dengan detail tutor, hari, dan waktu.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="date",
+     *         in="query",
+     *         description="Filter by date (optional)",
+     *         @OA\Schema(type="string", format="date", example="2025-12-01")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="schedule_data", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="tutor_name", type="string"),
+     *                     @OA\Property(property="day", type="string"),
+     *                     @OA\Property(property="time", type="string"),
+     *                     @OA\Property(property="status", type="string")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function indexStudent(Request $request)
     {
@@ -33,6 +62,36 @@ class ScheduleController extends Controller
             ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/tutor/schedule",
+     *     tags={"Schedule"},
+     *     summary="Get tutor schedule",
+     *     description="Menampilkan jadwal mengajar tutor dengan detail student yang diajar.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="date",
+     *         in="query",
+     *         description="Filter by date (optional)",
+     *         @OA\Schema(type="string", format="date", example="2025-12-01")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="schedule_data", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="student_name", type="string"),
+     *                     @OA\Property(property="day", type="string"),
+     *                     @OA\Property(property="time", type="string"),
+     *                     @OA\Property(property="status", type="string")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function indexTutor(Request $request)
     {
         $user = $request->user()->load('schedules.takenSchedules.user'); // Merujuk ke tutor

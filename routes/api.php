@@ -20,6 +20,7 @@ use App\Http\Controllers\FindTutorController;
 use App\Http\Controllers\TutorProfileController;
 use App\Http\Controllers\StudyPackageController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TutorVerifyController;
 
 // === REGISTER & LOGIN BIASA ===
 Route::post('/login', [LoginController::class, 'login']);
@@ -104,6 +105,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/student/review', [ReviewController::class, 'storeOrUpdate']);
         Route::patch('/student/review', [ReviewController::class, 'storeOrUpdate']);
     });
+
+    // Admin-only routes (gunakan middleware role yang sudah ada)
+    Route::middleware('role:admin')->group(function () {
+        // Data untuk registrasi tutor (dropdown / form options) - hanya admin
+        Route::get('/verify/tutor', [TutorVerifyController::class, 'index']);
+        Route::patch('/verify/tutor/approve', [TutorVerifyController::class, 'approve']);
+        Route::patch('/verify/tutor/reject', [TutorVerifyController::class, 'reject']);
+    });
     
 });
 
@@ -118,6 +127,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.forgot');
     Route::patch('/forgot-password/verify', [AuthController::class, 'verifyForgotPassword'])->name('password.verify-otp');
     Route::patch('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
+
 });
 
 // === LOGIN GOOGLE UNTUK MOBILE ===

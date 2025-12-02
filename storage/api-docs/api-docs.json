@@ -1,30 +1,38 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "lazuardy",
-        "description": "API registrasi",
+        "title": "PAD Lazuardy API",
+        "description": "API Documentation untuk aplikasi tutor matching PAD Lazuardy - Platform untuk menghubungkan siswa dengan tutor berkualitas",
         "contact": {
+            "name": "PAD Lazuardy Team",
             "email": "yafinuqmanelianto@mail.ugm.ac.id"
+        },
+        "license": {
+            "name": "Private",
+            "url": ""
         },
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "https://lazuardy.test/",
-            "description": "Server Development (Lokal)"
+            "url": "http://my-default-host.com",
+            "description": "Development Server (Local)"
+        },
+        {
+            "url": "https://api.padlazuardy.com",
+            "description": "Production Server"
         }
     ],
     "paths": {
-        "api/register": {
+        "/api/register": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "User menginput data email dan password untuk registrasi",
-                "description": "Endpoint untuk memulai proses registrasi user baru dengan mengirimkan email dan password. Sistem akan mengirimkan OTP ke email yang didaftarkan untuk verifikasi.",
-                "operationId": "initiateRegister",
+                "summary": "Send OTP for registration",
+                "description": "Langkah 1 registrasi: Kirim email & password, sistem akan mengirim OTP ke email.",
+                "operationId": "e954953080a08f18e4c0cd6d14d174c2",
                 "requestBody": {
-                    "description": "Data registrasi user",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -38,17 +46,18 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "user@gmail.com"
+                                        "example": "newuser@example.com"
                                     },
                                     "password": {
+                                        "description": "Min 8 karakter",
                                         "type": "string",
                                         "format": "password",
-                                        "example": "string12345"
+                                        "example": "password123"
                                     },
                                     "password_confirmation": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "string12345"
+                                        "example": "password123"
                                     }
                                 },
                                 "type": "object"
@@ -58,237 +67,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Registrasi berhasil, OTP telah dikirim ke email",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "temp_token": {
-                                            "type": "string",
-                                            "example": "temporary_token_string"
-                                        },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "user@gmail.com"
-                                        },
-                                        "otp": {
-                                            "type": "string",
-                                            "example": "1234"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request - Invalid input data",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "email": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "The email has already been taken."
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "api/register/verify": {
-            "patch": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Verifikasi email menggunakan OTP saat registrasi",
-                "description": "Endpoint untuk memverifikasi email user baru dengan menggunakan OTP yang telah dikirimkan ke email tersebut selama proses registrasi.",
-                "operationId": "verifyEmail",
-                "requestBody": {
-                    "description": "Data verifikasi email",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "temp_token",
-                                    "otp_code"
-                                ],
-                                "properties": {
-                                    "temp_token": {
-                                        "type": "string",
-                                        "example": "temporary_token_string"
-                                    },
-                                    "otp_code": {
-                                        "type": "string",
-                                        "example": "1234"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Email berhasil diverifikasi",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Registrasi berhasil. Email terverifikasi."
-                                        },
-                                        "token": {
-                                            "type": "string",
-                                            "example": "auth_token_string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request - Invalid OTP or temp token",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Invalid OTP or temporary token."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "api/register/resend-otp": {
-            "patch": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Kirim ulang OTP untuk verifikasi email saat registrasi",
-                "description": "Endpoint untuk mengirim ulang OTP ke email user baru selama proses registrasi jika OTP sebelumnya tidak diterima atau hilang.",
-                "operationId": "resendOtp",
-                "requestBody": {
-                    "description": "Data untuk mengirim ulang OTP",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "temp_token"
-                                ],
-                                "properties": {
-                                    "temp_token": {
-                                        "type": "string",
-                                        "example": "temporary_token_string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OTP berhasil dikirim ulang ke email",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "OTP berhasil terkirim kembali."
-                                        },
-                                        "otp_code": {
-                                            "type": "string",
-                                            "example": "1234"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request - Invalid temp token",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Invalid temporary token."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "api/forgot-password/verify": {
-            "patch": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Verifikasi OTP untuk lupa password",
-                "description": "Endpoint untuk memverifikasi OTP yang dikirimkan ke email user saat proses lupa password.",
-                "operationId": "verifyForgotPassword",
-                "requestBody": {
-                    "description": "Data verifikasi OTP lupa password",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "temp_token",
-                                    "otp_code"
-                                ],
-                                "properties": {
-                                    "temp_token": {
-                                        "type": "string",
-                                        "example": "temporary_token_string"
-                                    },
-                                    "otp_code": {
-                                        "type": "string",
-                                        "example": "1234"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OTP berhasil diverifikasi untuk reset password",
+                        "description": "OTP sent",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -299,11 +78,12 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "OTP verified successfully."
+                                            "example": "OTP berhasil terkirim ke email"
                                         },
-                                        "token": {
+                                        "otp": {
+                                            "description": "OTP code (hanya untuk development)",
                                             "type": "string",
-                                            "example": "reset_token_string"
+                                            "example": "123456"
                                         }
                                     },
                                     "type": "object"
@@ -311,58 +91,38 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request - Invalid OTP or temp token",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Invalid OTP or temporary token."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                    "422": {
+                        "description": "Validation error - Email sudah terdaftar"
                     }
                 }
             }
         },
-        "api/reset-password": {
+        "/api/register/verify": {
             "patch": {
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Reset password user",
-                "description": "Endpoint untuk mereset password user setelah OTP lupa password berhasil diverifikasi.",
-                "operationId": "resetPassword",
+                "summary": "Verify OTP for registration",
+                "description": "Langkah 2 registrasi: Verifikasi OTP yang dikirim ke email.",
+                "operationId": "efc5a9506417e8c465004b94f5e69212",
                 "requestBody": {
-                    "description": "Data reset password",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "token",
-                                    "password",
-                                    "password_confirmation"
+                                    "email",
+                                    "otp"
                                 ],
                                 "properties": {
-                                    "token": {
+                                    "email": {
                                         "type": "string",
-                                        "example": "reset_token_string"
+                                        "format": "email",
+                                        "example": "newuser@example.com"
                                     },
-                                    "password": {
+                                    "otp": {
                                         "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
+                                        "example": "123456"
                                     }
                                 },
                                 "type": "object"
@@ -372,14 +132,18 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Password berhasil direset",
+                        "description": "OTP verified",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "Password berhasil direset."
+                                            "example": "OTP berhasil diverifikasi"
                                         }
                                     },
                                     "type": "object"
@@ -388,14 +152,720 @@
                         }
                     },
                     "400": {
-                        "description": "Bad Request - Invalid token or input data",
+                        "description": "OTP invalid atau expired"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/register/student": {
+            "patch": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Complete student registration",
+                "description": "Langkah 3 registrasi student: Lengkapi data profil student setelah OTP terverifikasi.",
+                "operationId": "c646c495915bce59889f7ef27bd15c59",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "name",
+                                    "gender",
+                                    "date_of_birth",
+                                    "telephone_number",
+                                    "class_id",
+                                    "curriculum_id"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Andi Wijaya"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pria",
+                                            "wanita"
+                                        ]
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2005-01-15"
+                                    },
+                                    "telephone_number": {
+                                        "type": "string",
+                                        "example": "081234567890"
+                                    },
+                                    "religion": {
+                                        "type": "string",
+                                        "enum": [
+                                            "islam",
+                                            "kristen",
+                                            "katolik",
+                                            "hindu",
+                                            "buddha",
+                                            "konghucu"
+                                        ]
+                                    },
+                                    "class_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "curriculum_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "school": {
+                                        "type": "string",
+                                        "example": "SMA Negeri 1"
+                                    },
+                                    "parent": {
+                                        "type": "string",
+                                        "example": "Budi Santoso"
+                                    },
+                                    "parent_telephone_number": {
+                                        "type": "string",
+                                        "example": "081234567891"
+                                    },
+                                    "province": {
+                                        "type": "string",
+                                        "example": "Jawa Timur"
+                                    },
+                                    "regency": {
+                                        "type": "string",
+                                        "example": "Surabaya"
+                                    },
+                                    "district": {
+                                        "type": "string",
+                                        "example": "Rungkut"
+                                    },
+                                    "subdistrict": {
+                                        "type": "string",
+                                        "example": "Rungkut Kidul"
+                                    },
+                                    "street": {
+                                        "type": "string",
+                                        "example": "Jl. Raya Kalirungkut No. 1"
+                                    },
+                                    "latitude": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "example": -7.3297
+                                    },
+                                    "longitude": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "example": 112.7814
+                                    },
+                                    "profile_photo": {
+                                        "description": "Optional profile photo",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abc123..."
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Registrasi akun berhasil"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Registration failed"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user",
+                "description": "Login untuk admin, student, atau tutor. Menghapus token lama dan membuat token baru.",
+                "operationId": "3673edffcdc18c06ac5aef5e2219d774",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login berhasil",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Invalid reset token."
+                                            "example": "Login berhasil"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abc123def456..."
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Admin User"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "admin@example.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "admin"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email atau password salah",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email atau password salah"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout user",
+                "description": "Menghapus token akses saat ini (revoke token)",
+                "operationId": "5e29d25372d83a1ff5c3165a43f3302d",
+                "responses": {
+                    "200": {
+                        "description": "Logout berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout berhasil"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token invalid"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get current authenticated user",
+                "description": "Mendapatkan informasi user yang sedang login berdasarkan token",
+                "operationId": "b061496ee99b7229710086826df8b3ff",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Andi Wijaya"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "andi@example.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "student"
+                                                },
+                                                "profile_photo_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "telephone_number": {
+                                                    "type": "string",
+                                                    "example": "081234567890"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/find-tutor": {
+            "get": {
+                "tags": [
+                    "Tutor Search"
+                ],
+                "summary": "Cari tutor dengan filter dan scoring algorithm",
+                "description": "Cari tutor dengan filter + scoring algorithm\n\nAlgoritma:\n1. Apply filter (subject, class, min_rating, radius)\n2. Hitung recommendation score untuk setiap tutor\n3. Sort by score DESC dan ambil top 6 per halaman",
+                "operationId": "2d1ddf37d8832c867fe04f46822dffcc",
+                "parameters": [
+                    {
+                        "name": "radius",
+                        "in": "query",
+                        "description": "Radius pencarian dalam km (default: 10)",
+                        "schema": {
+                            "type": "number",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Nomor halaman untuk infinite scroll (default: 1, fixed 6 tutors per page)",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "subject_id",
+                        "in": "query",
+                        "description": "Filter berdasarkan mata pelajaran tertentu",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "class_id",
+                        "in": "query",
+                        "description": "Filter berdasarkan kelas (SD, SMP, SMA, dll)",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "min_rating",
+                        "in": "query",
+                        "description": "Filter rating minimum (0-5)",
+                        "schema": {
+                            "type": "number",
+                            "example": 4
+                        }
+                    },
+                    {
+                        "name": "weight_rating",
+                        "in": "query",
+                        "description": "Bobot rating dalam scoring (0-1, default: 0.6)",
+                        "schema": {
+                            "type": "number",
+                            "example": 0.6
+                        }
+                    },
+                    {
+                        "name": "weight_distance",
+                        "in": "query",
+                        "description": "Bobot jarak dalam scoring (0-1, default: 0.4)",
+                        "schema": {
+                            "type": "number",
+                            "example": 0.4
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar tutor dengan score tertinggi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/find-tutor/{id}": {
+            "get": {
+                "tags": [
+                    "Tutor Search"
+                ],
+                "summary": "Detail tutor dengan perhitungan jarak",
+                "description": "Get tutor detail by ID dengan informasi jarak",
+                "operationId": "858a04e7c91ffa80bb1a354c1b001074",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail tutor"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/package/order": {
+            "get": {
+                "tags": [
+                    "Payment & Orders"
+                ],
+                "summary": "Get payment package info",
+                "description": "Menampilkan informasi detail paket belajar untuk persiapan order.",
+                "operationId": "da647b1934379012ea6800abf7b10ddc",
+                "parameters": [
+                    {
+                        "name": "package_id",
+                        "in": "query",
+                        "description": "ID paket yang akan dibeli",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Paket Bronze"
+                                        },
+                                        "session": {
+                                            "type": "integer",
+                                            "example": 8
+                                        },
+                                        "price": {
+                                            "type": "integer",
+                                            "example": 1000000
+                                        },
+                                        "discount": {
+                                            "type": "integer",
+                                            "example": 100000
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Package not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Payment & Orders"
+                ],
+                "summary": "Create order for study package",
+                "description": "Membuat order baru untuk paket belajar. Status order = pending, payment status = pending.",
+                "operationId": "5ac0931b9ce1c67e2d75168556a21668",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "package_id",
+                                    "total_amount",
+                                    "payment_method"
+                                ],
+                                "properties": {
+                                    "package_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "total_amount": {
+                                        "description": "Total setelah diskon",
+                                        "type": "integer",
+                                        "example": 900000
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "enum": [
+                                            "transfer",
+                                            "e-wallet",
+                                            "cash"
+                                        ],
+                                        "example": "transfer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Berhasil membuat order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Failed to create order"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/package/payment": {
+            "post": {
+                "tags": [
+                    "Payment & Orders"
+                ],
+                "summary": "Upload payment proof",
+                "description": "Upload bukti pembayaran (transfer). File akan disimpan dan status payment berubah menjadi 'pending verification'.",
+                "operationId": "034901320868c08df4dce5f478af4bb2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "order_id",
+                                    "payment_file"
+                                ],
+                                "properties": {
+                                    "order_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "payment_file": {
+                                        "description": "File bukti transfer (jpg, png, pdf)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment proof uploaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bukti pembayaran berhasil diupload"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Failed to upload"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/student/profile": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get student profile",
+                "description": "Menampilkan data lengkap profile student termasuk user data dan student-specific data.",
+                "operationId": "fc127d0a1826153cab060f7cf661aa9f",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "school": {
+                                            "type": "string"
+                                        },
+                                        "class": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -403,7 +873,1006 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/student/review": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get list of tutors to review",
+                "description": "Menampilkan daftar tutor yang pernah mengajar student untuk diberi review.",
+                "operationId": "4d7bb68702083742ff9be7776982eebb",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "tutor_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "tutor_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "tutor_classes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "purchased_subject_name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Create or update review for tutor",
+                "description": "Student memberikan review dan rating untuk tutor. Jika sudah pernah review, akan di-update.",
+                "operationId": "649b53eb181bae04fac59ef8e0d528d0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "tutor_id",
+                                    "quality",
+                                    "delivery",
+                                    "attitude",
+                                    "benefit",
+                                    "rate"
+                                ],
+                                "properties": {
+                                    "tutor_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "quality": {
+                                        "type": "string",
+                                        "enum": [
+                                            "poor",
+                                            "average",
+                                            "good",
+                                            "excellent"
+                                        ]
+                                    },
+                                    "delivery": {
+                                        "type": "string",
+                                        "enum": [
+                                            "poor",
+                                            "average",
+                                            "good",
+                                            "excellent"
+                                        ]
+                                    },
+                                    "attitude": {
+                                        "type": "string",
+                                        "enum": [
+                                            "poor",
+                                            "average",
+                                            "good",
+                                            "excellent"
+                                        ]
+                                    },
+                                    "benefit": {
+                                        "type": "string",
+                                        "enum": [
+                                            "poor",
+                                            "average",
+                                            "good",
+                                            "excellent"
+                                        ]
+                                    },
+                                    "rate": {
+                                        "description": "Rating 1-5",
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "review": {
+                                        "type": "string",
+                                        "example": "Tutor sangat baik dan sabar"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Review created/updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/student/schedule": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get student schedule",
+                "description": "Menampilkan jadwal belajar student dengan detail tutor, hari, dan waktu.",
+                "operationId": "a7d75f36edc5a7f14caff4a86a30a858",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Filter by date (optional)",
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-12-01"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "schedule_data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "tutor_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "day": {
+                                                        "type": "string"
+                                                    },
+                                                    "time": {
+                                                        "type": "string"
+                                                    },
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/tutor/schedule": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get tutor schedule",
+                "description": "Menampilkan jadwal mengajar tutor dengan detail student yang diajar.",
+                "operationId": "0f7bc470494593486075ddd3c5f8e866",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Filter by date (optional)",
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-12-01"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "schedule_data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "student_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "day": {
+                                                        "type": "string"
+                                                    },
+                                                    "time": {
+                                                        "type": "string"
+                                                    },
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/dashboard/student": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Get student dashboard data",
+                "description": "Menampilkan data lengkap dashboard student: profile, paket belajar, jadwal, dan statistik.",
+                "operationId": "3aae6fbca55164b189d83dc475644c53",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "profile": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "class": {
+                                                    "type": "string",
+                                                    "example": "kelas 10"
+                                                },
+                                                "school": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "packages": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "package_stats": {
+                                            "properties": {
+                                                "total_packages": {
+                                                    "type": "integer"
+                                                },
+                                                "total_remaining_sessions": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "schedules": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "schedule_stats": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "User bukan student"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/dashboard/student/recommended-tutors": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Get recommended tutors for student",
+                "description": "Menampilkan daftar tutor rekomendasi berdasarkan kedekatan lokasi (5 tutors per page).",
+                "operationId": "259679db78fc82614c4fa472f3607d8e",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "user_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "profile_photo_url": {
+                                                        "type": "string"
+                                                    },
+                                                    "education": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "subjects": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "User bukan student"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/my-packages": {
+            "get": {
+                "tags": [
+                    "Study Packages"
+                ],
+                "summary": "Get student's purchased packages",
+                "description": "Menampilkan daftar paket belajar yang sudah dibeli student dengan progress dan sesi tersisa.",
+                "operationId": "434f870881933a65508f9b92dd7369fb",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "package_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "package_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "total_session": {
+                                                        "type": "integer"
+                                                    },
+                                                    "total_remaining_session": {
+                                                        "type": "integer"
+                                                    },
+                                                    "overall_progress_percentage": {
+                                                        "type": "number"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Only student can access"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/dashboard/tutor": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Get tutor dashboard data",
+                "description": "Menampilkan data lengkap dashboard tutor: profile, students, jadwal, earnings, dan statistik.",
+                "operationId": "ddc2a15f74c6017bcbcc4b02c9649b1a",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "profile": {
+                                            "type": "object"
+                                        },
+                                        "subjects": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "students": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "earnings": {
+                                            "type": "object"
+                                        },
+                                        "statistics": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "User bukan tutor"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/tutor-profile/{id}": {
+            "get": {
+                "tags": [
+                    "Tutor Profile"
+                ],
+                "summary": "Tampilkan profile tutor lengkap",
+                "description": "Tampilkan profile tutor lengkap untuk student\n\nMenampilkan:\n- Informasi dasar tutor (nama, foto, rating, kontak)\n- Kualifikasi & metode mengajar\n- Mata pelajaran yang diajar\n- Jadwal kosong tutor\n- Review dari siswa lain",
+                "operationId": "58203ef4398e55b737cc41fe41e74d6c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID dari tutor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile tutor berhasil dimuat"
+                    },
+                    "404": {
+                        "description": "Tutor tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/tutor-profile/{id}/available-slots": {
+            "get": {
+                "tags": [
+                    "Tutor Profile"
+                ],
+                "summary": "Cek slot waktu tersedia untuk tanggal tertentu",
+                "description": "Get available time slots for a specific date",
+                "operationId": "cee79cb999c4cca0cc0da8d7baeb0842",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Tanggal yang ingin dicek (format: Y-m-d)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Available slots"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/verify/tutor": {
+            "get": {
+                "tags": [
+                    "Admin - Tutor Verification"
+                ],
+                "summary": "Get list of tutors pending verification",
+                "description": "Menampilkan daftar tutor yang perlu diverifikasi oleh admin (status = verify). Termasuk data user, subjects, dan files yang diupload.",
+                "operationId": "ccf0751b689a1d4272a72ae58c452500",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "tutors": {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "user": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 2
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Budi Santoso"
+                                                                    },
+                                                                    "email": {
+                                                                        "type": "string",
+                                                                        "example": "budi@example.com"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "price": {
+                                                                "type": "integer",
+                                                                "example": 150000
+                                                            },
+                                                            "badge": {
+                                                                "type": "string",
+                                                                "example": "bronze"
+                                                            },
+                                                            "course_mode": {
+                                                                "type": "string",
+                                                                "example": "online"
+                                                            },
+                                                            "description": {
+                                                                "type": "string",
+                                                                "example": "Pengalaman mengajar 5 tahun"
+                                                            },
+                                                            "education": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "qualification": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "experience": {
+                                                                "type": "string"
+                                                            },
+                                                            "organization": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "learning_method": {
+                                                                "type": "string"
+                                                            },
+                                                            "subjects": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "Matematika SD"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "files": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "ijazah.pdf"
+                                                                        },
+                                                                        "type": {
+                                                                            "type": "string",
+                                                                            "example": "certificate"
+                                                                        },
+                                                                        "path_url": {
+                                                                            "type": "string",
+                                                                            "example": "uploads/files/ijazah.pdf"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 15
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Token invalid atau tidak ada"
+                    },
+                    "403": {
+                        "description": "Forbidden - Bukan role admin"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/verify/tutor/approve": {
+            "patch": {
+                "tags": [
+                    "Admin - Tutor Verification"
+                ],
+                "summary": "Approve tutor verification",
+                "description": "Mengubah status tutor dari 'verify' menjadi 'active'. Hanya admin yang bisa mengakses.",
+                "operationId": "9feb1fbcfa9413afeb76d030294e86e2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "ID user tutor yang akan di-approve",
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tutor berhasil diverifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tutor berhasil diverifikasi dan diaktifkan"
+                                        },
+                                        "tutor": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "active"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden - Bukan role admin"
+                    },
+                    "404": {
+                        "description": "Tutor not found atau status bukan 'verify'"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/verify/tutor/reject": {
+            "patch": {
+                "tags": [
+                    "Admin - Tutor Verification"
+                ],
+                "summary": "Reject tutor verification",
+                "description": "Mengubah status tutor dari 'verify' menjadi 'rejected'. Admin dapat memberikan alasan penolakan.",
+                "operationId": "ffdf03cb5271e518a3f481412ad6295c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "ID user tutor yang akan ditolak",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "reason": {
+                                        "description": "Alasan penolakan (optional, max 500 karakter)",
+                                        "type": "string",
+                                        "example": "Dokumen tidak lengkap"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tutor berhasil ditolak",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tutor ditolak"
+                                        },
+                                        "tutor": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "rejected"
+                                                },
+                                                "reason": {
+                                                    "type": "string",
+                                                    "example": "Dokumen tidak lengkap"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden - Bukan role admin"
+                    },
+                    "404": {
+                        "description": "Tutor not found atau status bukan 'verify'"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "api/register/student/{user}": {
@@ -584,7 +2053,7 @@
                                         "type": "string",
                                         "example": "Jawa Barat"
                                     },
-                                    "regency": {
+                                    "city": {
                                         "description": "Kota/Kabupaten tempat tinggal tutor",
                                         "type": "string",
                                         "example": "Bandung"
@@ -704,10 +2173,56 @@
             }
         }
     },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Laravel Sanctum Bearer Token. Dapatkan token dari endpoint login, lalu masukkan di sini.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
     "tags": [
         {
             "name": "Authentication",
-            "description": "Authentication"
+            "description": "Endpoints untuk login, register, dan logout"
+        },
+        {
+            "name": "Admin - Tutor Verification",
+            "description": "Endpoints untuk admin verifikasi tutor"
+        },
+        {
+            "name": "Dashboard",
+            "description": "Dashboard untuk student dan tutor"
+        },
+        {
+            "name": "Profile",
+            "description": "Manajemen profile user"
+        },
+        {
+            "name": "Payment & Orders",
+            "description": "Pembayaran dan order paket belajar"
+        },
+        {
+            "name": "Schedule",
+            "description": "Jadwal belajar student dan tutor"
+        },
+        {
+            "name": "Reviews",
+            "description": "Review dan rating tutor"
+        },
+        {
+            "name": "Tutor Search",
+            "description": "Tutor Search"
+        },
+        {
+            "name": "Study Packages",
+            "description": "Study Packages"
+        },
+        {
+            "name": "Tutor Profile",
+            "description": "Tutor Profile"
         },
         {
             "name": "students",
