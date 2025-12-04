@@ -1,16 +1,19 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportAndAnalyticController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\TutorApplicationController;
-use App\Models\Review;
 use App\Http\Controllers\UserController;
+use App\Models\Review;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -22,11 +25,23 @@ use App\Http\Controllers\StudyPackageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TutorVerifyController;
 
-// === REGISTER & LOGIN BIASA ===
-Route::post('/login', [LoginController::class, 'login']);
-                    
-// === LOGIN GOOGLE - Complete Registration (API) ===
-Route::post('/auth/google/complete', [GoogleController::class, 'completeGoogleRegistration'])->name('google.complete');
+// Route::post('/login', [LoginController::class, 'login']);
+
+// Authentication
+Route::middleware('guest')->group(function () {
+    Route::post('/auth/google/complete', [GoogleController::class, 'completeGoogleRegistration'])->name('google.complete');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'sendRegisterOtp'])->name('register.sendOtp');
+    Route::patch('/register/verify', [AuthController::class, 'verifyRegisterOtp'])->name('register.verify-otp');
+    Route::patch('/register/resend-otp', [AuthController::class, 'resendRegisterOtp'])->name('register.resend-otp');
+    Route::patch('/register/student', [AuthController::class, 'storeStudentRegister'])->name('register.student');
+    Route::patch('/register/tutor', [AuthController::class, 'storeTutorRegister'])->name('register.tutor');
+    
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.forgot');
+    Route::patch('/forgot-password/verify', [AuthController::class, 'verifyForgotPassword'])->name('password.verify-otp');
+    Route::patch('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
+    Route::get('form-data', [UserController::class, 'indexFormRegister']);
+});
 
 // === PROTECTED ROUTES (wajib login) ===
 Route::middleware('auth:sanctum')->group(function () {
@@ -90,7 +105,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/student/profile', [ProfileController::class, 'updateStudentProfile']);
 
         // order & payment
-        Route::get('/package/order', [PaymentController::class, 'showPaymentPackage']);
+        Route::get('/package/order/{id}', [PaymentController::class, 'showPaymentPackage']);
         Route::post('/package/order', [PaymentController::class, 'storeOrderPackage']);
         Route::post('/package/payment', [PaymentController::class, 'uploadPaymentFile'])->name('payment.upload');
         Route::get('/payment/history', [PaymentController::class, 'showHistory']);
@@ -112,6 +127,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/verify/tutor', [TutorVerifyController::class, 'index']);
         Route::patch('/verify/tutor/approve', [TutorVerifyController::class, 'approve']);
         Route::patch('/verify/tutor/reject', [TutorVerifyController::class, 'reject']);
+
+        Route::get('/admin/student', [StudentManagementController::class, 'index']);
+        Route::get('/admin/student/{id}', [StudentManagementController::class, 'show']);
+        Route::patch('/admin/student/{id}/accept', [StudentManagementController::class, 'accept']);
+        Route::patch('/admin/student/{id}/reject', [StudentManagementController::class, 'reject']);
+        
+        Route::get('/admin/analytic', [ReportAndAnalyticController::class, 'index']);
     });
     
 });

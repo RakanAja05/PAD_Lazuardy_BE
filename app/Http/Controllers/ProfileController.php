@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\DayEnum;
 use App\Http\Requests\UpdateStudentProfileRequest;
 use App\Http\Requests\UpdateTutorLessonMethodRequest;
 use App\Http\Requests\UpdateTutorProfileRequest;

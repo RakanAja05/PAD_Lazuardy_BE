@@ -12,9 +12,10 @@ enum ReligionEnum: string
     case KONGHUCU = 'konghucu';
 
     
-    public static function displayName(string $value): string
+    public function displayName() : string 
     {
-        return match ($value) {
+        return match($this) 
+        {
             self::ISLAM->value => 'Islam',
             self::KRISTEN->value => 'Kristen',
             self::KATOLIK->value => 'Katolik',
@@ -24,6 +25,16 @@ enum ReligionEnum: string
         };
     }
     
+    public static function tryFromDisplayName(string $displayName): ?self
+    {
+        foreach (self::cases() as $case) {
+            if ($case->displayName() === $displayName) {
+                return $case;
+            }
+        }
+        return null;
+    }
+
     public static function list(): array
     {
         return array_map(fn($case) => $case->value, self::cases());
