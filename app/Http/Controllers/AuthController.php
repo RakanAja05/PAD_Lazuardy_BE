@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BadgeEnum;
+use App\Enums\GenderEnum;
 use App\Enums\OtpIdentifierEnum;
 use App\Enums\OtpTypeEnum;
 use App\Enums\RoleEnum;
@@ -147,14 +148,16 @@ class AuthController extends Controller
             'telephone_number', 'religion',
             'latitude', 'longitude',
         );
-
+        
         if ($request->hasFile('profile_photo')){
             $file = $request->file('profile_photo');
             $path = $file->store('uploads', 'public');
-
+            
             $userData['profile_photo_url'] = $path;
         }
 
+        $userData['gender'] = GenderEnum::tryFromDisplayName($request->gender);
+        
         $userData['password'] = Hash::make($userData['password']);
         $userData['role'] = RoleEnum::STUDENT;
         $userData['home_address'] = $userService->convertAddressToArray(

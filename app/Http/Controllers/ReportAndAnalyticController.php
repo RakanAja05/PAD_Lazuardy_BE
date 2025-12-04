@@ -9,7 +9,6 @@ use App\Models\Review;
 use App\Models\Student;
 use App\Models\Tutor;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class ReportAndAnalyticController extends Controller
 {

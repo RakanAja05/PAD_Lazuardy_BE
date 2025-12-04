@@ -16,9 +16,12 @@ use Throwable;
 
 class PaymentController extends Controller
 {
-    public function showPaymentPackage(Package $package)
+    public function showPaymentPackage(Package $id)
     {
-        return response()->json($package, 200);
+        return response()->json([
+            'status' => 'success',
+            'data' => $id,
+        ], 200);
     }
 
     public function storeOrderPackage(Request $request)

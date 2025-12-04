@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\TutorApplicationController;
+use App\Http\Controllers\UserController;
 use App\Models\Review;
 
 // Authentication
@@ -25,6 +27,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.forgot');
     Route::patch('/forgot-password/verify', [AuthController::class, 'verifyForgotPassword'])->name('password.verify-otp');
     Route::patch('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
+    Route::get('form-data', [UserController::class, 'indexFormRegister']);
 });
 
 // === LOGIN GOOGLE UNTUK MOBILE ===
@@ -62,7 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/student/profile', [ProfileController::class, 'updateStudentProfile']);
 
         // order & payment
-        Route::get('/package/order', [PaymentController::class, 'showPaymentPackage']);
+        Route::get('/package/order/{id}', [PaymentController::class, 'showPaymentPackage']);
         Route::post('/package/order', [PaymentController::class, 'storeOrderPackage']);
         Route::post('/package/payment', [PaymentController::class, 'uploadPaymentFile'])->name('payment.upload');
         Route::get('/payment/history', [PaymentController::class, 'showHistory']);
