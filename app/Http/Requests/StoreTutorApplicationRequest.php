@@ -31,16 +31,6 @@ class StoreTutorApplicationRequest extends FormRequest
                 'required',
                 'array',
             ],
-
-            // Tutor-subject
-            'subject_ids' => [
-                'required',
-                'array',
-            ],
-
-            'subject_ids.*' => [
-                'exists:subjects,id'
-            ],
             
             'cv' => ['nullable', 'array'],
             'cv.*.name' => ['required', 'string', 'max:255'],

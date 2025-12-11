@@ -15,6 +15,16 @@ enum CourseModeEnum: string
             self::OFFLINE => 'Offline',
         };
     }
+    
+    public static function tryFromDisplayName(string $displayName): ?self
+    {
+        foreach (self::cases() as $case) {
+            if ($case->displayName() === $displayName) {
+                return $case;
+            }
+        }
+        return null;
+    }
 
     public static function list() : array 
     {
