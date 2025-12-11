@@ -28,7 +28,7 @@ use App\Http\Controllers\TutorSalaryController;
 
 // === LOGIN & REGISTRATION (Guest Routes) ===
 Route::middleware('guest')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [LoginController::class, 'login']);
     Route::post('/auth/google/complete', [GoogleController::class, 'completeGoogleRegistration'])->name('google.complete');
     Route::post('/register', [AuthController::class, 'sendRegisterOtp'])->name('register.sendOtp');
     Route::patch('/register/verify', [AuthController::class, 'verifyRegisterOtp'])->name('register.verify-otp');
