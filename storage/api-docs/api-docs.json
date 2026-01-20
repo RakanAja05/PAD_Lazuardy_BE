@@ -2171,6 +2171,752 @@
                     }
                 }
             }
+        },
+        "/api/admin/tutor-salary": {
+            "get": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Get list of tutor salaries",
+                "description": "Menampilkan daftar gaji semua tutor yang sudah aktif.",
+                "operationId": "4ed4c6b38b068799307f9cc43adedb36",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by tutor name",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "min_salary",
+                        "in": "query",
+                        "description": "Filter minimum salary",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "tutor@example.com"
+                                                    },
+                                                    "salary": {
+                                                        "type": "integer",
+                                                        "example": 500000
+                                                    },
+                                                    "bank": {
+                                                        "type": "string",
+                                                        "example": "BCA"
+                                                    },
+                                                    "rekening": {
+                                                        "type": "string",
+                                                        "example": "1234567890"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "total_salary": {
+                                            "type": "integer",
+                                            "example": 2500000
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Only admin can access"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/tutor-salary/{userId}": {
+            "get": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Get tutor salary detail",
+                "description": "Menampilkan detail gaji tutor termasuk breakdown dari setiap sesi mengajar.",
+                "operationId": "c284a220d62b799332f12c10ca8008dc",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "User ID of the tutor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "salary": {
+                                                    "type": "integer"
+                                                },
+                                                "bank": {
+                                                    "type": "string"
+                                                },
+                                                "rekening": {
+                                                    "type": "string"
+                                                },
+                                                "sanction_amount": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tutor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/tutor-salary/{userId}/confirm": {
+            "post": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Confirm salary payment",
+                "description": "Mengkonfirmasi bahwa gaji tutor sudah dibayarkan dan mereset salary menjadi 0.",
+                "operationId": "f499cbb159f1158e103a35e438e88c69",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "User ID of the tutor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "note": {
+                                        "type": "string",
+                                        "example": "Pembayaran periode November 2025",
+                                        "description": "Optional note for payment confirmation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Salary confirmed and reset",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Gaji tutor berhasil dikonfirmasi dan direset"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "paid_salary": {
+                                                    "type": "integer",
+                                                    "example": 500000,
+                                                    "description": "Amount that was paid"
+                                                },
+                                                "current_salary": {
+                                                    "type": "integer",
+                                                    "example": 0,
+                                                    "description": "Current salary after reset"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tutor not found"
+                    },
+                    "400": {
+                        "description": "Salary is already 0"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/tutor-salary/confirm-batch": {
+            "post": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Confirm salary payment for multiple tutors",
+                "description": "Mengkonfirmasi pembayaran gaji untuk beberapa tutor sekaligus dan mereset salary mereka menjadi 0.",
+                "operationId": "58d90e298a2668d1b586996e8cf16bb3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "tutor_ids"
+                                ],
+                                "properties": {
+                                    "tutor_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            2,
+                                            3,
+                                            5
+                                        ]
+                                    },
+                                    "note": {
+                                        "type": "string",
+                                        "example": "Pembayaran batch periode November 2025"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Batch payment confirmed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total_tutors": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "total_paid": {
+                                                    "type": "integer",
+                                                    "example": 1500000
+                                                },
+                                                "tutors": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "user_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "paid_salary": {
+                                                                "type": "integer"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/tutor-salary/{userId}/confirm-with-invoice": {
+            "post": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Confirm salary payment with invoice",
+                "description": "Konfirmasi pembayaran gaji tutor dengan upload invoice bukti transfer dan mengirim email ke tutor.",
+                "operationId": "116e04d5f88bc925d806995bd3e3d6fd",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "User ID of the tutor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "invoice_file",
+                                    "payment_method"
+                                ],
+                                "properties": {
+                                    "invoice_file": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Invoice file (pdf, jpg, jpeg, png - max 5MB)"
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "enum": [
+                                            "transfer",
+                                            "check",
+                                            "e-wallet"
+                                        ],
+                                        "example": "transfer"
+                                    },
+                                    "note": {
+                                        "type": "string",
+                                        "example": "Pembayaran periode November 2025"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Salary confirmed and email sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pembayaran gaji berhasil dikonfirmasi dan email dikirim ke tutor"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "paid_salary": {
+                                                    "type": "integer"
+                                                },
+                                                "invoice_url": {
+                                                    "type": "string"
+                                                },
+                                                "payment_method": {
+                                                    "type": "string"
+                                                },
+                                                "email_sent": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tutor not found"
+                    },
+                    "400": {
+                        "description": "Salary is already 0"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/tutor-salary/pending-payment": {
+            "get": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Get tutors with pending salary",
+                "description": "Menampilkan daftar tutor yang memiliki gaji terhutang (salary > 0) yang perlu dibayarkan.",
+                "operationId": "58b3999e2cdf9f7d4dda56a5b6e02d52",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by tutor name",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by: salary_asc, salary_desc (default: salary_desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "salary_asc",
+                                "salary_desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "tutor@example.com"
+                                                    },
+                                                    "salary": {
+                                                        "type": "integer",
+                                                        "example": 500000
+                                                    },
+                                                    "bank": {
+                                                        "type": "string",
+                                                        "example": "BCA"
+                                                    },
+                                                    "rekening": {
+                                                        "type": "string",
+                                                        "example": "1234567890"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total_pending": {
+                                            "type": "integer",
+                                            "example": 2500000
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Only admin can access"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/tutor/verification-pending": {
+            "get": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Get tutors pending verification",
+                "description": "Menampilkan daftar tutor yang sedang menunggu verifikasi (status = verify).",
+                "operationId": "a9e77be1e48c847f6eb519f0248dbceb",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by tutor name",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "tutor@example.com"
+                                                    },
+                                                    "telephone_number": {
+                                                        "type": "string",
+                                                        "example": "081234567890"
+                                                    },
+                                                    "experience": {
+                                                        "type": "string"
+                                                    },
+                                                    "education": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "qualification": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "verify"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 3
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Only admin can access"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/tutor-salary/{userId}/history": {
+            "get": {
+                "tags": [
+                    "Admin - Tutor Salary"
+                ],
+                "summary": "Get tutor salary payment history",
+                "description": "Menampilkan riwayat pembayaran gaji untuk tutor tertentu.",
+                "operationId": "e3c485bc7281a1ebec72d226ac429481",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "User ID of the tutor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "amount": {
+                                                        "type": "integer"
+                                                    },
+                                                    "payment_method": {
+                                                        "type": "string"
+                                                    },
+                                                    "paid_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "invoice_url": {
+                                                        "type": "string"
+                                                    },
+                                                    "note": {
+                                                        "type": "string"
+                                                    },
+                                                    "email_sent": {
+                                                        "type": "boolean"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "total_paid": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -2191,6 +2937,10 @@
         {
             "name": "Admin - Tutor Verification",
             "description": "Endpoints untuk admin verifikasi tutor"
+        },
+        {
+            "name": "Admin - Tutor Salary",
+            "description": "Endpoints untuk admin kelola gaji tutor"
         },
         {
             "name": "Dashboard",
