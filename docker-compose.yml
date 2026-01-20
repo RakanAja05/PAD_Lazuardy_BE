@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: .
+    container_name: laravel-app
+    restart: always
+    volumes:
+      - .:/var/www
+    networks:
+      - backend-nw
+
+  webserver:
+    image: nginx:alpine
+    container_name: nginx-server
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+      - db
+    networks:
+      - backend-nw
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: jobportal
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    networks:
+      - backend-nw
+
+networks:
+  backend-nw:
+    driver: bridge

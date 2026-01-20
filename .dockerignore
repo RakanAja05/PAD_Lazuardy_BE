@@ -1,0 +1,4 @@
+vendor
+.git
+storage/*.key
+.phpunit.result.cache
