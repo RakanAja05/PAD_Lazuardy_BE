@@ -9,7 +9,9 @@ return [
     'allowed_origins' => [
         'http://localhost:5173',
         'http://127.0.0.1:5173',
-        'https://yourfrontend.com',   
+        'https://yourfrontend.com', 
+        'http://localhost:8080',      // WAJIB: Port Docker Frontend kamu
+        'http://127.0.0.1:8080',      // Tambahkan ini untuk jaga-jaga 
     ],
 
     'allowed_origins_patterns' => [],
