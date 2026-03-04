@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Enums\TutorStatusEnum;
 use App\Models\Tutor;
 use Illuminate\Http\JsonResponse;
@@ -14,7 +15,7 @@ class TutorVerifyController extends Controller
     /**
      * Return paginated list of tutors that need verification (status = verify).
      * Only returns fields needed by admin for verification.
-     * 
+     *
      * @OA\Get(
      *     path="/api/verify/tutor",
      *     tags={"Admin - Tutor Verification"},
@@ -116,7 +117,7 @@ class TutorVerifyController extends Controller
 
     /**
      * Approve tutor verification (status = active)
-     * 
+     *
      * @OA\Patch(
      *     path="/api/verify/tutor/approve",
      *     tags={"Admin - Tutor Verification"},
@@ -185,7 +186,7 @@ class TutorVerifyController extends Controller
 
     /**
      * Reject tutor verification (status = rejected)
-     * 
+     *
      * @OA\Patch(
      *     path="/api/verify/tutor/reject",
      *     tags={"Admin - Tutor Verification"},

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Enums\PaymentStatusEnum;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +20,7 @@ class StudentManagementController extends Controller
             ->where('status', PaymentStatusEnum::UPLOADED)
             ->orderBy('created_at', 'asc')
             ->paginate(9);
-        
+
         return response()->json($results, 200);
     }
 
@@ -28,7 +29,7 @@ class StudentManagementController extends Controller
      */
     public function show(Payment $payment)
     {
-        $payment->load('order.user.student', 'order.package'); 
+        $payment->load('order.user.student', 'order.package');
 
         $file = Storage::url($payment->proof_image_url);
 

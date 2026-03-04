@@ -27,7 +27,7 @@ class GoogleController extends Controller
     {
         try {
             // Ambil data dari Google
-            $googleUser = Socialite::driver('google')->stateless()->user();
+            $googleUser = Socialite::driver('google')->user();
 
             // Cek apakah email sudah terdaftar di sistem (by email saja)
             $existingUser = User::where('email', $googleUser->getEmail())->first();

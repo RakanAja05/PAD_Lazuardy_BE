@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Enums\BadgeEnum;
 use App\Enums\GenderEnum;
 use App\Enums\OtpIdentifierEnum;
@@ -14,6 +15,8 @@ use App\Http\Requests\VerifyOtpRequest;
 use App\Models\Student;
 use App\Models\Tutor;
 use App\Models\User;
+use App\Models\ClassModel;
+use App\Models\Curriculum;
 use App\Services\AuthService;
 use App\Services\OtpService;
 use App\Services\UserService;
@@ -64,7 +67,7 @@ class AuthController extends Controller
 
         // panggil objek service otp
         $otpService = new OtpService;
-        
+
 
         // otp dibuat diservice
         $otp = $otpService->createOtp($data['email'], OtpIdentifierEnum::EMAIL->value, OtpTypeEnum::REGISTER->value);
@@ -201,21 +204,21 @@ class AuthController extends Controller
         $authService = new AuthService;
 
         $userData = $request->only(
-            'email', 'password','name', 
+            'email', 'password','name',
             'gender', 'date_of_birth',
             'telephone_number', 'religion',
             'latitude', 'longitude',
         );
-        
+
         if ($request->hasFile('profile_photo')){
             $file = $request->file('profile_photo');
             $path = $file->store('uploads', 'public');
-            
+
             $userData['profile_photo_url'] = $path;
         }
 
         $userData['gender'] = GenderEnum::tryFromDisplayName($request->gender);
-        
+
         $userData['password'] = Hash::make($userData['password']);
         $userData['role'] = RoleEnum::STUDENT;
         $userData['home_address'] = $userService->convertAddressToArray(
@@ -223,13 +226,14 @@ class AuthController extends Controller
         );
 
         $studentData = $request->only([
-            'class_id', 'curriculum_id', 
-            'school','parent', 
-            'parent_telephone_number', 
+            'class_id', 'curriculum_id',
+            'school','parent',
+            'parent_telephone_number',
         ]);
+        $studentData = $this->resolveStudentRefs($studentData);
 
         DB::beginTransaction();
-        try 
+        try
         {
             // Query untuk masukin ke database masuk ke service
             $userResult = $authService->registerUser($userData);
@@ -262,7 +266,7 @@ class AuthController extends Controller
 
         // filter data user
         $userData = $request->only(
-            'email', 'password','name', 
+            'email', 'password','name',
             'gender', 'date_of_birth',
             'telephone_number', 'religion',
             'latitude', 'longitude',
@@ -286,12 +290,12 @@ class AuthController extends Controller
         $tutorData['badge'] = BadgeEnum::BRONZE;
 
         DB::beginTransaction();
-        try 
+        try
         {
             $userResult = $authService->registerUser($userData);
             $tutorData['user_id'] = $userResult["user"]->id;
             Tutor::create($tutorData);
-            
+
             DB::commit();
             return response()->json([
                 "status" => "success",
@@ -309,7 +313,28 @@ class AuthController extends Controller
         }
     }
 
-    
+    private function resolveStudentRefs(array $studentData): array
+    {
+        if (!empty($studentData['class_id']) && !ClassModel::whereKey($studentData['class_id'])->exists()) {
+            $classId = ClassModel::whereRaw('LOWER(name) = ?', [strtolower((string) $studentData['class_id'])])
+                ->value('id');
+            if ($classId) {
+                $studentData['class_id'] = $classId;
+            }
+        }
+
+        if (!empty($studentData['curriculum_id']) && !Curriculum::whereKey($studentData['curriculum_id'])->exists()) {
+            $curriculumId = Curriculum::whereRaw('LOWER(name) = ?', [strtolower((string) $studentData['curriculum_id'])])
+                ->value('id');
+            if ($curriculumId) {
+                $studentData['curriculum_id'] = $curriculumId;
+            }
+        }
+
+        return $studentData;
+    }
+
+
     public function forgotPassword(Request $request)
     {
         $validatedData = $request->validate([
@@ -319,7 +344,7 @@ class AuthController extends Controller
         $otpService = new OtpService;
 
         $user = User::getUserByEmail($validatedData['email']);
-        
+
         if (!$user->exists()) {
             return response()->json([
                 "message" => "Email tidak ditemukan."
@@ -345,7 +370,7 @@ class AuthController extends Controller
             DB::rollBack();
             throw $e;
         }
-        
+
     }
 
     public function verifyForgotPassword(VerifyOtpRequest $request)
@@ -363,7 +388,7 @@ class AuthController extends Controller
         ], $verify["code"]);
     }
 
-    
+
     public function resetPassword(UpdateAuthRequest $request)
     {
         $validatedData = $request->validated();
@@ -371,7 +396,7 @@ class AuthController extends Controller
         $cache_key = 'auth:reset-password:' . $validatedData['token'];
         $cache_data = Cache::get($cache_key);
         $user = User::getUserByEmail($cache_data['email']);
-        
+
 
         if (!$user->exists()) {
             return response()->json([

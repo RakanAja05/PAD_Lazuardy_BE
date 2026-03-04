@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Schedules;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
     /**
      * Display a listing of the student schedule resource.
-     * 
+     *
      * @OA\Get(
      *     path="/api/student/schedule",
      *     tags={"Schedule"},

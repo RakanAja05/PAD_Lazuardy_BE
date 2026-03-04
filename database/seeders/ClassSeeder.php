@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ClassEnum;
 use App\Models\ClassModel;
 use Illuminate\Database\Seeder;
 
@@ -9,11 +10,10 @@ class ClassSeeder extends Seeder
 {
     public function run(): void
     {
-        $classes = [];
-
-        for ($i=1; $i<=6; $i++){
-            $classes[] = ['name' => 'kelas ' . $i];
-        }
+        $classes = array_map(
+            fn($name) => ['name' => $name],
+            ClassEnum::list()
+        );
 
         ClassModel::insert($classes);
     }

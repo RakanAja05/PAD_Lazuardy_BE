@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Payments;
 
+use App\Http\Controllers\Controller;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentMethodEnum;
 use App\Enums\PaymentStatusEnum;
@@ -97,14 +98,14 @@ class PaymentController extends Controller
                 'total_amount' => $request->total_amount,
                 'status' => OrderStatusEnum::PENDING->value,
             ]);
-    
+
             Payment::create([
                 'order_id' => $order->id,
                 'amount' => $request->total_amount,
                 'payment_method' => $request->payment_method,
                 'status' => PaymentStatusEnum::PENDING->value,
             ]);
-            
+
             DB::commit();
             return response()->json([
                 'status' => "success",
@@ -158,7 +159,7 @@ class PaymentController extends Controller
 
         if($request->hasFile('file_upload')){
             $file = $request->file('file_upload');
-                                                                            
+
             // Simpan ke storage
             $path = $file->store("uploads", 'public');
 
@@ -199,7 +200,7 @@ class PaymentController extends Controller
             ->with('order.package')
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
             $historyData = [];
 
             foreach ($payments as $payment) {
@@ -248,7 +249,7 @@ class PaymentController extends Controller
                             })
                             ->where($request->payment_id)
                             ->firstOrFail();
-        
+
         $package = $payment->order->package;
         $data = [
             'package_id' => $package->id,
@@ -264,5 +265,5 @@ class PaymentController extends Controller
         return response()->json($data, 200);
     }
 
-    
+
 }

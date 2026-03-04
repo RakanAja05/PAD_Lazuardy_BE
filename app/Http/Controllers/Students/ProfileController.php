@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Students;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateStudentProfileRequest;
 use App\Http\Requests\UpdateTutorLessonMethodRequest;
 use App\Http\Requests\UpdateTutorProfileRequest;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
-{ 
+{
     /**
      * @OA\Get(
      *     path="/api/student/profile",
@@ -44,7 +45,7 @@ class ProfileController extends Controller
         $userData = $userService->showUserProfile($user);
         $studentData = $studentService->showStudentProfile($student);
         $message = ['status' => 'success'];
-        
+
         $data = array_merge($message, $userData, $studentData);
 
         return response()->json($data, 200);
@@ -59,7 +60,7 @@ class ProfileController extends Controller
 
         $userData = $userService->showUserProfile($user);
         $message = ['message' => 'success'];
-        
+
         $data = array_merge($userData, $message);
 
         return response()->json($data, 200);
@@ -77,9 +78,9 @@ class ProfileController extends Controller
         $address = $userService->convertAddressToArray($request);
         $userData = $request->only(['name', 'telephone_number', 'profile_photo_url', 'gender', 'date_of_birth', 'religion', 'latitude', 'longitude']);
         $userData['home_address'] = $address;
-        
+
         DB::beginTransaction();
-        try 
+        try
         {
             $user->update($userData);
             $student->update($request->only(['school', 'class_id', 'curriculum_id', 'parent', 'parent_telephone_number']));
@@ -88,19 +89,19 @@ class ProfileController extends Controller
                 'status' => 'success',
                 'message' => 'Profile berhasil di update',
             ],200);
-        } 
-        catch(Exception $e) 
+        }
+        catch(Exception $e)
         {
             DB::rollBack();
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Gagal mengupdate profil: ' . $e->getMessage(),
                 'error_code' => $e->getCode(),
-            ], 500); 
+            ], 500);
         }
     }
-    
+
     public function updateTutorProfile(UpdateTutorProfileRequest $request)
     {
         $request->validated();
@@ -108,15 +109,15 @@ class ProfileController extends Controller
         $user = $request->user()->load(['tutor']);
         $tutor = $user->tutor;
         $userData = $request->only([
-            'name', 
-            'gender', 
-            'date_of_birth', 
+            'name',
+            'gender',
+            'date_of_birth',
             'religion',
             'telephone_number',
             'latitude',
             'longitude',
         ]);
-        
+
         $rawAddress = $request->only([
             'province',
             'regency',
@@ -124,7 +125,7 @@ class ProfileController extends Controller
             'subdistrict',
             'street',
         ]);
-        
+
         $tutorData = $request->only([
             'bank',
             'rekening',
@@ -133,12 +134,12 @@ class ProfileController extends Controller
         $userService = new UserService;
         $address = $userService->convertAddressToArray($rawAddress);
         $userData = array_merge($userData, $address);
-        
+
         DB::beginTransaction();
         try{
             $user->update($userData);
             $tutor->update($tutorData);
-            
+
             DB::commit();
 
             return response()->json([
@@ -146,9 +147,9 @@ class ProfileController extends Controller
                 'message' => 'Profile berhasil di update',
             ], 200);
         } catch(Exception $e) {
-            
+
             DB::rollBack();
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Gagal mengupdate profile' . $e->getMessage(),

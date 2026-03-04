@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\TutorStatusEnum;
-use Doctrine\Common\Annotations\Annotation\Enum;
+use App\Enums\SubjectApplicationEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $status = TutorStatusEnum::list();
+        $status = SubjectApplicationEnum::list();
 
         Schema::create('tutor_subjects', function (Blueprint $table) use ($status) {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');

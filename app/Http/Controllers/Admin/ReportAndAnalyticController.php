@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\TutorStatusEnum;
 use App\Models\Payment;

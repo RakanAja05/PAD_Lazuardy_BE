@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\GenderEnum;
+use App\Enums\PlatformEnum;
 use App\Enums\ReligionEnum;
 use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,8 +66,10 @@ class User extends Authenticatable
             'home_address' => 'array',
             'date_of_birth' => 'date',
             'role' => RoleEnum::class,
+            'gender' => GenderEnum::class,
             'religion' => ReligionEnum::class,
-            'rekening' => 'string'
+            'platform' => PlatformEnum::class,
+            'rekening' => 'string',
         ];
     }
 
@@ -88,11 +92,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(TakenSchedule::class);
     }
-    
+
     public function subjects(): BelongsToMany {
         return $this->belongsToMany(Subject::class, 'tutor_subjects', 'user_id', 'subject_id');
     }
-    
+
     public function files(): HasMany {
         return $this->hasMany(File::class);
     }
@@ -101,7 +105,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Payment::class);
     }
-    
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
@@ -126,7 +130,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class, 'to_user_id');
     }
-    
+
     public function scopeGetUserByEmail($query, $email)
     {
         return $query->where('email', $email)->first();

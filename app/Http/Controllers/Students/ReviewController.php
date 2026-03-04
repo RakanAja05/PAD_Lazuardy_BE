@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Students;
 
+use App\Http\Controllers\Controller;
 use App\Enums\RatingOptionEnum;
 use App\Enums\RoleEnum;
 use App\Models\Review;
@@ -40,7 +41,7 @@ class ReviewController extends Controller
     {
         $user = $request->user()->load([
             'studentPackageStudents.tutor.subjects.class',
-            'studentPackageStudents.subject' 
+            'studentPackageStudents.subject'
         ]);
 
         $tutorsToReview = $user->studentPackageStudents
@@ -57,8 +58,8 @@ class ReviewController extends Controller
                     'tutor_id' => $tutor->id,
                     'tutor_name' => $tutor->name,
                     'tutor_description' => $tutor->description,
-                    'tutor_classes' => $classNames, 
-                    'purchased_subject_name' => $studentPackageStudent->subject->name, 
+                    'tutor_classes' => $classNames,
+                    'purchased_subject_name' => $studentPackageStudent->subject->name,
                 ];
             });
 
@@ -110,13 +111,13 @@ class ReviewController extends Controller
             'rate' => ['required', 'integer'],
             'review' => ['nullable', 'string'],
         ]);
-        
+
         $tutor = User::where('id', $request->tutor_id)
         ->where('role', RoleEnum::TUTOR)
         ->firstOrFail();
 
         $student = $request->user();
-        
+
         $data = $request->only(['quality', 'delivery', 'attitude', 'benefit', 'rate', 'review']);
         try {
             Review::updateOrCreate([
@@ -146,7 +147,7 @@ class ReviewController extends Controller
         $reviewData = Review::where('from_user_id', $student->id)
             ->where('to_user_id', $request->tutor_id)
             ->first();
-        
+
         return response()->json([
             'status' => 'success',
             'data' => $reviewData,

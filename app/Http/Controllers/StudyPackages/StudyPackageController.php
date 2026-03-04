@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\StudyPackages;
 
+use App\Http\Controllers\Controller;
 use App\Enums\RoleEnum;
 use App\Models\StudentPackage;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ class StudyPackageController extends Controller
 {
     /**
      * Menampilkan daftar paket yang dibeli student (summary)
-     * 
+     *
      * @OA\Get(
      *     path="/api/my-packages",
      *     tags={"Study Packages"},
@@ -39,7 +40,7 @@ class StudyPackageController extends Controller
     public function packages(Request $request)
     {
         $user = $request->user();
-        
+
         if ($user->role !== RoleEnum::STUDENT) {
             return response()->json([
                 'success' => false,
@@ -98,7 +99,7 @@ class StudyPackageController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        
+
         if ($user->role !== RoleEnum::STUDENT) {
             return response()->json([
                 'success' => false,
@@ -172,7 +173,7 @@ class StudyPackageController extends Controller
     public function show(Request $request, $packageId)
     {
         $user = $request->user();
-        
+
         if ($user->role !== RoleEnum::STUDENT) {
             return response()->json([
                 'success' => false,

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tutors;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\ScheduleTutor;
@@ -14,14 +15,14 @@ class TutorProfileController extends Controller
 {
     /**
      * Tampilkan profile tutor lengkap untuk student
-     * 
+     *
      * Menampilkan:
      * - Informasi dasar tutor (nama, foto, rating, kontak)
      * - Kualifikasi & metode mengajar
      * - Mata pelajaran yang diajar
      * - Jadwal kosong tutor
      * - Review dari siswa lain
-     * 
+     *
      * @OA\Get(
      *   path="/api/tutor-profile/{id}",
      *   tags={"Tutor Profile"},
@@ -47,7 +48,7 @@ class TutorProfileController extends Controller
     public function show(Request $request, $id)
     {
         $user = Auth::user();
-        
+
         // Get tutor data dengan rating
         $tutor = User::select('users.*')
             ->selectRaw('COALESCE(AVG(reviews.rate), 0) as avg_rating')
@@ -70,16 +71,16 @@ class TutorProfileController extends Controller
         $distance = null;
         if ($user->latitude && $user->longitude && $tutor->latitude && $tutor->longitude) {
             $distance = $this->calculateDistance(
-                $user->latitude, 
-                $user->longitude, 
-                $tutor->latitude, 
+                $user->latitude,
+                $user->longitude,
+                $tutor->latitude,
                 $tutor->longitude
             );
         }
 
         // Parse home address
-        $address = is_string($tutor->home_address) 
-            ? json_decode($tutor->home_address, true) 
+        $address = is_string($tutor->home_address)
+            ? json_decode($tutor->home_address, true)
             : $tutor->home_address;
 
         // Format subjects
@@ -110,7 +111,7 @@ class TutorProfileController extends Controller
                 'profile_photo_url' => $tutor->profile_photo_url,
                 'telephone_number' => $tutor->telephone_number,
                 'gender' => $tutor->gender,
-                
+
                 // RATING INFO
                 'rating' => [
                     'average' => round($tutor->avg_rating, 1),
@@ -150,8 +151,8 @@ class TutorProfileController extends Controller
                 // TUTOR INFO
                 'tutor_info' => [
                     'price' => $tutor->tutor->price ?? null,
-                    'price_formatted' => $tutor->tutor->price 
-                        ? 'Rp ' . number_format($tutor->tutor->price, 0, ',', '.') 
+                    'price_formatted' => $tutor->tutor->price
+                        ? 'Rp ' . number_format($tutor->tutor->price, 0, ',', '.')
                         : null,
                     'description' => $tutor->tutor->description ?? null,
                     'badge' => $tutor->tutor->badge ?? null,
@@ -294,7 +295,7 @@ class TutorProfileController extends Controller
 
     /**
      * Get available time slots for a specific date
-     * 
+     *
      * @OA\Get(
      *   path="/api/tutor-profile/{id}/available-slots",
      *   tags={"Tutor Profile"},

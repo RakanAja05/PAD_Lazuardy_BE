@@ -2,9 +2,7 @@
 
 namespace App\Enums;
 
-use PhpParser\Node\Stmt\Label;
-
-enum ClassEnum: String
+enum ClassEnum: string
 {
     case KELAS_1 = 'kelas 1';
     case KELAS_2 = 'kelas 2';
@@ -20,9 +18,9 @@ enum ClassEnum: String
     case KELAS_12 = 'kelas 12';
     case UMUM = 'umum';
 
-    public function displayName() : string 
+    public function displayName() : string
     {
-        return match($this) 
+        return match($this)
         {
             self::KELAS_1 => 'Kelas 1',
             self::KELAS_2 => 'Kelas 2',
@@ -36,7 +34,7 @@ enum ClassEnum: String
             self::KELAS_10 => 'Kelas 10',
             self::KELAS_11 => 'Kelas 11',
             self::KELAS_12 => 'Kelas 12',
-            self::KELAS_12 => 'Umum',
+            self::UMUM => 'Umum',
         };
     }
 
@@ -49,13 +47,13 @@ enum ClassEnum: String
         }
         return null;
     }
-    
-    public static function list() : array 
+
+    public static function list() : array
     {
         return array_map(fn($case) => $case->value, self::cases());
     }
 
-    public static function displayList() : array 
+    public static function displayList() : array
     {
         return array_map(fn($case) => $case->displayName(), self::cases());
     }

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tutors;
 
+use App\Http\Controllers\Controller;
 use App\Models\Presence;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class PresenceController extends Controller
         $data = $user->takenSchedules
                     ->map(function($takenSchedule){
                         $student = $takenSchedule->student;
-                        
+
                         return [
                             'taken_schedule_id' => $takenSchedule->id,
                             'student_id' => $student->id,
@@ -36,7 +37,7 @@ class PresenceController extends Controller
                             'status' => $takenSchedule->status,
                         ];
                     });
-        
+
         return response()->json([
             'status' => 'success',
             'data' => $data
@@ -60,7 +61,7 @@ class PresenceController extends Controller
         $user = $request->user();
 
         $presenceData = $request->only([
-            'taken_schedule_id', 'student_user_id', 
+            'taken_schedule_id', 'student_user_id',
             'material', 'evaluation', 'grade',
         ]);
 
@@ -70,7 +71,7 @@ class PresenceController extends Controller
             $file = $request->file('photo');
             $path = $file->store('uploads', 'public');
             $presenceData['pbm_image_url'] = $path;
-            
+
             Presence::create($presenceData);
 
             return response()->json([

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Mail\SalaryPaymentMail;
 use App\Models\SalaryPayment;
 use App\Models\Tutor;
@@ -747,4 +748,5 @@ class TutorSalaryController extends Controller
             'total_paid' => $salaryPayments->sum('amount')
         ]);
     }
+
 }

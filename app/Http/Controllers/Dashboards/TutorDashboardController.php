@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboards;
 
+use App\Http\Controllers\Controller;
 use App\Enums\ScheduleStatusEnum;
 use App\Models\StudentPackage;
 use App\Models\TakenSchedule;
@@ -13,7 +14,7 @@ class TutorDashboardController extends Controller
 {
     /**
      * Get dashboard data untuk tutor
-     * 
+     *
      * @OA\Get(
      *     path="/api/dashboard/tutor",
      *     tags={"Dashboard"},
@@ -39,7 +40,7 @@ class TutorDashboardController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        
+
         // Cek apakah user adalah tutor
         if (!$user->tutor) {
             return response()->json([
@@ -103,7 +104,7 @@ class TutorDashboardController extends Controller
                     'package_name' => $sp->package->name ?? null,
                     'remaining_session' => $sp->remaining_session,
                     'total_session' => $sp->package->session ?? 0,
-                    'progress_percentage' => $sp->package && $sp->package->session > 0 
+                    'progress_percentage' => $sp->package && $sp->package->session > 0
                         ? round((($sp->package->session - $sp->remaining_session) / $sp->package->session) * 100, 2)
                         : 0,
                 ];
@@ -241,7 +242,7 @@ class TutorDashboardController extends Controller
     public function summary(Request $request)
     {
         $user = $request->user();
-        
+
         if (!$user->tutor) {
             return response()->json([
                 'status' => 'error',

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tutors;
 
+use App\Http\Controllers\Controller;
 use App\Enums\TutorStatusEnum;
 use App\Models\Tutor;
 use App\Models\User;
@@ -13,12 +14,12 @@ class FindTutorController extends Controller
 {
     /**
      * Cari tutor dengan filter + scoring algorithm
-     * 
+     *
      * Algoritma:
      * 1. Apply filter (subject, class, min_rating, radius)
      * 2. Hitung recommendation score untuk setiap tutor
      * 3. Sort by score DESC dan ambil top 6 per halaman
-     * 
+     *
      * @OA\Get(
      *   path="/api/find-tutor",
      *   tags={"Tutor Search"},
@@ -75,7 +76,7 @@ class FindTutorController extends Controller
     public function search(Request $request)
     {
         $user = Auth::user();
-        
+
         // Validasi user harus sudah ada koordinat
         if (!$user->latitude || !$user->longitude) {
             return response()->json([
@@ -86,14 +87,14 @@ class FindTutorController extends Controller
 
         $lat = $user->latitude;
         $lng = $user->longitude;
-        
+
         // Filter dari frontus
         $radius = $request->input('radius', 10); // Default 10 km
         $subjectId = $request->input('subject_id');
         $classId = $request->input('class_id');
         $minRating = $request->input('min_rating');
         $gender = $request->input('gender'); // 'man' atau 'woman'
-        
+
         // Auto-detect province dari user location untuk optimasi query (hidden filter)
         $userProvince = null;
         if ($user->home_address && is_array($user->home_address)) {
@@ -102,16 +103,16 @@ class FindTutorController extends Controller
             $addressData = json_decode($user->home_address, true);
             $userProvince = $addressData['province'] ?? null;
         }
-        
+
         // Pagination
-        $limit = 9; 
+        $limit = 9;
         $page = $request->input('page', 1);
         $offset = ($page - 1) * $limit;
-        
+
         // Bobot untuk scoring (customizable via query params)
         $weightRating = $request->input('weight_rating', 0.6); // 60% rating
         $weightDistance = $request->input('weight_distance', 0.4); // 40% distance
-        
+
         // Validasi weight harus 0-1
         $weightRating = max(0, min(1, $weightRating));
         $weightDistance = max(0, min(1, $weightDistance));
@@ -184,17 +185,17 @@ class FindTutorController extends Controller
         $tutorsWithScore = $allTutors->map(function($tutor) use ($radius, $weightRating, $weightDistance) {
             // Normalize rating (0-1): rating 5 = 1.0
             $normalizedRating = $tutor->avg_rating / 5;
-            
+
             // Normalize distance (0-1): jarak 0 = 1.0, jarak = radius = 0
             $normalizedDistance = 1 - ($tutor->distance / $radius);
-            
+
             // Hitung recommendation score
             $recommendationScore = ($normalizedRating * $weightRating) + ($normalizedDistance * $weightDistance);
-            
+
             $tutor->recommendation_score = round($recommendationScore, 4);
             $tutor->normalized_rating = round($normalizedRating, 4);
             $tutor->normalized_distance = round($normalizedDistance, 4);
-            
+
             return $tutor;
         });
 
@@ -210,8 +211,8 @@ class FindTutorController extends Controller
 
         // Format response - FRONTEND FRIENDLY
         $result = $tutors->map(function($tutor, $index) use ($offset) {
-            $address = is_string($tutor->home_address) 
-                ? json_decode($tutor->home_address, true) 
+            $address = is_string($tutor->home_address)
+                ? json_decode($tutor->home_address, true)
                 : $tutor->home_address;
 
             return [
@@ -296,7 +297,7 @@ class FindTutorController extends Controller
 
     /**
      * Get tutor detail by ID dengan informasi jarak
-     * 
+     *
      * @OA\Get(
      *   path="/api/find-tutor/{id}",
      *   tags={"Tutor Search"},
@@ -314,7 +315,7 @@ class FindTutorController extends Controller
     public function show(Request $request, $id)
     {
         $user = Auth::user();
-        
+
         if (!$user->latitude || !$user->longitude) {
             return response()->json([
                 'status' => 'error',
@@ -325,7 +326,7 @@ class FindTutorController extends Controller
         $lat = $user->latitude;
         $lng = $user->longitude;
 
-        $tutor = User::selectRaw("users.*, 
+        $tutor = User::selectRaw("users.*,
             (6371 * acos(
                 cos(radians(?)) * cos(radians(latitude)) *
                 cos(radians(longitude) - radians(?)) +
@@ -343,8 +344,8 @@ class FindTutorController extends Controller
             ], 404);
         }
 
-        $address = is_string($tutor->home_address) 
-            ? json_decode($tutor->home_address, true) 
+        $address = is_string($tutor->home_address)
+            ? json_decode($tutor->home_address, true)
             : $tutor->home_address;
 
         return response()->json([

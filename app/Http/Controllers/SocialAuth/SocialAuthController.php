@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SocialAuth;
 
-use App\Enums\RoleEnum;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
@@ -19,7 +20,7 @@ class SocialAuthController extends Controller
 
     public function handleProviderCallback(string $provider)
     {
-        try 
+        try
         {
             $socialiteUser = Socialite::driver($provider)->stateless()->user();
             $providerIdColumn = $provider . "_id";
@@ -40,16 +41,33 @@ class SocialAuthController extends Controller
                 $loggedUser = $user;
             } else {
                 $userEmail = $socialiteUser->getEmail() ?? $socialiteUser->getId().'@'.$provider.'.local';
-                
-                $newUser = User::create([
-                    'name' => $socialiteUser->getName(),
+                $tempToken = Str::random(40);
+                Cache::put('social:register:' . $tempToken, [
+                    'provider' => $provider,
+                    'provider_id' => $socialiteUser->getId(),
                     'email' => $userEmail,
-                    $providerIdColumn => $socialiteUser->getId(),
-                    'password' => Hash::make(Str::random(16)),
-                    'email_verified_at' => now()
+                    'name' => $socialiteUser->getName(),
+                    'avatar' => $socialiteUser->getAvatar(),
+                ], 1800);
+
+                $frontend = config('app.frontend_url') ?? env('FRONTEND_URL');
+                $payload = json_encode([
+                    'provider' => $provider,
+                    'email' => $userEmail,
+                    'temp_token' => $tempToken,
                 ]);
 
-                $loggedUser = $newUser;
+                if ($frontend) {
+                    $redirectUrl = rtrim($frontend, '/') . '/register?social_data=' . urlencode($payload);
+                    return redirect()->away($redirectUrl);
+                }
+
+                return response()->json([
+                    'type' => 'register',
+                    'provider' => $provider,
+                    'email' => $userEmail,
+                    'temp_token' => $tempToken,
+                ], 200);
             }
 
             $token = $loggedUser->createToken('auth_token')->plainTextToken;
@@ -67,7 +85,7 @@ class SocialAuthController extends Controller
                 'token_type' => 'Bearer',
                 'message' => 'Login menggunakan ' . ucfirst($provider) . ' berhasil.',
             ], 200);
-        } catch(Exception $e) 
+        } catch(Exception $e)
         {
             return response()->json([
                 'message' => 'Gagal otentikasi melalui ' . ucfirst($provider) . '.',

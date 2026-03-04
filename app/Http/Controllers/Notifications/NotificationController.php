@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Notifications;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,14 +10,14 @@ class NotificationController extends Controller
 {
     /**
      * Get all notifications for authenticated user (paginated)
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
         $user = Auth::user();
-        
+
         // Ambil notifikasi dengan pagination (15 per page)
         $notifications = $user->notifications()
             ->orderBy('created_at', 'desc')
@@ -41,14 +42,14 @@ class NotificationController extends Controller
 
     /**
      * Get unread notifications count
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function unreadCount(Request $request)
     {
         $user = Auth::user();
-        
+
         $count = $user->unreadNotifications()->count();
 
         return response()->json([
@@ -62,7 +63,7 @@ class NotificationController extends Controller
 
     /**
      * Mark specific notification as read
-     * 
+     *
      * @param Request $request
      * @param string $id
      * @return \Illuminate\Http\JsonResponse
@@ -70,7 +71,7 @@ class NotificationController extends Controller
     public function markAsRead(Request $request, $id)
     {
         $user = Auth::user();
-        
+
         $notification = $user->notifications()->find($id);
 
         if (!$notification) {
@@ -90,14 +91,14 @@ class NotificationController extends Controller
 
     /**
      * Mark all notifications as read
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function markAllAsRead(Request $request)
     {
         $user = Auth::user();
-        
+
         $user->unreadNotifications->markAsRead();
 
         return response()->json([
@@ -108,7 +109,7 @@ class NotificationController extends Controller
 
     /**
      * Delete specific notification
-     * 
+     *
      * @param Request $request
      * @param string $id
      * @return \Illuminate\Http\JsonResponse
@@ -116,7 +117,7 @@ class NotificationController extends Controller
     public function delete(Request $request, $id)
     {
         $user = Auth::user();
-        
+
         $notification = $user->notifications()->find($id);
 
         if (!$notification) {
@@ -136,14 +137,14 @@ class NotificationController extends Controller
 
     /**
      * Delete all read notifications
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function deleteAllRead(Request $request)
     {
         $user = Auth::user();
-        
+
         $user->readNotifications()->delete();
 
         return response()->json([

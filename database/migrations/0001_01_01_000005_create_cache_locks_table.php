@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\ClassEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $classes = ClassEnum::list();
-
-        Schema::create('classes', function (Blueprint $table) use ($classes) {
-            $table->id();
-            $table->enum('name', $classes);
+        Schema::create('cache_locks', function (Blueprint $table) {
+            $table->string('key')->primary();
+            $table->string('owner');
+            $table->integer('expiration');
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classes');
+        Schema::dropIfExists('cache_locks');
     }
 };

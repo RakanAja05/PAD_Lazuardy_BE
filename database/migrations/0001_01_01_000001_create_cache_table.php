@@ -17,11 +17,6 @@ return new class extends Migration
             $table->integer('expiration');
         });
 
-        Schema::create('cache_locks', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->string('owner');
-            $table->integer('expiration');
-        });
     }
 
     /**
@@ -30,6 +25,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('cache');
-        Schema::dropIfExists('cache_locks');
     }
 };

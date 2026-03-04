@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboards;
 
+use App\Http\Controllers\Controller;
 use App\Enums\ScheduleStatusEnum;
 use App\Models\StudentPackage;
 use App\Models\TakenSchedule;
@@ -12,7 +13,7 @@ class StudentDashboardController extends Controller
 {
     /**
      * Get dashboard data untuk student
-     * 
+     *
      * @OA\Get(
      *     path="/api/dashboard/student",
      *     tags={"Dashboard"},
@@ -46,7 +47,7 @@ class StudentDashboardController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        
+
         // Cek apakah user adalah student
         if (!$user->student) {
             return response()->json([
@@ -193,7 +194,7 @@ class StudentDashboardController extends Controller
     /**
      * Get recommended tutors dengan pagination (5 tutor per page)
      * Untuk kotak "Tutor Rekomendasi" di dashboard
-     * 
+     *
      * @OA\Get(
      *     path="/api/dashboard/student/recommended-tutors",
      *     tags={"Dashboard"},
@@ -230,7 +231,7 @@ class StudentDashboardController extends Controller
     public function getRecommendedTutors(Request $request)
     {
         $user = $request->user();
-        
+
         if (!$user->student) {
             return response()->json([
                 'status' => 'error',
@@ -240,7 +241,7 @@ class StudentDashboardController extends Controller
 
         // Ambil alamat student
         $studentAddress = $user->home_address;
-        
+
         // Query tutor dengan status active
         $tutorsQuery = User::where('role', 'tutor')
             ->whereHas('tutor', function ($query) {
@@ -307,7 +308,7 @@ class StudentDashboardController extends Controller
     public function summary(Request $request)
     {
         $user = $request->user();
-        
+
         if (!$user->student) {
             return response()->json([
                 'status' => 'error',
