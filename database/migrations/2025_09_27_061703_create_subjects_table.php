@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\SubjectEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $subjects = SubjectEnum::list();
-
-        Schema::create('subjects', function (Blueprint $table) use ($subjects) {
+        Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->enum('name', $subjects);
+            $table->string('name');
             $table->foreignId('curriculum_id')->constrained('curriculums');
             $table->foreignId('class_id')->constrained('classes');
             $table->string('icon_image_url')->nullable();
