@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum ClassEnum: string
+use PhpParser\Node\Stmt\Label;
+
+enum ClassEnum: String
 {
     case KELAS_1 = 'kelas 1';
     case KELAS_2 = 'kelas 2';

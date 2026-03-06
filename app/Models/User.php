@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\GenderEnum;
-use App\Enums\PlatformEnum;
 use App\Enums\ReligionEnum;
 use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -66,10 +64,8 @@ class User extends Authenticatable
             'home_address' => 'array',
             'date_of_birth' => 'date',
             'role' => RoleEnum::class,
-            'gender' => GenderEnum::class,
             'religion' => ReligionEnum::class,
-            'platform' => PlatformEnum::class,
-            'rekening' => 'string',
+            'rekening' => 'string'
         ];
     }
 
