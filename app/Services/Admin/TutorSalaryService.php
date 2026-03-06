@@ -44,8 +44,11 @@ class TutorSalaryService
 
         return new ResponseDTO([
             'status' => 'success',
-            'data' => $data,
-            'total_salary' => $totalSalary,
+            'message' => 'Berhasil mengambil data gaji tutor',
+            'data' => [
+                'tutors' => $data,
+                'total_salary' => $totalSalary,
+            ],
         ], 200);
     }
 
@@ -59,11 +62,15 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Tutor tidak ditemukan',
+                'errors' => [
+                    'user_id' => $userId,
+                ],
             ], 404);
         }
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil detail gaji tutor',
             'data' => [
                 'user_id' => $tutor->user_id,
                 'name' => $tutor->user->name,
@@ -90,6 +97,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Tutor tidak ditemukan',
+                'errors' => [
+                    'user_id' => $userId,
+                ],
             ], 404);
         }
 
@@ -97,6 +107,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gaji tutor sudah 0, tidak ada yang perlu dikonfirmasi',
+                'errors' => [
+                    'salary' => $tutor->salary,
+                ],
             ], 400);
         }
 
@@ -125,6 +138,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan saat konfirmasi pembayaran: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -152,6 +168,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'tutor_ids harus disediakan dan tidak boleh kosong',
+                'errors' => [
+                    'tutor_ids' => $tutorIds,
+                ],
             ], 422);
         }
 
@@ -162,6 +181,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Tutor dengan ID: ' . implode(', ', $missingTutors) . ' tidak ditemukan',
+                'errors' => [
+                    'missing_tutors' => $missingTutors,
+                ],
             ], 422);
         }
 
@@ -176,6 +198,9 @@ class TutorSalaryService
                 return new ResponseDTO([
                     'status' => 'error',
                     'message' => 'Tidak ada tutor dengan gaji > 0 untuk dikonfirmasi',
+                    'errors' => [
+                        'tutor_ids' => $tutorIds,
+                    ],
                 ], 400);
             }
 
@@ -214,6 +239,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan saat konfirmasi batch: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -234,6 +262,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Tutor tidak ditemukan',
+                'errors' => [
+                    'user_id' => $userId,
+                ],
             ], 404);
         }
 
@@ -241,6 +272,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gaji tutor sudah 0, tidak ada yang perlu dikonfirmasi',
+                'errors' => [
+                    'salary' => $tutor->salary,
+                ],
             ], 400);
         }
 
@@ -281,6 +315,9 @@ class TutorSalaryService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan saat konfirmasi pembayaran: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -321,9 +358,12 @@ class TutorSalaryService
 
         return new ResponseDTO([
             'status' => 'success',
-            'data' => $data,
-            'count' => count($data),
-            'total_pending' => $totalPending,
+            'message' => 'Berhasil mengambil data pembayaran tertunda',
+            'data' => [
+                'tutors' => $data,
+                'count' => count($data),
+                'total_pending' => $totalPending,
+            ],
         ], 200);
     }
 
@@ -356,8 +396,11 @@ class TutorSalaryService
 
         return new ResponseDTO([
             'status' => 'success',
-            'data' => $data,
-            'count' => count($data),
+            'message' => 'Berhasil mengambil data verifikasi pending',
+            'data' => [
+                'tutors' => $data,
+                'count' => count($data),
+            ],
         ], 200);
     }
 
@@ -370,9 +413,11 @@ class TutorSalaryService
         if ($salaryPayments->isEmpty()) {
             return new ResponseDTO([
                 'status' => 'success',
-                'data' => [],
-                'total_paid' => 0,
                 'message' => 'Belum ada riwayat pembayaran',
+                'data' => [
+                    'payments' => [],
+                    'total_paid' => 0,
+                ],
             ], 200);
         }
 
@@ -390,8 +435,11 @@ class TutorSalaryService
 
         return new ResponseDTO([
             'status' => 'success',
-            'data' => $data,
-            'total_paid' => $salaryPayments->sum('amount'),
+            'message' => 'Berhasil mengambil riwayat pembayaran',
+            'data' => [
+                'payments' => $data,
+                'total_paid' => $salaryPayments->sum('amount'),
+            ],
         ], 200);
     }
 }

@@ -37,6 +37,7 @@ class PresenceService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil data presensi',
             'data' => $data,
         ], 200);
     }
@@ -71,12 +72,16 @@ class PresenceService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Presensi berhasil',
+                'data' => [],
             ], 201);
         }
 
         return new ResponseDTO([
-            'status' => 'failed',
-            'message' => 'presensi gagal',
+            'status' => 'error',
+            'message' => 'Presensi gagal',
+            'errors' => [
+                'photo' => 'file_missing',
+            ],
         ], 401);
     }
 }

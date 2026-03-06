@@ -18,7 +18,11 @@ class StudentManagementService
             ->orderBy('created_at', 'asc')
             ->paginate(9);
 
-        return new ResponseDTO($results, 200);
+        return new ResponseDTO([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil daftar pembayaran',
+            'data' => $results,
+        ], 200);
     }
 
     public function show(Payment $payment): ResponseDTO
@@ -27,8 +31,12 @@ class StudentManagementService
         $file = Storage::url($payment->proof_image_url);
 
         return new ResponseDTO([
-            'detail' => $payment,
-            'file' => $file,
+            'status' => 'success',
+            'message' => 'Berhasil mengambil detail pembayaran',
+            'data' => [
+                'detail' => $payment,
+                'file' => $file,
+            ],
         ], 200);
     }
 
@@ -41,11 +49,16 @@ class StudentManagementService
 
             return new ResponseDTO([
                 'status' => 'success',
+                'message' => 'Verifikasi pembayaran diterima',
+                'data' => [],
             ], 200);
         } catch (Throwable $e) {
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal menerima verifikasi: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -59,11 +72,16 @@ class StudentManagementService
 
             return new ResponseDTO([
                 'status' => 'success',
+                'message' => 'Verifikasi pembayaran ditolak',
+                'data' => [],
             ], 200);
         } catch (Throwable $e) {
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal menolak verifikasi: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }

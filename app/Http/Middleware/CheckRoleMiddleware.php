@@ -20,9 +20,11 @@ class CheckRoleMiddleware
 
         if(!$user){
             return response()->json([
-                'status' => "error",
-                'code' => 'UNAUTHENTICATED',
-                'message' => 'Unauthenticated'
+                'status' => 'error',
+                'message' => 'Unauthenticated',
+                'errors' => [
+                    'code' => 'UNAUTHENTICATED',
+                ],
             ], 401);
         }
 
@@ -30,16 +32,20 @@ class CheckRoleMiddleware
 
         if($role === RoleEnum::DEFAULT || $role === null) return response()->json([
             'status' => 'error',
-            'code' => 'ROLE_MISSING',
             'message' => 'Forbidden. Akses ditolak pengguna belum memilih role',
+            'errors' => [
+                'code' => 'ROLE_MISSING',
+            ],
         ], 403);
 
         if(in_array($role->value, $roles)) return $next($request);
 
         return response()->json([
-            "status" => "error",
-            "code" => 'INSUFFICIENT_PERMISSION',
-            "message" => "Forbidden. Akses ditolak karena peran Anda tidak memiliki izin untuk sumber daya ini."
+            'status' => 'error',
+            'message' => 'Forbidden. Akses ditolak karena peran Anda tidak memiliki izin untuk sumber daya ini.',
+            'errors' => [
+                'code' => 'INSUFFICIENT_PERMISSION',
+            ],
         ], 403);
     }
 }

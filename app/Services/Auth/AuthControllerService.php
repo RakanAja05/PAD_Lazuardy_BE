@@ -42,7 +42,9 @@ class AuthControllerService
         return new ResponseDTO([
             'status' => 'success',
             'message' => 'OTP berhasil terkirim ke email',
-            'otp' => $otp['code'],
+            'data' => [
+                'otp' => $otp['code'],
+            ],
         ], 201);
     }
 
@@ -61,10 +63,23 @@ class AuthControllerService
             OtpTypeEnum::REGISTER->value
         );
 
-        return new ResponseDTO([
+        $payload = [
             'status' => $result['status'],
             'message' => $result['message'],
-        ], $result['code']);
+        ];
+
+        if ($result['status'] === 'success') {
+            $payload['data'] = [
+                'identifier' => $result['identifier'] ?? null,
+            ];
+        } else {
+            $payload['errors'] = [
+                'identifier' => $result['identifier'] ?? null,
+                'code' => $result['code'] ?? null,
+            ];
+        }
+
+        return new ResponseDTO($payload, $result['code']);
     }
 
     public function resendRegisterOtp(Request $request): ResponseDTO
@@ -80,11 +95,22 @@ class AuthControllerService
             OtpTypeEnum::REGISTER->value
         );
 
-        return new ResponseDTO([
+        $payload = [
             'status' => $result['status'],
             'message' => $result['message'],
-            'otp' => $result['otp_code'] ?? null,
-        ], $result['code']);
+        ];
+
+        if ($result['status'] === 'success') {
+            $payload['data'] = [
+                'otp' => $result['otp_code'] ?? null,
+            ];
+        } else {
+            $payload['errors'] = [
+                'detail' => $result['message'],
+            ];
+        }
+
+        return new ResponseDTO($payload, $result['code']);
     }
 
     public function storeStudentRegister(StoreStudentRegisterRequest $request): ResponseDTO
@@ -131,8 +157,10 @@ class AuthControllerService
 
             return new ResponseDTO([
                 'status' => 'success',
-                'token' => $userResult['token'],
                 'message' => 'Registrasi akun berhasil',
+                'data' => [
+                    'token' => $userResult['token'],
+                ],
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -140,7 +168,9 @@ class AuthControllerService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Registrasi gagal: ' . $e->getMessage(),
-                'error_code' => $e->getCode(),
+                'errors' => [
+                    'code' => $e->getCode(),
+                ],
             ], 500);
         }
     }
@@ -184,8 +214,10 @@ class AuthControllerService
 
             return new ResponseDTO([
                 'status' => 'success',
-                'token' => $userResult['token'],
                 'message' => 'Registrasi akun berhasil',
+                'data' => [
+                    'token' => $userResult['token'],
+                ],
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
@@ -193,7 +225,9 @@ class AuthControllerService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Registrasi gagal: ' . $e->getMessage(),
-                'error_code' => $e->getCode(),
+                'errors' => [
+                    'code' => $e->getCode(),
+                ],
             ], 500);
         }
     }
@@ -209,7 +243,11 @@ class AuthControllerService
 
         if (!$user->exists()) {
             return new ResponseDTO([
+                'status' => 'error',
                 'message' => 'Email tidak ditemukan.',
+                'errors' => [
+                    'email' => $validatedData['email'],
+                ],
             ], 404);
         }
 
@@ -231,9 +269,12 @@ class AuthControllerService
             DB::commit();
 
             return new ResponseDTO([
+                'status' => 'success',
                 'message' => 'OTP untuk reset password telah dikirim ke email Anda.',
-                'otp' => $otp['code'],
-                'temp_token' => $caching['token'],
+                'data' => [
+                    'otp' => $otp['code'],
+                    'temp_token' => $caching['token'],
+                ],
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
@@ -254,11 +295,23 @@ class AuthControllerService
         $tokenReset = Str::random(15);
         Cache::put('auth:reset-password:' . $tokenReset, ['email' => $verify['identifier']], 1800);
 
-        return new ResponseDTO([
+        $payload = [
             'status' => $verify['status'],
             'message' => $verify['message'],
-            'token' => $tokenReset,
-        ], $verify['code']);
+        ];
+
+        if ($verify['status'] === 'success') {
+            $payload['data'] = [
+                'token' => $tokenReset,
+            ];
+        } else {
+            $payload['errors'] = [
+                'identifier' => $verify['identifier'] ?? null,
+                'code' => $verify['code'] ?? null,
+            ];
+        }
+
+        return new ResponseDTO($payload, $verify['code']);
     }
 
     public function resetPassword(UpdateAuthRequest $request): ResponseDTO
@@ -271,7 +324,11 @@ class AuthControllerService
 
         if (!$user->exists()) {
             return new ResponseDTO([
+                'status' => 'error',
                 'message' => 'Email tidak ditemukan.',
+                'errors' => [
+                    'email' => $cacheData['email'] ?? null,
+                ],
             ], 404);
         }
 
@@ -286,7 +343,9 @@ class AuthControllerService
         }
 
         return new ResponseDTO([
+            'status' => 'success',
             'message' => 'Password berhasil direset.',
+            'data' => [],
         ], 200);
     }
 

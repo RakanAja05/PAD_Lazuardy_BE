@@ -24,11 +24,14 @@ class ProfileService
 
         $userData = $userService->showUserProfile($user);
         $studentData = $studentService->showStudentProfile($student);
-        $message = ['status' => 'success'];
 
-        $data = array_merge($message, $userData, $studentData);
+        $data = array_merge($userData, $studentData);
 
-        return new ResponseDTO($data, 200);
+        return new ResponseDTO([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil profil student',
+            'data' => $data,
+        ], 200);
     }
 
     public function showTutorProfile(Request $request): ResponseDTO
@@ -37,10 +40,14 @@ class ProfileService
 
         $userService = new UserService();
         $userData = $userService->showUserProfile($user);
-        $message = ['message' => 'success'];
-        $data = array_merge($userData, $message);
 
-        return new ResponseDTO($data, 200);
+        $data = $userData;
+
+        return new ResponseDTO([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil profil tutor',
+            'data' => $data,
+        ], 200);
     }
 
     public function updateStudentProfile(UpdateStudentProfileRequest $request): ResponseDTO
@@ -80,6 +87,7 @@ class ProfileService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Profile berhasil di update',
+                'data' => [],
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
@@ -87,7 +95,9 @@ class ProfileService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal mengupdate profil: ' . $e->getMessage(),
-                'error_code' => $e->getCode(),
+                'errors' => [
+                    'code' => $e->getCode(),
+                ],
             ], 500);
         }
     }
@@ -135,6 +145,7 @@ class ProfileService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Profile berhasil di update',
+                'data' => [],
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
@@ -142,7 +153,9 @@ class ProfileService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal mengupdate profile' . $e->getMessage(),
-                'error_code' => $e->getCode(),
+                'errors' => [
+                    'code' => $e->getCode(),
+                ],
             ], 500);
         }
     }
@@ -160,7 +173,11 @@ class ProfileService
             'schedules' => $user->schedules,
         ];
 
-        return new ResponseDTO($data, 200);
+        return new ResponseDTO([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil metode belajar tutor',
+            'data' => $data,
+        ], 200);
     }
 
     public function updateTutorLessonMethod(UpdateTutorLessonMethodRequest $request): ResponseDTO
@@ -192,6 +209,7 @@ class ProfileService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Profile dan jadwal tutor berhasil diperbarui.',
+                'data' => [],
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
@@ -199,6 +217,9 @@ class ProfileService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Profile dan jadwal tutor gagal diperbarui: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }

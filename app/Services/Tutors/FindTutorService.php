@@ -18,6 +18,9 @@ class FindTutorService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Lokasi Anda belum tersedia. Mohon aktifkan GPS atau lengkapi data alamat.',
+                'errors' => [
+                    'location' => 'missing',
+                ],
             ], 400);
         }
 
@@ -161,36 +164,38 @@ class FindTutorService
         return new ResponseDTO([
             'status' => 'success',
             'message' => 'Tutors sorted by recommendation score',
-            'data' => $result,
-            'pagination' => [
-                'current_page' => $page,
-                'total' => $totalTutors,
-                'per_page' => $limit,
-                'total_pages' => $totalPages,
-                'has_more' => $page < $totalPages,
-                'next_page' => $page < $totalPages ? $page + 1 : null,
-            ],
-            'filters' => [
-                'radius_km' => $radius,
-                'subject_id' => $subjectId,
-                'class_id' => $classId,
-                'min_rating' => $minRating,
-                'gender' => $gender,
-            ],
-            'auto_optimizations' => [
-                'province_filter' => $userProvince ? "Auto-filtered to {$userProvince} province" : 'No auto-filter applied',
-            ],
-            'algorithm' => [
-                'description' => 'Recommendation score = (normalized_rating × weight_rating) + (normalized_distance × weight_distance)',
-                'weights' => [
-                    'rating' => $weightRating,
-                    'distance' => $weightDistance,
+            'data' => [
+                'tutors' => $result,
+                'pagination' => [
+                    'current_page' => $page,
+                    'total' => $totalTutors,
+                    'per_page' => $limit,
+                    'total_pages' => $totalPages,
+                    'has_more' => $page < $totalPages,
+                    'next_page' => $page < $totalPages ? $page + 1 : null,
                 ],
-            ],
-            'meta' => [
-                'user_location' => [
-                    'latitude' => $lat,
-                    'longitude' => $lng,
+                'filters' => [
+                    'radius_km' => $radius,
+                    'subject_id' => $subjectId,
+                    'class_id' => $classId,
+                    'min_rating' => $minRating,
+                    'gender' => $gender,
+                ],
+                'auto_optimizations' => [
+                    'province_filter' => $userProvince ? "Auto-filtered to {$userProvince} province" : 'No auto-filter applied',
+                ],
+                'algorithm' => [
+                    'description' => 'Recommendation score = (normalized_rating x weight_rating) + (normalized_distance x weight_distance)',
+                    'weights' => [
+                        'rating' => $weightRating,
+                        'distance' => $weightDistance,
+                    ],
+                ],
+                'meta' => [
+                    'user_location' => [
+                        'latitude' => $lat,
+                        'longitude' => $lng,
+                    ],
                 ],
             ],
         ], 200);
@@ -204,6 +209,9 @@ class FindTutorService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Lokasi Anda belum tersedia.',
+                'errors' => [
+                    'location' => 'missing',
+                ],
             ], 400);
         }
 
@@ -220,6 +228,9 @@ class FindTutorService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Tutor tidak ditemukan',
+                'errors' => [
+                    'tutor_id' => $id,
+                ],
             ], 404);
         }
 
@@ -229,6 +240,7 @@ class FindTutorService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil detail tutor',
             'data' => [
                 'user_id' => $tutor->id,
                 'name' => $tutor->name,

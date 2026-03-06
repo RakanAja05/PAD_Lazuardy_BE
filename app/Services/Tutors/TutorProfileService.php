@@ -30,6 +30,9 @@ class TutorProfileService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Tutor tidak ditemukan',
+                'errors' => [
+                    'tutor_id' => $id,
+                ],
             ], 404);
         }
 
@@ -63,6 +66,7 @@ class TutorProfileService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil profil tutor',
             'data' => [
                 'user_id' => $tutor->id,
                 'name' => $tutor->name,
@@ -142,6 +146,7 @@ class TutorProfileService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil jadwal tersedia',
             'data' => [
                 'date' => $date,
                 'day_name' => $this->getDayName($dayOfWeek),

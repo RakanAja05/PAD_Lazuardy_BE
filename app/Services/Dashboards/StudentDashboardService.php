@@ -19,6 +19,9 @@ class StudentDashboardService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'User bukan student',
+                'errors' => [
+                    'role' => 'student_required',
+                ],
             ], 403);
         }
 
@@ -136,6 +139,7 @@ class StudentDashboardService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil dashboard student',
             'data' => [
                 'profile' => $profile,
                 'packages' => $packages,
@@ -157,6 +161,9 @@ class StudentDashboardService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'User bukan student',
+                'errors' => [
+                    'role' => 'student_required',
+                ],
             ], 403);
         }
 
@@ -180,34 +187,37 @@ class StudentDashboardService
 
         return new ResponseDTO([
             'status' => 'success',
-            'data' => $tutors->map(function ($tutor) {
-                return [
-                    'tutor_id' => $tutor->id,
-                    'tutor_name' => $tutor->name,
-                    'tutor_photo' => $tutor->profile_photo_url,
-                    'gender' => $tutor->gender,
-                    'address' => $tutor->home_address,
-                    'education' => $tutor->tutor?->education ?? null,
-                    'experience' => $tutor->tutor?->experience ?? 0,
-                    'price' => $tutor->tutor?->price ?? 0,
-                    'description' => $tutor->tutor?->description ?? null,
-                    'course_mode' => $tutor->tutor?->course_mode ?? null,
-                    'badge' => $tutor->tutor?->badge ?? null,
-                    'subjects' => $tutor->subjects->map(function ($subject) {
-                        return [
-                            'subject_id' => $subject->id,
-                            'subject_name' => $subject->name,
-                            'subject_icon' => $subject->icon_image_url ?? null,
-                        ];
-                    }),
-                ];
-            }),
-            'pagination' => [
-                'current_page' => $tutors->currentPage(),
-                'last_page' => $tutors->lastPage(),
-                'per_page' => $tutors->perPage(),
-                'total' => $tutors->total(),
-                'has_more' => $tutors->hasMorePages(),
+            'message' => 'Berhasil mengambil rekomendasi tutor',
+            'data' => [
+                'tutors' => $tutors->map(function ($tutor) {
+                    return [
+                        'tutor_id' => $tutor->id,
+                        'tutor_name' => $tutor->name,
+                        'tutor_photo' => $tutor->profile_photo_url,
+                        'gender' => $tutor->gender,
+                        'address' => $tutor->home_address,
+                        'education' => $tutor->tutor?->education ?? null,
+                        'experience' => $tutor->tutor?->experience ?? 0,
+                        'price' => $tutor->tutor?->price ?? 0,
+                        'description' => $tutor->tutor?->description ?? null,
+                        'course_mode' => $tutor->tutor?->course_mode ?? null,
+                        'badge' => $tutor->tutor?->badge ?? null,
+                        'subjects' => $tutor->subjects->map(function ($subject) {
+                            return [
+                                'subject_id' => $subject->id,
+                                'subject_name' => $subject->name,
+                                'subject_icon' => $subject->icon_image_url ?? null,
+                            ];
+                        }),
+                    ];
+                }),
+                'pagination' => [
+                    'current_page' => $tutors->currentPage(),
+                    'last_page' => $tutors->lastPage(),
+                    'per_page' => $tutors->perPage(),
+                    'total' => $tutors->total(),
+                    'has_more' => $tutors->hasMorePages(),
+                ],
             ],
         ], 200);
     }
@@ -220,6 +230,9 @@ class StudentDashboardService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'User bukan student',
+                'errors' => [
+                    'role' => 'student_required',
+                ],
             ], 403);
         }
 
@@ -237,6 +250,7 @@ class StudentDashboardService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil ringkasan student',
             'data' => $summary,
         ], 200);
     }

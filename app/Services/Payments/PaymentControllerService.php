@@ -21,6 +21,7 @@ class PaymentControllerService
     {
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil detail paket',
             'data' => $package,
         ], 200);
     }
@@ -55,6 +56,7 @@ class PaymentControllerService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Berhasil membuat order',
+                'data' => [],
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
@@ -62,6 +64,9 @@ class PaymentControllerService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal membuat order: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -87,20 +92,27 @@ class PaymentControllerService
 
             if ($updatePayment === 0) {
                 return new ResponseDTO([
-                    'status' => 'Error',
+                    'status' => 'error',
                     'message' => 'Gagal mengupload data file',
+                    'errors' => [
+                        'payment' => 'update_failed',
+                    ],
                 ], 200);
             }
 
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Bukti pembayaran berhasil terkirim',
+                'data' => [],
             ], 200);
         }
 
         return new ResponseDTO([
-            'status' => 'failed',
+            'status' => 'error',
             'message' => 'Tidak ditemukan file yang diunggah',
+            'errors' => [
+                'file_upload' => 'missing',
+            ],
         ], 400);
     }
 
@@ -139,13 +151,16 @@ class PaymentControllerService
 
             return new ResponseDTO([
                 'status' => 'success',
+                'message' => 'Berhasil mengambil riwayat transaksi',
                 'data' => $historyData,
             ], 200);
         } catch (Throwable $e) {
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan saat memproses riwayat transaksi.',
-                'error_detail' => $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -175,6 +190,10 @@ class PaymentControllerService
             'time_created' => $payment->created_at->format('H:i:s'),
         ];
 
-        return new ResponseDTO($data, 200);
+        return new ResponseDTO([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil detail pembayaran',
+            'data' => $data,
+        ], 200);
     }
 }

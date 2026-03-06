@@ -74,11 +74,15 @@ class ReviewService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Review berhasil terkirim',
+                'data' => [],
             ], 201);
         } catch (Exception $e) {
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Review gagal terkirim: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 401);
         }
     }
@@ -96,6 +100,7 @@ class ReviewService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil detail review',
             'data' => $reviewData,
         ], 200);
     }

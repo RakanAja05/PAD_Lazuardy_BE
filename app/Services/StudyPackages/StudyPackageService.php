@@ -15,8 +15,11 @@ class StudyPackageService
 
         if ($user->role !== RoleEnum::STUDENT) {
             return new ResponseDTO([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Hanya student yang dapat mengakses endpoint ini',
+                'errors' => [
+                    'role' => 'student_required',
+                ],
             ], 403);
         }
 
@@ -59,7 +62,7 @@ class StudyPackageService
         })->values();
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Berhasil mengambil daftar paket yang dibeli',
             'data' => $data,
         ], 200);
@@ -71,8 +74,11 @@ class StudyPackageService
 
         if ($user->role !== RoleEnum::STUDENT) {
             return new ResponseDTO([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Hanya student yang dapat mengakses endpoint ini',
+                'errors' => [
+                    'role' => 'student_required',
+                ],
             ], 403);
         }
 
@@ -130,7 +136,7 @@ class StudyPackageService
         })->values();
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Berhasil mengambil data paket belajar',
             'data' => $data,
         ], 200);
@@ -142,8 +148,11 @@ class StudyPackageService
 
         if ($user->role !== RoleEnum::STUDENT) {
             return new ResponseDTO([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Hanya student yang dapat mengakses endpoint ini',
+                'errors' => [
+                    'role' => 'student_required',
+                ],
             ], 403);
         }
 
@@ -158,8 +167,11 @@ class StudyPackageService
 
         if ($studentPackages->isEmpty()) {
             return new ResponseDTO([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Paket tidak ditemukan',
+                'errors' => [
+                    'package_id' => $packageId,
+                ],
             ], 404);
         }
 
@@ -205,7 +217,7 @@ class StudyPackageService
         ];
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Berhasil mengambil detail paket belajar',
             'data' => $data,
         ], 200);

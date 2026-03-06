@@ -17,7 +17,11 @@ class LoginService
 
         if (!Auth::attempt($credentials)) {
             return new ResponseDTO([
+                'status' => 'error',
                 'message' => 'Email atau password salah',
+                'errors' => [
+                    'credentials' => 'invalid',
+                ],
             ], 401);
         }
 
@@ -26,9 +30,12 @@ class LoginService
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return new ResponseDTO([
+            'status' => 'success',
             'message' => 'Login berhasil',
-            'token' => $token,
-            'user' => $user,
+            'data' => [
+                'token' => $token,
+                'user' => $user,
+            ],
         ], 200);
     }
 
@@ -37,14 +44,20 @@ class LoginService
         $request->user()->currentAccessToken()?->delete();
 
         return new ResponseDTO([
+            'status' => 'success',
             'message' => 'Logout berhasil',
+            'data' => [],
         ], 200);
     }
 
     public function me(Request $request): ResponseDTO
     {
         return new ResponseDTO([
-            'user' => $request->user(),
+            'status' => 'success',
+            'message' => 'Berhasil mengambil profil',
+            'data' => [
+                'user' => $request->user(),
+            ],
         ], 200);
     }
 }

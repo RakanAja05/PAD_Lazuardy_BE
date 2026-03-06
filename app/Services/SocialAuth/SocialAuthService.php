@@ -59,25 +59,35 @@ class SocialAuthService
                 }
 
                 return response()->json([
-                    'type' => 'register',
-                    'provider' => $provider,
-                    'email' => $userEmail,
-                    'temp_token' => $tempToken,
+                    'status' => 'success',
+                    'message' => 'Akun belum terdaftar, silakan lengkapi data',
+                    'data' => [
+                        'type' => 'register',
+                        'provider' => $provider,
+                        'email' => $userEmail,
+                        'temp_token' => $tempToken,
+                    ],
                 ], 200);
             }
 
             $token = $loggedUser->createToken('auth_token')->plainTextToken;
 
             return response()->json([
-                'user' => $loggedUser,
-                'token' => $token,
-                'token_type' => 'Bearer',
+                'status' => 'success',
                 'message' => 'Login menggunakan ' . ucfirst($provider) . ' berhasil.',
+                'data' => [
+                    'user' => $loggedUser,
+                    'token' => $token,
+                    'token_type' => 'Bearer',
+                ],
             ], 200);
         } catch (Exception $e) {
             return response()->json([
+                'status' => 'error',
                 'message' => 'Gagal otentikasi melalui ' . ucfirst($provider) . '.',
-                'error' => $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }

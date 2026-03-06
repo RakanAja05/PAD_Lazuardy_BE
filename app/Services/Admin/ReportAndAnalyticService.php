@@ -37,6 +37,10 @@ class ReportAndAnalyticService
             'average_rating' => $averageRating,
         ];
 
-        return new ResponseDTO($data, 200);
+        return new ResponseDTO([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil laporan dan analitik',
+            'data' => $data,
+        ], 200);
     }
 }

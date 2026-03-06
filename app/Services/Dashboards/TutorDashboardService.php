@@ -20,6 +20,9 @@ class TutorDashboardService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'User bukan tutor',
+                'errors' => [
+                    'role' => 'tutor_required',
+                ],
             ], 403);
         }
 
@@ -186,6 +189,7 @@ class TutorDashboardService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil dashboard tutor',
             'data' => [
                 'profile' => $profile,
                 'subjects' => $subjects,
@@ -210,6 +214,9 @@ class TutorDashboardService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'User bukan tutor',
+                'errors' => [
+                    'role' => 'tutor_required',
+                ],
             ], 403);
         }
 
@@ -241,6 +248,7 @@ class TutorDashboardService
 
         return new ResponseDTO([
             'status' => 'success',
+            'message' => 'Berhasil mengambil ringkasan tutor',
             'data' => $summary,
         ], 200);
     }

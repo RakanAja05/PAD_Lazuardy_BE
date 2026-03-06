@@ -35,6 +35,7 @@ class TutorApplicationService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Berhasil menyelesaikan formulir pendaftaran tutor',
+                'data' => [],
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
@@ -42,6 +43,9 @@ class TutorApplicationService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }

@@ -45,7 +45,11 @@ class TutorVerifyService
         $tutorsPaginator->setCollection($tutorsCollection);
 
         return new ResponseDTO([
-            'tutors' => $tutorsPaginator,
+            'status' => 'success',
+            'message' => 'Berhasil mengambil data tutor',
+            'data' => [
+                'tutors' => $tutorsPaginator,
+            ],
         ], 200);
     }
 
@@ -65,9 +69,11 @@ class TutorVerifyService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Tutor berhasil diverifikasi dan diaktifkan',
-                'tutor' => [
-                    'user_id' => $tutor->user_id,
-                    'status' => $tutor->status->value,
+                'data' => [
+                    'tutor' => [
+                        'user_id' => $tutor->user_id,
+                        'status' => $tutor->status->value,
+                    ],
                 ],
             ], 200);
         } catch (Exception $e) {
@@ -76,6 +82,9 @@ class TutorVerifyService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal memverifikasi tutor: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -96,10 +105,12 @@ class TutorVerifyService
             return new ResponseDTO([
                 'status' => 'success',
                 'message' => 'Tutor ditolak',
-                'tutor' => [
-                    'user_id' => $tutor->user_id,
-                    'status' => $tutor->status->value,
-                    'reason' => $validated['reason'] ?? null,
+                'data' => [
+                    'tutor' => [
+                        'user_id' => $tutor->user_id,
+                        'status' => $tutor->status->value,
+                        'reason' => $validated['reason'] ?? null,
+                    ],
                 ],
             ], 200);
         } catch (Exception $e) {
@@ -108,6 +119,9 @@ class TutorVerifyService
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal menolak tutor: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }

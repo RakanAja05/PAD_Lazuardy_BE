@@ -35,33 +35,40 @@ class GoogleAuthService
 
                 return new ResponseDTO([
                     'status' => 'success',
-                    'type' => 'login',
                     'message' => 'Login berhasil',
-                    'token' => $token,
-                    'user' => [
-                        'id' => $existingUser->id,
-                        'name' => $existingUser->name,
-                        'email' => $existingUser->email,
-                        'role' => $existingUser->role,
+                    'data' => [
+                        'type' => 'login',
+                        'token' => $token,
+                        'user' => [
+                            'id' => $existingUser->id,
+                            'name' => $existingUser->name,
+                            'email' => $existingUser->email,
+                            'role' => $existingUser->role,
+                        ],
                     ],
                 ], 200);
             }
 
             return new ResponseDTO([
                 'status' => 'success',
-                'type' => 'register',
                 'message' => 'User belum terdaftar, silakan lengkapi data',
-                'google_data' => [
-                    'google_id' => $googleUser->getId(),
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'avatar' => $googleUser->getAvatar(),
+                'data' => [
+                    'type' => 'register',
+                    'google_data' => [
+                        'google_id' => $googleUser->getId(),
+                        'name' => $googleUser->getName(),
+                        'email' => $googleUser->getEmail(),
+                        'avatar' => $googleUser->getAvatar(),
+                    ],
                 ],
             ], 200);
         } catch (\Exception $e) {
             return new ResponseDTO([
                 'status' => 'error',
                 'message' => 'Gagal login dengan Google: ' . $e->getMessage(),
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }
@@ -96,14 +103,20 @@ class GoogleAuthService
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return new ResponseDTO([
+                'status' => 'success',
                 'message' => 'Registrasi berhasil',
-                'user' => $user,
-                'token' => $token,
+                'data' => [
+                    'user' => $user,
+                    'token' => $token,
+                ],
             ], 201);
         } catch (\Exception $e) {
             return new ResponseDTO([
-                'error' => 'Gagal menyelesaikan registrasi',
-                'message' => $e->getMessage(),
+                'status' => 'error',
+                'message' => 'Gagal menyelesaikan registrasi',
+                'errors' => [
+                    'detail' => $e->getMessage(),
+                ],
             ], 500);
         }
     }

@@ -17,7 +17,7 @@ class NotificationService
             ->paginate(15);
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Notifications retrieved successfully',
             'data' => [
                 'notifications' => $notifications->items(),
@@ -39,7 +39,7 @@ class NotificationService
         $count = $user->unreadNotifications()->count();
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Unread notifications count retrieved successfully',
             'data' => [
                 'unread_count' => $count,
@@ -54,16 +54,20 @@ class NotificationService
 
         if (!$notification) {
             return new ResponseDTO([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Notification not found',
+                'errors' => [
+                    'notification_id' => $id,
+                ],
             ], 404);
         }
 
         $notification->markAsRead();
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Notification marked as read',
+            'data' => [],
         ], 200);
     }
 
@@ -73,8 +77,9 @@ class NotificationService
         $user->unreadNotifications->markAsRead();
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'All notifications marked as read',
+            'data' => [],
         ], 200);
     }
 
@@ -85,16 +90,20 @@ class NotificationService
 
         if (!$notification) {
             return new ResponseDTO([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Notification not found',
+                'errors' => [
+                    'notification_id' => $id,
+                ],
             ], 404);
         }
 
         $notification->delete();
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Notification deleted successfully',
+            'data' => [],
         ], 200);
     }
 
@@ -104,8 +113,9 @@ class NotificationService
         $user->readNotifications()->delete();
 
         return new ResponseDTO([
-            'success' => true,
+            'status' => 'success',
             'message' => 'All read notifications deleted successfully',
+            'data' => [],
         ], 200);
     }
 }

@@ -26,7 +26,9 @@ class ScheduleService
         return new ResponseDTO([
             'status' => 'success',
             'message' => 'Data jadwal berhasil terkirim',
-            'schedule_data' => $tsData,
+            'data' => [
+                'schedules' => $tsData,
+            ],
         ], 200);
     }
 
@@ -48,7 +50,9 @@ class ScheduleService
         return new ResponseDTO([
             'status' => 'success',
             'message' => 'Data jadwal berhasil terkirim',
-            'schedule_data' => $data,
+            'data' => [
+                'schedules' => $data,
+            ],
         ], 200);
     }
 }
