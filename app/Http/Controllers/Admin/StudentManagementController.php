@@ -3,73 +3,40 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Enums\PaymentStatusEnum;
 use App\Models\Payment;
-use Illuminate\Support\Facades\Storage;
-use Throwable;
+use App\Services\Admin\StudentManagementService;
 
 class StudentManagementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private readonly StudentManagementService $studentManagementService)
     {
-        $results = Payment::query()
-            ->with('order.user.student', 'order.package')
-            ->where('status', PaymentStatusEnum::UPLOADED)
-            ->orderBy('created_at', 'asc')
-            ->paginate(9);
-
-        return response()->json($results, 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function index()
+    {
+        $result = $this->studentManagementService->index();
+
+        return response()->json($result->payload, $result->code);
+    }
+
     public function show(Payment $payment)
     {
-        $payment->load('order.user.student', 'order.package');
+        $result = $this->studentManagementService->show($payment);
 
-        $file = Storage::url($payment->proof_image_url);
-
-        return response()->json([
-            'detail' => $payment,
-            'file' => $file
-        ], 200);
+        return response()->json($result->payload, $result->code);
     }
 
     public function accept(Payment $payment)
     {
-        try{
-            $payment->update([
-                'status' => PaymentStatusEnum::VALIDATED,
-            ]);
-            return response()->json([
-                'status' => 'success'
-            ], 200);
-        } catch(Throwable $e){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal menerima verifikasi: ' . $e->getMessage(),
-            ], 500);
-        }
+        $result = $this->studentManagementService->accept($payment);
+
+        return response()->json($result->payload, $result->code);
     }
 
     public function reject(Payment $payment)
     {
-        try{
-            $payment->update([
-                'status' => PaymentStatusEnum::REJECTED,
-            ]);
-            return response()->json([
-                'status' => 'success'
-            ], 200);
-        } catch(Throwable $e){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal menolak verifikasi: ' . $e->getMessage(),
-            ], 500);
-        }
+        $result = $this->studentManagementService->reject($payment);
+
+        return response()->json($result->payload, $result->code);
     }
 }

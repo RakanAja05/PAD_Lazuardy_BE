@@ -1,0 +1,1241 @@
+{
+  "generated_at": "2026-03-06",
+  "scope": "routes/api",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/login",
+      "auth": "guest",
+      "body": {
+        "email": "string",
+        "password": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "message": "Login berhasil",
+          "token": "string",
+          "user": "object"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/google/complete",
+      "auth": "guest",
+      "body": {
+        "google_id": "string",
+        "name": "string",
+        "email": "string",
+        "role": "student|tutor",
+        "telephone_number": "string|null",
+        "date_of_birth": "YYYY-MM-DD|null",
+        "gender": "male|female|null",
+        "profile_photo_url": "url|null"
+      },
+      "response": {
+        "status_code": 201,
+        "body": {
+          "message": "Registrasi berhasil",
+          "user": "object",
+          "token": "string"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/register",
+      "auth": "guest",
+      "body": {
+        "email": "string",
+        "password": "string",
+        "password_confirmation": "string"
+      },
+      "response": {
+        "status_code": 201,
+        "body": {
+          "status": "success",
+          "message": "OTP berhasil terkirim ke email",
+          "otp": "string"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/register/verify",
+      "auth": "guest",
+      "body": {
+        "email": "string",
+        "otp": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success|error",
+          "message": "string"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/register/resend-otp",
+      "auth": "guest",
+      "body": {
+        "email": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success|error",
+          "message": "string",
+          "otp": "string|null"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/register/student",
+      "auth": "guest",
+      "body": {
+        "email": "string",
+        "password": "string",
+        "name": "string",
+        "gender": "enum",
+        "date_of_birth": "YYYY-MM-DD",
+        "telephone_number": "string",
+        "profile_photo": "file|null",
+        "province": "string",
+        "regency": "string",
+        "district": "string",
+        "subdistrict": "string",
+        "street": "string",
+        "religion": "enum|null",
+        "latitude": "number",
+        "longitude": "number",
+        "class_id": "integer|null",
+        "curriculum_id": "integer|null",
+        "school": "string|null",
+        "parent": "string|null",
+        "parent_telephone_number": "string|null"
+      },
+      "response": {
+        "status_code": 201,
+        "body": {
+          "status": "success",
+          "token": "string",
+          "message": "Registrasi akun berhasil"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/register/tutor",
+      "auth": "guest",
+      "body": {
+        "email": "string",
+        "password": "string",
+        "password_confirmation": "string",
+        "name": "string",
+        "gender": "enum",
+        "religion": "string",
+        "date_of_birth": "YYYY-MM-DD",
+        "telephone_number": "string",
+        "profile_photo": "file|null",
+        "province": "string",
+        "regency": "string",
+        "district": "string",
+        "subdistrict": "string",
+        "street": "string",
+        "latitude": "number",
+        "longitude": "number",
+        "bank": "string",
+        "rekening": "string"
+      },
+      "response": {
+        "status_code": 201,
+        "body": {
+          "status": "success",
+          "token": "string",
+          "message": "Registrasi akun berhasil"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/forgot-password",
+      "auth": "guest",
+      "body": {
+        "email": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "message": "OTP untuk reset password telah dikirim ke email Anda.",
+          "otp": "string",
+          "temp_token": "string"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/forgot-password/verify",
+      "auth": "guest",
+      "body": {
+        "temp_token": "string",
+        "otp_code": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success|error",
+          "message": "string",
+          "token": "string"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/reset-password",
+      "auth": "guest",
+      "body": {
+        "token": "string",
+        "password": "string",
+        "password_confirmation": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "message": "Password berhasil direset."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/logout",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "message": "Logout berhasil"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "user": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/student",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": {
+            "profile": "object",
+            "packages": "array",
+            "package_stats": "object",
+            "schedules": "array",
+            "schedule_stats": "object",
+            "upcoming_schedules": "array",
+            "my_tutors": "array",
+            "subjects": "array"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/student/summary",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": {
+            "total_packages": "number",
+            "total_remaining_sessions": "number",
+            "total_schedules_today": "number",
+            "total_upcoming_schedules": "number"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/student/recommended-tutors",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "array",
+          "pagination": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/tutor",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": {
+            "profile": "object",
+            "subjects": "array",
+            "students": "array",
+            "student_stats": "object",
+            "my_schedules": "array",
+            "taken_schedules": "array",
+            "schedule_stats": "object",
+            "upcoming_schedules": "array",
+            "earnings": "object",
+            "reviews": "array",
+            "review_stats": "object"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/tutor/summary",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": {
+            "total_students": "number",
+            "total_subjects": "number",
+            "total_schedules_today": "number",
+            "total_upcoming_schedules": "number",
+            "completed_sessions_this_month": "number",
+            "estimated_earnings_this_month": "number"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/find-tutor",
+      "auth": "auth:sanctum",
+      "body": null,
+      "query": {
+        "radius": "number|null",
+        "subject_id": "integer|null",
+        "class_id": "integer|null",
+        "min_rating": "number|null",
+        "gender": "string|null",
+        "page": "integer|null",
+        "weight_rating": "number|null",
+        "weight_distance": "number|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Tutors sorted by recommendation score",
+          "data": "array",
+          "pagination": "object",
+          "filters": "object",
+          "algorithm": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/find-tutor/{id}",
+      "auth": "auth:sanctum",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tutor-profile/{id}",
+      "auth": "auth:sanctum",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tutor-profile/{id}/available-slots",
+      "auth": "auth:sanctum",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "query": {
+        "date": "YYYY-MM-DD"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": {
+            "date": "YYYY-MM-DD",
+            "day_name": "string",
+            "slots": "array"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tutor/apply",
+      "auth": "auth:sanctum + role:tutor",
+      "body": null,
+      "response": {
+        "status_code": 501,
+        "body": {
+          "note": "No controller method found for GET /tutor/apply"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tutor/apply",
+      "auth": "auth:sanctum + role:tutor",
+      "body": {
+        "experience": "string",
+        "organization": "array",
+        "cv": "array|null",
+        "cv.*.name": "string",
+        "cv.*.path_url": "url",
+        "ktp": "array|null",
+        "ktp.*.name": "string",
+        "ktp.*.path_url": "url",
+        "ijazah": "array|null",
+        "ijazah.*.name": "string",
+        "ijazah.*.path_url": "url",
+        "certificate": "array|null",
+        "certificate.*.name": "string",
+        "certificate.*.path_url": "url",
+        "portofolio": "array|null",
+        "portofolio.*.name": "string",
+        "portofolio.*.path_url": "url"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Berhasil menyelesaikan formulir pendaftaran tutor"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tutor/lesson-formulir",
+      "auth": "auth:sanctum + role:tutor",
+      "body": {
+        "course_mode": "string",
+        "description": "string",
+        "qualification": "array",
+        "qualification.*": "string",
+        "learning_method": "string",
+        "schedules": "array",
+        "schedules.*.day": "enum",
+        "schedules.*.time": "HH:mm"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Profile dan jadwal tutor berhasil diperbarui."
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tutor/profile",
+      "auth": "auth:sanctum + role:tutor",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "message": "success",
+          "user": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tutor/profile/edit",
+      "auth": "auth:sanctum + role:tutor",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "message": "success",
+          "user": "object"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tutor/profile",
+      "auth": "auth:sanctum + role:tutor",
+      "body": {
+        "name": "string",
+        "gender": "enum",
+        "date_of_birth": "YYYY-MM-DD",
+        "religion": "enum",
+        "telephone_number": "string",
+        "province": "string",
+        "regency": "string",
+        "district": "string",
+        "subdistrict": "string",
+        "street": "string",
+        "bank": "string|null",
+        "rekening": "string|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Profile berhasil di update"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tutor/presence",
+      "auth": "auth:sanctum + role:tutor",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "array"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tutor/presence",
+      "auth": "auth:sanctum + role:tutor",
+      "body": {
+        "taken_schedule_id": "integer",
+        "student_user_id": "integer",
+        "material": "string",
+        "evaluation": "string",
+        "grade": "integer",
+        "photo": "file"
+      },
+      "response": {
+        "status_code": 201,
+        "body": {
+          "status": "success",
+          "message": "Presensi berhasil"
+        },
+        "note": "Route points to PresenceController::create but controller only has store()."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/student/profile",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "user": "object",
+          "student": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/student/profile/edit",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "user": "object",
+          "student": "object"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/student/profile",
+      "auth": "auth:sanctum + role:student",
+      "body": {
+        "name": "string",
+        "telephone_number": "string",
+        "profile_photo_url": "string",
+        "gender": "enum",
+        "date_of_birth": "YYYY-MM-DD",
+        "religion": "enum",
+        "province": "string",
+        "regency": "string",
+        "district": "string",
+        "subdistrict": "string",
+        "street": "string",
+        "school": "string",
+        "class_id": "integer|null",
+        "curriculum_id": "integer|null",
+        "parent": "string|null",
+        "parent_telephone_number": "string|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Profile berhasil di update"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/student/review",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Data daftar tutor berhasil terkirim",
+          "data": "array"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/student/review/{tutor_id}",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "path_params": {
+        "tutor_id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "object|null"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/student/review",
+      "auth": "auth:sanctum + role:student",
+      "body": {
+        "tutor_id": "integer",
+        "quality": "enum",
+        "delivery": "enum",
+        "attitude": "enum",
+        "benefit": "enum",
+        "rate": "integer",
+        "review": "string|null"
+      },
+      "response": {
+        "status_code": 201,
+        "body": {
+          "status": "success",
+          "message": "Review berhasil terkirim"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/student/review",
+      "auth": "auth:sanctum + role:student",
+      "body": {
+        "tutor_id": "integer",
+        "quality": "enum",
+        "delivery": "enum",
+        "attitude": "enum",
+        "benefit": "enum",
+        "rate": "integer",
+        "review": "string|null"
+      },
+      "response": {
+        "status_code": 201,
+        "body": {
+          "status": "success",
+          "message": "Review berhasil terkirim"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/my-packages",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "Berhasil mengambil daftar paket yang dibeli",
+          "data": "array"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/study-packages",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "Berhasil mengambil data paket belajar",
+          "data": "array"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/study-packages/{id}",
+      "auth": "auth:sanctum",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "Berhasil mengambil detail paket belajar",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "Notifications retrieved successfully",
+          "data": {
+            "notifications": "array",
+            "pagination": "object"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/unread-count",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "Unread notifications count retrieved successfully",
+          "data": {
+            "unread_count": "number"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/notifications/read-all",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "All notifications marked as read"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/notifications/{id}/read",
+      "auth": "auth:sanctum",
+      "body": null,
+      "path_params": {
+        "id": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "Notification marked as read"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/notifications/read-all",
+      "auth": "auth:sanctum",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "All read notifications deleted successfully"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/notifications/{id}",
+      "auth": "auth:sanctum",
+      "body": null,
+      "path_params": {
+        "id": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "success": true,
+          "message": "Notification deleted successfully"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/package/order/{id}",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/package/order",
+      "auth": "auth:sanctum + role:student",
+      "body": {
+        "package_id": "integer",
+        "total_amount": "integer",
+        "payment_method": "enum"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Berhasil membuat order"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/package/payment",
+      "auth": "auth:sanctum + role:student",
+      "body": {
+        "file_upload": "file",
+        "order_id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Bukti pembayaran berhasil terkirim"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment/history",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "array"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment/history/detail",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "query": {
+        "payment_id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "package_id": "integer",
+          "package_name": "string",
+          "session": "integer",
+          "amount": "integer",
+          "payment_method": "string",
+          "payment_status": "string",
+          "date_created": "YYYY-MM-DD",
+          "time_created": "HH:mm:ss"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tutor/schedule",
+      "auth": "auth:sanctum + role:tutor",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Data jadwal berhasil terkirim",
+          "schedule_data": "array"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/student/schedule",
+      "auth": "auth:sanctum + role:student",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Data jadwal berhasil terkirim",
+          "schedule_data": "array"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verify/tutor",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "tutors": "pagination_object"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/verify/tutor/approve",
+      "auth": "auth:sanctum + role:admin",
+      "body": {
+        "user_id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Tutor berhasil diverifikasi dan diaktifkan",
+          "tutor": "object"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/verify/tutor/reject",
+      "auth": "auth:sanctum + role:admin",
+      "body": {
+        "user_id": "integer",
+        "reason": "string|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Tutor ditolak",
+          "tutor": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/tutor-salary",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "query": {
+        "search": "string|null",
+        "min_salary": "number|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "array",
+          "total_salary": "number"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/tutor-salary/{userId}",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "path_params": {
+        "userId": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/tutor-salary/{userId}/confirm",
+      "auth": "auth:sanctum + role:admin",
+      "body": {
+        "note": "string|null"
+      },
+      "path_params": {
+        "userId": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Gaji tutor berhasil dikonfirmasi dan direset",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/tutor-salary/confirm-batch",
+      "auth": "auth:sanctum + role:admin",
+      "body": {
+        "tutor_ids": "array",
+        "note": "string|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Pembayaran gaji batch berhasil dikonfirmasi",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/tutor-salary/{userId}/confirm-with-invoice",
+      "auth": "auth:sanctum + role:admin",
+      "body": {
+        "invoice_file": "file",
+        "payment_method": "transfer|check|e-wallet",
+        "note": "string|null"
+      },
+      "path_params": {
+        "userId": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Pembayaran gaji berhasil dikonfirmasi dan email telah diproses.",
+          "data": "object"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/tutor-salary/pending-payment",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "query": {
+        "search": "string|null",
+        "sort": "salary_asc|salary_desc|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "array",
+          "count": "number",
+          "total_pending": "number"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/tutor/verification-pending",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "query": {
+        "search": "string|null"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "array",
+          "count": "number"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/tutor-salary/{userId}/history",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "path_params": {
+        "userId": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "data": "array",
+          "total_paid": "number"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/tutor-salary/{userId}/payment-history",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "path_params": {
+        "userId": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success",
+          "message": "Payment history retrieved successfully",
+          "data": "array"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/student",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": "pagination_object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/student/{id}",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "detail": "object",
+          "file": "string"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/student/{id}/accept",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/student/{id}/reject",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "path_params": {
+        "id": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "body": {
+          "status": "success"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/analytic",
+      "auth": "auth:sanctum + role:admin",
+      "body": null,
+      "response": {
+        "status_code": 200,
+        "body": {
+          "total_student": "number",
+          "total_student_verif": "number",
+          "total_tutor": "number",
+          "total_tutor_verif": "number",
+          "total_transaction": "number",
+          "average_rating": "number"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/{provider}/mobile",
+      "auth": "public",
+      "body": null,
+      "path_params": {
+        "provider": "string"
+      },
+      "response": {
+        "status_code": 501,
+        "body": {
+          "note": "No SocialAuthController::mobileLogin method found"
+        }
+      }
+    }
+  ]
+}

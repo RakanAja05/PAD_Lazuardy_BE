@@ -1,0 +1,683 @@
+{
+  "info": {
+    "_postman_id": "6b7f5f0a-7c2d-4d9f-9e0b-4efc1d2b9a10",
+    "name": "PAD Lazuardy - Auth Flow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Student Auth Flow",
+      "item": [
+        {
+          "name": "Send Register OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{student_email}}\",\n  \"password\": \"{{student_password}}\",\n  \"password_confirmation\": \"{{student_password}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.otp) {",
+                  "  pm.collectionVariables.set('student_register_otp', json.otp);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify Register OTP",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/register/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "register",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{student_email}}\",\n  \"otp\": \"{{student_register_otp}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register Student",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/register/student",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "register",
+                "student"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{student_email}}\",\n  \"password\": \"{{student_password}}\",\n  \"password_confirmation\": \"{{student_password}}\",\n  \"name\": \"John Doe\",\n  \"telephone_number\": \"081234567890\",\n  \"date_of_birth\": \"2005-01-15\",\n  \"gender\": \"male\",\n  \"religion\": \"islam\",\n  \"province\": \"Jawa Timur\",\n  \"regency\": \"Surabaya\",\n  \"district\": \"Gubeng\",\n  \"subdistrict\": \"Airlangga\",\n  \"street\": \"Jl. Airlangga No. 10\",\n  \"latitude\": -7.2699803,\n  \"longitude\": 112.7520883,\n  \"school\": \"SMA Negeri 1 Surabaya\",\n  \"parent\": \"Ibu Siti Aisyah\",\n  \"parent_telephone_number\": \"082345678901\",\n  \"class_id\": 1,\n  \"curriculum_id\": 1\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('student_auth_token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{student_email}}\",\n  \"password\": \"{{student_password}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('student_auth_token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "logout"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/forgot-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "forgot-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{student_email}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.temp_token) {",
+                  "  pm.collectionVariables.set('student_forgot_temp_token', json.temp_token);",
+                  "}",
+                  "if (json && json.otp) {",
+                  "  pm.collectionVariables.set('student_forgot_otp', json.otp);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify Forgot OTP",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/forgot-password/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "forgot-password",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otp_code\": \"{{student_forgot_otp}}\",\n  \"temp_token\": \"{{student_forgot_temp_token}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('student_reset_token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reset-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reset-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{student_reset_token}}\",\n  \"password\": \"{{student_new_password}}\",\n  \"password_confirmation\": \"{{student_new_password}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tutor Auth Flow",
+      "item": [
+        {
+          "name": "Send Register OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{tutor_email}}\",\n  \"password\": \"{{tutor_password}}\",\n  \"password_confirmation\": \"{{tutor_password}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.otp) {",
+                  "  pm.collectionVariables.set('tutor_register_otp', json.otp);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify Register OTP",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/register/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "register",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{tutor_email}}\",\n  \"otp\": \"{{tutor_register_otp}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register Tutor",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/register/tutor",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "register",
+                "tutor"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{tutor_email}}\",\n  \"password\": \"{{tutor_password}}\",\n  \"password_confirmation\": \"{{tutor_password}}\",\n  \"name\": \"John Doe\",\n  \"telephone_number\": \"081234567890\",\n  \"date_of_birth\": \"2005-01-15\",\n  \"gender\": \"male\",\n  \"religion\": \"islam\",\n  \"province\": \"Jawa Timur\",\n  \"regency\": \"Surabaya\",\n  \"district\": \"Gubeng\",\n  \"subdistrict\": \"Airlangga\",\n  \"street\": \"Jl. Airlangga No. 10\",\n  \"latitude\": -7.2699803,\n  \"longitude\": 112.7520883,\n  \"bank\": \"BCA\",\n  \"rekening\": \"1234567890\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('tutor_auth_token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{tutor_email}}\",\n  \"password\": \"{{tutor_password}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('tutor_auth_token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tutor_auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tutor_auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "logout"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/forgot-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "forgot-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{tutor_email}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.temp_token) {",
+                  "  pm.collectionVariables.set('tutor_forgot_temp_token', json.temp_token);",
+                  "}",
+                  "if (json && json.otp) {",
+                  "  pm.collectionVariables.set('tutor_forgot_otp', json.otp);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify Forgot OTP",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/forgot-password/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "forgot-password",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otp_code\": \"{{tutor_forgot_otp}}\",\n  \"temp_token\": \"{{tutor_forgot_temp_token}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('tutor_reset_token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reset-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reset-password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{tutor_reset_token}}\",\n  \"password\": \"{{tutor_new_password}}\",\n  \"password_confirmation\": \"{{tutor_new_password}}\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "student_email",
+      "value": "student@example.com"
+    },
+    {
+      "key": "student_password",
+      "value": "password123"
+    },
+    {
+      "key": "student_new_password",
+      "value": "password1234"
+    },
+    {
+      "key": "student_register_otp",
+      "value": ""
+    },
+    {
+      "key": "student_auth_token",
+      "value": ""
+    },
+    {
+      "key": "student_forgot_temp_token",
+      "value": ""
+    },
+    {
+      "key": "student_forgot_otp",
+      "value": ""
+    },
+    {
+      "key": "student_reset_token",
+      "value": ""
+    },
+    {
+      "key": "tutor_email",
+      "value": "tutor@example.com"
+    },
+    {
+      "key": "tutor_password",
+      "value": "password123"
+    },
+    {
+      "key": "tutor_new_password",
+      "value": "password1234"
+    },
+    {
+      "key": "tutor_register_otp",
+      "value": ""
+    },
+    {
+      "key": "tutor_auth_token",
+      "value": ""
+    },
+    {
+      "key": "tutor_forgot_temp_token",
+      "value": ""
+    },
+    {
+      "key": "tutor_forgot_otp",
+      "value": ""
+    },
+    {
+      "key": "tutor_reset_token",
+      "value": ""
+    }
+  ]
+}

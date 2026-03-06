@@ -3,41 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Enums\PaymentStatusEnum;
-use App\Enums\TutorStatusEnum;
-use App\Models\Payment;
-use App\Models\Review;
-use App\Models\Student;
-use App\Models\Tutor;
-use Carbon\Carbon;
+use App\Services\Admin\ReportAndAnalyticService;
 
 class ReportAndAnalyticController extends Controller
 {
+    public function __construct(private readonly ReportAndAnalyticService $reportAndAnalyticService)
+    {
+    }
+
     public function index()
     {
-        $totalStudent = Student::all()->count();
-        $totalStudentVerif = Payment::where('status', PaymentStatusEnum::UPLOADED)->count();
-        $totalTutor = Tutor::all()->count();
-        $totalTutorVerif = Tutor::where('status', TutorStatusEnum::VERIFY)->count();
+        $result = $this->reportAndAnalyticService->index();
 
-        $startDate = Carbon::now()->startOfMonth();
-
-        // Technical debt: Transaksi yang terhitung masih sejak kapan pembayaran itu dibuat bukan tepat pas dibayarnya
-        $totalTransaction = Payment::where('status', PaymentStatusEnum::VALIDATED)
-                                ->where('created_at', '>=', $startDate)
-                                ->count();
-
-        $averageRating = Review::avg('rate');
-
-        $data = [
-            'total_student' => $totalStudent,
-            'total_student_verif' => $totalStudentVerif,
-            'total_tutor' => $totalTutor,
-            'total_tutor_verif' => $totalTutorVerif,
-            'total_transaction' => $totalTransaction,
-            'average_rating' => $averageRating,
-        ];
-
-        return response()->json($data, 200);
+        return response()->json($result->payload, $result->code);
     }
 }
