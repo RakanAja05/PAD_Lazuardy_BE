@@ -11,6 +11,16 @@ class SalaryPaymentHistoryController extends Controller
     {
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/admin/tutor-salary/{userId}/payment-history",
+     *     tags={"Admin"},
+     *     summary="Tutor salary payment history",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="userId", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="History", @OA\JsonContent(ref="#/components/schemas/StandardSuccess"))
+     * )
+     */
     public function getPaymentHistory($userId)
     {
         $result = $this->salaryPaymentHistoryService->getPaymentHistory($userId);

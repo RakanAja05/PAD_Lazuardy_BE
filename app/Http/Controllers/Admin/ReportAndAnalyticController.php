@@ -11,6 +11,15 @@ class ReportAndAnalyticController extends Controller
     {
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/admin/analytic",
+     *     tags={"Admin"},
+     *     summary="Admin analytics",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Analytics", @OA\JsonContent(ref="#/components/schemas/StandardSuccess"))
+     * )
+     */
     public function index()
     {
         $result = $this->reportAndAnalyticService->index();

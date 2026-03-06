@@ -12,6 +12,15 @@ class TutorDashboardController extends Controller
     {
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/dashboard/tutor",
+     *     tags={"Dashboards"},
+     *     summary="Tutor dashboard",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Dashboard data", @OA\JsonContent(ref="#/components/schemas/StandardSuccess"))
+     * )
+     */
     public function index(Request $request)
     {
         $result = $this->tutorDashboardService->index($request);
@@ -19,6 +28,15 @@ class TutorDashboardController extends Controller
         return response()->json($result->payload, $result->code);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/dashboard/tutor/summary",
+     *     tags={"Dashboards"},
+     *     summary="Tutor dashboard summary",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Summary data", @OA\JsonContent(ref="#/components/schemas/StandardSuccess"))
+     * )
+     */
     public function summary(Request $request)
     {
         $result = $this->tutorDashboardService->summary($request);

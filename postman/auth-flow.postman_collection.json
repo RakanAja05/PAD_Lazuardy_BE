@@ -39,8 +39,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.otp) {",
-                  "  pm.collectionVariables.set('student_register_otp', json.otp);",
+                  "if (json && json.data && json.data.otp) {",
+                  "  pm.collectionVariables.set('student_register_otp', json.data.otp);",
                   "}"
                 ]
               }
@@ -106,8 +106,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.token) {",
-                  "  pm.collectionVariables.set('student_auth_token', json.token);",
+                  "if (json && json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('student_auth_token', json.data.token);",
                   "}"
                 ]
               }
@@ -145,8 +145,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.token) {",
-                  "  pm.collectionVariables.set('student_auth_token', json.token);",
+                  "if (json && json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('student_auth_token', json.data.token);",
                   "}"
                 ]
               }
@@ -228,11 +228,11 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.temp_token) {",
-                  "  pm.collectionVariables.set('student_forgot_temp_token', json.temp_token);",
+                  "if (json && json.data && json.data.temp_token) {",
+                  "  pm.collectionVariables.set('student_forgot_temp_token', json.data.temp_token);",
                   "}",
-                  "if (json && json.otp) {",
-                  "  pm.collectionVariables.set('student_forgot_otp', json.otp);",
+                  "if (json && json.data && json.data.otp) {",
+                  "  pm.collectionVariables.set('student_forgot_otp', json.data.otp);",
                   "}"
                 ]
               }
@@ -271,8 +271,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.token) {",
-                  "  pm.collectionVariables.set('student_reset_token', json.token);",
+                  "if (json && json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('student_reset_token', json.data.token);",
                   "}"
                 ]
               }
@@ -341,8 +341,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.otp) {",
-                  "  pm.collectionVariables.set('tutor_register_otp', json.otp);",
+                  "if (json && json.data && json.data.otp) {",
+                  "  pm.collectionVariables.set('tutor_register_otp', json.data.otp);",
                   "}"
                 ]
               }
@@ -408,8 +408,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.token) {",
-                  "  pm.collectionVariables.set('tutor_auth_token', json.token);",
+                  "if (json && json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('tutor_auth_token', json.data.token);",
                   "}"
                 ]
               }
@@ -447,8 +447,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.token) {",
-                  "  pm.collectionVariables.set('tutor_auth_token', json.token);",
+                  "if (json && json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('tutor_auth_token', json.data.token);",
                   "}"
                 ]
               }
@@ -530,11 +530,11 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.temp_token) {",
-                  "  pm.collectionVariables.set('tutor_forgot_temp_token', json.temp_token);",
+                  "if (json && json.data && json.data.temp_token) {",
+                  "  pm.collectionVariables.set('tutor_forgot_temp_token', json.data.temp_token);",
                   "}",
-                  "if (json && json.otp) {",
-                  "  pm.collectionVariables.set('tutor_forgot_otp', json.otp);",
+                  "if (json && json.data && json.data.otp) {",
+                  "  pm.collectionVariables.set('tutor_forgot_otp', json.data.otp);",
                   "}"
                 ]
               }
@@ -573,8 +573,8 @@
               "script": {
                 "exec": [
                   "var json = pm.response.json();",
-                  "if (json && json.token) {",
-                  "  pm.collectionVariables.set('tutor_reset_token', json.token);",
+                  "if (json && json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('tutor_reset_token', json.data.token);",
                   "}"
                 ]
               }
