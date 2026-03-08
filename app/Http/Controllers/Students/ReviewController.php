@@ -39,10 +39,10 @@ class ReviewController extends Controller
      *         @OA\JsonContent(
      *             required={"tutor_id","quality","delivery","attitude","benefit","rate"},
      *             @OA\Property(property="tutor_id", type="integer"),
-     *             @OA\Property(property="quality", type="string"),
-     *             @OA\Property(property="delivery", type="string"),
-     *             @OA\Property(property="attitude", type="string"),
-     *             @OA\Property(property="benefit", type="string"),
+    *             @OA\Property(property="quality", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
+    *             @OA\Property(property="delivery", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
+    *             @OA\Property(property="attitude", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
+    *             @OA\Property(property="benefit", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
      *             @OA\Property(property="rate", type="integer"),
      *             @OA\Property(property="review", type="string")
      *         )
@@ -61,10 +61,10 @@ class ReviewController extends Controller
      *         @OA\JsonContent(
      *             required={"tutor_id","quality","delivery","attitude","benefit","rate"},
      *             @OA\Property(property="tutor_id", type="integer"),
-     *             @OA\Property(property="quality", type="string"),
-     *             @OA\Property(property="delivery", type="string"),
-     *             @OA\Property(property="attitude", type="string"),
-     *             @OA\Property(property="benefit", type="string"),
+    *             @OA\Property(property="quality", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
+    *             @OA\Property(property="delivery", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
+    *             @OA\Property(property="attitude", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
+    *             @OA\Property(property="benefit", type="string", enum={"sangat baik","baik","cukup","buruk","sangat buruk"}),
      *             @OA\Property(property="rate", type="integer"),
      *             @OA\Property(property="review", type="string")
      *         )

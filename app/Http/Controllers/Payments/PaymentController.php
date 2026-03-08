@@ -42,7 +42,7 @@ class PaymentController extends Controller
      *             required={"package_id","total_amount","payment_method"},
      *             @OA\Property(property="package_id", type="integer"),
      *             @OA\Property(property="total_amount", type="integer"),
-     *             @OA\Property(property="payment_method", type="string")
+    *             @OA\Property(property="payment_method", type="string", enum={"mandiri","bni","bri","bpr","bpd","qris"})
      *         )
      *     ),
      *     @OA\Response(response=200, description="Order created", @OA\JsonContent(ref="#/components/schemas/StandardSuccess"))

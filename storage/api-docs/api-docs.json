@@ -818,7 +818,11 @@
                                         "type": "string"
                                     },
                                     "gender": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
                                     },
                                     "date_of_birth": {
                                         "type": "string",
@@ -843,7 +847,15 @@
                                         "type": "string"
                                     },
                                     "religion": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "islam",
+                                            "kristen",
+                                            "katolik",
+                                            "hindu",
+                                            "buddha",
+                                            "konghucu"
+                                        ]
                                     },
                                     "latitude": {
                                         "type": "number"
@@ -901,7 +913,11 @@
                                         "type": "string"
                                     },
                                     "gender": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
                                     },
                                     "date_of_birth": {
                                         "type": "string"
@@ -929,7 +945,15 @@
                                         "type": "string"
                                     },
                                     "religion": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "islam",
+                                            "kristen",
+                                            "katolik",
+                                            "hindu",
+                                            "buddha",
+                                            "konghucu"
+                                        ]
                                     },
                                     "latitude": {
                                         "type": "number"
@@ -1033,7 +1057,11 @@
                                         "type": "string"
                                     },
                                     "gender": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
                                     },
                                     "date_of_birth": {
                                         "type": "string"
@@ -1057,7 +1085,15 @@
                                         "type": "string"
                                     },
                                     "religion": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "islam",
+                                            "kristen",
+                                            "katolik",
+                                            "hindu",
+                                            "buddha",
+                                            "konghucu"
+                                        ]
                                     },
                                     "latitude": {
                                         "type": "number"
@@ -1109,7 +1145,11 @@
                                         "type": "string"
                                     },
                                     "gender": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
                                     },
                                     "date_of_birth": {
                                         "type": "string"
@@ -1137,7 +1177,15 @@
                                         "type": "string"
                                     },
                                     "religion": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "islam",
+                                            "kristen",
+                                            "katolik",
+                                            "hindu",
+                                            "buddha",
+                                            "konghucu"
+                                        ]
                                     },
                                     "latitude": {
                                         "type": "number"
@@ -1947,7 +1995,15 @@
                                         "type": "integer"
                                     },
                                     "payment_method": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "mandiri",
+                                            "bni",
+                                            "bri",
+                                            "bpr",
+                                            "bpd",
+                                            "qris"
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -2257,13 +2313,25 @@
                                         "type": "string"
                                     },
                                     "gender": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
                                     },
                                     "date_of_birth": {
                                         "type": "string"
                                     },
                                     "religion": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "islam",
+                                            "kristen",
+                                            "katolik",
+                                            "hindu",
+                                            "buddha",
+                                            "konghucu"
+                                        ]
                                     },
                                     "province": {
                                         "type": "string"
@@ -2349,13 +2417,25 @@
                                         "type": "string"
                                     },
                                     "gender": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
                                     },
                                     "date_of_birth": {
                                         "type": "string"
                                     },
                                     "religion": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "islam",
+                                            "kristen",
+                                            "katolik",
+                                            "hindu",
+                                            "buddha",
+                                            "konghucu"
+                                        ]
                                     },
                                     "telephone_number": {
                                         "type": "string"
@@ -2427,7 +2507,11 @@
                                 ],
                                 "properties": {
                                     "course_mode": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "online",
+                                            "offline"
+                                        ]
                                     },
                                     "description": {
                                         "type": "string"
@@ -2446,7 +2530,16 @@
                                         "items": {
                                             "properties": {
                                                 "day": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "minggu",
+                                                        "senin",
+                                                        "selasa",
+                                                        "rabu",
+                                                        "kamis",
+                                                        "jumat",
+                                                        "sabtu"
+                                                    ]
                                                 },
                                                 "time": {
                                                     "type": "string",
@@ -2530,16 +2623,44 @@
                                         "type": "integer"
                                     },
                                     "quality": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "sangat baik",
+                                            "baik",
+                                            "cukup",
+                                            "buruk",
+                                            "sangat buruk"
+                                        ]
                                     },
                                     "delivery": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "sangat baik",
+                                            "baik",
+                                            "cukup",
+                                            "buruk",
+                                            "sangat buruk"
+                                        ]
                                     },
                                     "attitude": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "sangat baik",
+                                            "baik",
+                                            "cukup",
+                                            "buruk",
+                                            "sangat buruk"
+                                        ]
                                     },
                                     "benefit": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "sangat baik",
+                                            "baik",
+                                            "cukup",
+                                            "buruk",
+                                            "sangat buruk"
+                                        ]
                                     },
                                     "rate": {
                                         "type": "integer"

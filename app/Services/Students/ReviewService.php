@@ -9,6 +9,7 @@ use App\Models\Review;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class ReviewService
@@ -49,7 +50,11 @@ class ReviewService
     public function storeOrUpdate(Request $request): ResponseDTO
     {
         $request->validate([
-            'tutor_id' => ['required', 'integer', 'exists:users,id, role,tutor'],
+            'tutor_id' => [
+                'required',
+                'integer',
+                Rule::exists('users', 'id')->where('role', RoleEnum::TUTOR->value),
+            ],
             'quality' => ['required', new Enum(RatingOptionEnum::class)],
             'delivery' => ['required', new Enum(RatingOptionEnum::class)],
             'attitude' => ['required', new Enum(RatingOptionEnum::class)],
@@ -90,7 +95,11 @@ class ReviewService
     public function show(Request $request): ResponseDTO
     {
         $request->validate([
-            'tutor_id' => ['required', 'integer', 'exists:users,id, role,tutor'],
+            'tutor_id' => [
+                'required',
+                'integer',
+                Rule::exists('users', 'id')->where('role', RoleEnum::TUTOR->value),
+            ],
         ]);
         $student = $request->user();
 
